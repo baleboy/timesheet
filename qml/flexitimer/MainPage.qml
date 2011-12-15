@@ -5,6 +5,7 @@ import "Utils.js" as Utils
 import "Db.js" as Db
 
 CommonPage {
+    id: projectPage
     tools: commonTools
     title: qsTr("Projects")
 
@@ -14,13 +15,5 @@ CommonPage {
 
     ProjectsPage {
         visible: projectsModel.count != 0
-    }
-
-    ListModel {
-        id: testModel
-        ListElement { startTime: "00:00"; endTime: "10:00"; date: "26/10/2011"}
-        ListElement { startTime: "10:00"; endTime: "12:00"; date: "26/10/2011"}
-        ListElement { startTime: "00:00"; endTime: "10:00"; date: "25/10/2011"}
-        ListElement { startTime: "10:00"; endTime: "12:00"; date: "25/10/2011"}
     }
 }

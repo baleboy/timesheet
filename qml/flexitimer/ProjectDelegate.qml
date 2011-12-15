@@ -12,7 +12,7 @@ Item {
         anchors.fill: parent
         onClicked: {
             detailPage.title = name
-            Db.populateProjectDetails(name)
+            Db.populateProjectDetails(detailsModel, name)
             pageStack.push(detailPage)
         }
     }
@@ -29,25 +29,21 @@ Item {
             width: 52
             text: checked ? "||" : ">"
             anchors.verticalCenter: parent.verticalCenter
-            checked: projectList.pressed == index
-            onClicked:
+            checked: projectList.inProgress == name
+            onClicked: {
+                console.log("old in progress:" + projectList.inProgress)
                 if (checked) {
-                    projectList.pressed = -1
+                    Db.addProjectEnd()
+                    projectList.inProgress = ""
                 }
                 else {
-                    projectList.pressed = index
-                }
-
-            onCheckedChanged: {
-                var now = new Date()
-                if (!checked) {
-                    // ending the task
-                    Db.addProjectEnd(name)
-                }
-                else {
-                    // starting the task
+                    if (projectList.inProgress != "")
+                        Db.addProjectEnd()
+                    projectList.inProgress = name
                     Db.addProjectStart(name)
                 }
+                console.log("new in progress:" + projectList.inProgress)
+                Db.setProperty("projectInProgress", projectList.inProgress)
             }
         }
 

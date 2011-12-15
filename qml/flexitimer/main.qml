@@ -39,6 +39,10 @@ PageStackWindow {
                 text: qsTr("Clear data")
                 onClicked: { Db.clearAll(); projectsModel.clear() }
             }
+            MenuItem {
+                text: qsTr("Print all")
+                onClicked: { Db.printAll() }
+            }
         }
     }
 
@@ -79,7 +83,6 @@ PageStackWindow {
     }
 
     Component.onCompleted: {
-        Db.init();
-        Db.populateProjectsModel();
+        Db.populateProjectsModel(projectsModel);
     }
 }

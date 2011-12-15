@@ -1,10 +1,13 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import "Db.js" as Db
 
 ListView {
 
     id: projectList
-    property int pressed: -1
+    property string inProgress: Db.getProperty("projectInProgress")
+    property int lastId: -1
+    property int nextId: 1
 
     anchors {
         top: parent.top
@@ -18,4 +21,5 @@ ListView {
     model: projectsModel
 
     delegate: ProjectDelegate {}
+
 }
