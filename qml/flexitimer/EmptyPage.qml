@@ -16,6 +16,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("No Projects")
             font.pixelSize: Const.fontLarge
+            color: "gray"
         }
 
         Label {
@@ -23,6 +24,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Add a project to start tracking")
             font.pixelSize: Const.fontMedium
+            color: "gray"
         }
     }
 

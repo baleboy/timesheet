@@ -17,54 +17,83 @@ Item {
         }
     }
 
-    Row {
-        anchors.fill: parent
-        anchors.margins: Const.margin
-        spacing: Const.margin
+    Button {
+        id: startButton
 
+        height: 52
+        width: 52
+        text: checked ? "||" : ">"
+        checked: projectList.inProgress == name
 
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+            leftMargin: Const.margin
+        }
 
-        Button {
-            height: 52
-            width: 52
-            text: checked ? "||" : ">"
-            anchors.verticalCenter: parent.verticalCenter
-            checked: projectList.inProgress == name
-            onClicked: {
-                console.log("old in progress:" + projectList.inProgress)
-                if (checked) {
-                    Db.addProjectEnd()
-                    projectList.inProgress = ""
-                }
-                else {
-                    if (projectList.inProgress != "")
-                        Db.addProjectEnd()
-                    projectList.inProgress = name
-                    Db.addProjectStart(name)
-                }
-                console.log("new in progress:" + projectList.inProgress)
-                Db.setProperty("projectInProgress", projectList.inProgress)
+        function stopCurrentProject()
+        {
+            workTimer.stop()
+            Db.addProjectEnd()
+            projectsModel.setProperty(projectList.inProgressIndex, "elapsed", workTimer.elapsed)
+            Db.saveElapsed(projectList.inProgress, workTimer.elapsed)
+        }
+
+        onClicked: {
+            console.log("old in progress:" + projectList.inProgress)
+            if (checked) {
+                // this task was stopped by pressing the pause button
+                stopCurrentProject()
+                projectList.inProgress = ""
             }
+            else {
+                if (projectList.inProgress != "") {
+                    // previous task stopped implicitly
+                    stopCurrentProject()
+                }
+                projectList.inProgress = name
+                projectList.inProgressIndex = index
+                Db.addProjectStart(name)
+                workTimer.elapsed = parseInt(elapsed)
+                workTimer.start()
+                console.log("elapsed: " + elapsed)
+            }
+            console.log("new in progress:" + projectList.inProgress)
+            Db.setProperty("projectInProgress", projectList.inProgress)
         }
-
-        Label {
-            text: name
-            font.pixelSize: Const.fontMedium
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Label {
-            text: Utils.toTime(elapsed)
-            font.pixelSize: Const.fontLarge
-            color: "darkGray"
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Label {
-            text: ">"
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
     }
+
+    Label {
+        text: name
+        font.pixelSize: Const.fontMedium
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: startButton.right
+            leftMargin: Const.margin
+        }
+    }
+
+    Label {
+        text: Utils.toTime(projectList.inProgress == name ? workTimer.elapsed : elapsed)
+        font.pixelSize: Const.fontMedium
+        color: "darkGray"
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: moreIndicator.left
+            rightMargin: Const.margin
+        }
+    }
+
+    Label {
+        id: moreIndicator
+        text: ">"
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: Const.margin
+        }
+    }
+
+
 
 }

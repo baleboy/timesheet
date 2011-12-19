@@ -7,7 +7,12 @@ import "Db.js" as Db
 CommonPage {
     id: projectPage
     tools: commonTools
-    title: qsTr("Projects")
+    title: today()
+
+    function today() {
+        var now = new Date()
+        return Qt.formatDate(now, "MMMM dd, yyyy")
+    }
 
     EmptyPage {
         visible: projectsModel.count == 0

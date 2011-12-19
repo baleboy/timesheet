@@ -6,8 +6,22 @@ CommonPage {
 
     property alias model: listView.model
 
+    Item {
+        anchors.fill: parent
+        Label {
+            font.pixelSize: Const.fontLarge
+            color: "gray"
+            anchors.centerIn: parent
+            text: qsTr("No records")
+
+            visible: model.count === 0
+        }
+    }
+
     ListView {
         id: listView
+
+        visible: model.count > 0
 
         model: detailsModel
 
@@ -24,20 +38,31 @@ CommonPage {
         clip: true
 
         delegate: Item {
-            height: 85
+            height: 70
             width: parent.width
-            Row {
-                anchors.fill: parent
-                anchors.margins: Const.margin
-                spacing: Const.margin
 
-                Label {
-                    text: startTime
-                }
-                Label {
-                    text: endTime
+            Label {
+                text: startTime + " - " + endTime
+                font.pixelSize: Const.fontMedium
+                width: 320
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: Const.margin
                 }
             }
+
+            Label {
+                text: elapsed
+                font.pixelSize: Const.fontMedium
+                color: "gray"
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: Const.margin
+                }
+            }
+
         }
 
         section.delegate: Rectangle {

@@ -9,6 +9,8 @@ Page {
     property alias title: titleLabel.text
     property int headerHeight: Const.headerHeight
 
+    orientationLock: PageOrientation.LockPortrait
+
     Rectangle {
 
         id: header

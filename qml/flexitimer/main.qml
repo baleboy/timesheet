@@ -81,8 +81,4 @@ PageStackWindow {
     ListModel {
         id: detailsModel
     }
-
-    Component.onCompleted: {
-        Db.populateProjectsModel(projectsModel);
-    }
 }
