@@ -5,23 +5,22 @@ import "Utils.js" as Utils
 import "Db.js" as Db
 
 Item {
-    height: 85
+    height: 105
     width: parent.width
 
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            detailPage.title = name
+            pageStack.push(detailPage, { title: name })
             Db.populateProjectDetails(detailsModel, name)
-            pageStack.push(detailPage)
         }
     }
 
     Button {
         id: startButton
 
-        height: 52
-        width: 52
+        height: 58
+        width: 58
         text: checked ? "||" : ">"
         checked: projectList.inProgress == name
 
@@ -35,7 +34,7 @@ Item {
         {
             workTimer.stop()
             Db.addProjectEnd()
-            projectsModel.setProperty(projectList.inProgressIndex, "elapsed", workTimer.elapsed)
+            // projectsModel.setProperty(projectList.inProgressIndex, "elapsed", workTimer.elapsed)
             Db.saveElapsed(projectList.inProgress, workTimer.elapsed)
         }
 
@@ -54,9 +53,8 @@ Item {
                 projectList.inProgress = name
                 projectList.inProgressIndex = index
                 Db.addProjectStart(name)
-                workTimer.elapsed = parseInt(elapsed)
                 workTimer.start()
-                console.log("elapsed: " + elapsed)
+                console.log("elapsed today: " + elapsedToday)
             }
             console.log("new in progress:" + projectList.inProgress)
             Db.setProperty("projectInProgress", projectList.inProgress)
@@ -64,36 +62,49 @@ Item {
     }
 
     Label {
+        id: nameLabel
         text: name
         font.pixelSize: Const.fontMedium
         anchors {
-            verticalCenter: parent.verticalCenter
+            top: parent.top
+            topMargin: Const.margin
             left: startButton.right
             leftMargin: Const.margin
         }
     }
 
     Label {
-        text: Utils.toTime(projectList.inProgress == name ? workTimer.elapsed : elapsed)
-        font.pixelSize: Const.fontMedium
-        color: "darkGray"
+        id: timeLabel
+        text: "Today " + Utils.toTime(elapsedToday)
+        color: "gray"
+        font.pixelSize: Const.fontSmall
         anchors {
-            verticalCenter: parent.verticalCenter
-            right: moreIndicator.left
-            rightMargin: Const.margin
+            bottom: parent.bottom
+            bottomMargin: Const.margin
+            left: nameLabel.left
+            topMargin: Const.margin
         }
     }
 
     Label {
+        id: timeLabel2
+        text: "Total " + Utils.toTime(elapsedToday)
+        color: "gray"
+        font.pixelSize: Const.fontSmall
+        anchors {
+            top: timeLabel.top
+            left: timeLabel.right
+            leftMargin: Const.bigMargin
+        }
+    }
+
+    MoreIndicator {
         id: moreIndicator
-        text: ">"
         anchors {
             verticalCenter: parent.verticalCenter
             right: parent.right
             rightMargin: Const.margin
         }
     }
-
-
 
 }

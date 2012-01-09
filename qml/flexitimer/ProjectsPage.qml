@@ -14,16 +14,16 @@ Item {
     Rectangle {
 
         id: rect1
-        color: "gray"
+        color: "orange"
         width: parent.width
-        height: 80
+        height: 90
         anchors {
             top: parent.top
             topMargin: Const.headerHeight
         }
 
         Label {
-            font.pixelSize: Const.fontLarge
+            font.pixelSize: Const.fontHuge
             text: Utils.toTime(todaysTotal)
             anchors.centerIn: parent
             color: "white"
@@ -50,7 +50,18 @@ Item {
 
         BackgroundTimer {
             id: workTimer
-            onElapsedChanged: todaysTotal += workTimer.delta
+            onTick: {
+                console.log("*** tick()")
+                console.log("Project in progress: " + projectList.inProgress + "[" + projectList.inProgressIndex + "]")
+                console.log("Timer delta: " + workTimer.delta)
+                todaysTotal += workTimer.delta
+                var t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedToday) + workTimer.delta
+                console.log("elapsed today: " + t)
+                projectList.model.setProperty(projectList.inProgressIndex, "elapsedToday", t)
+                t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedTotal) + workTimer.delta
+                console.log("elapsed total: " + t)
+                projectList.model.setProperty(projectList.inProgressIndex, "elapsedTotal", t)
+            }
         }
 
         Component.onCompleted: {
@@ -58,13 +69,22 @@ Item {
             inProgress = Db.getProperty("projectInProgress")
             model.clear();
             Db.db.transaction(function(tx) {
-                                  var rs = tx.executeSql('SELECT * FROM Projects');
+                                  var rs = tx.executeSql('SELECT \
+                                                         project \
+                                                         ,SUM(endTime - startTime) AS elapsedTotal \
+                                                         ,SUM(CASE WHEN startTime >= ? AND startTime <= ? THEN endTime - startTime ELSE 0 END) AS elapsedToday \
+                                                     FROM \
+                                                         (SELECT Projects.name as project, Details.startTime, Details.endTime \
+                                                         FROM Projects \
+                                                         LEFT JOIN Details \
+                                                         ON Projects.name=Details.project) \
+                                                     GROUP BY \
+                                                         project', [Db.dayStart(), Db.dayEnd()]);
                                   for(var i = 0; i < rs.rows.length; i++) {
-                                      model.append({name: rs.rows.item(i).name, elapsed: rs.rows.item(i).elapsed});
+                                      model.append({name: rs.rows.item(i).project, elapsedTotal: rs.rows.item(i).elapsedTotal, elapsedToday: rs.rows.item(i).elapsedToday});
                                       if (rs.rows.item(i).name == inProgress) {
                                           inProgressIndex = i
                                           console.log("Project in progress: " + inProgress + ", index: " + inProgressIndex)
-                                          workTimer.elapsed = rs.rows.item(i).elapsed
                                           workTimer.start()
                                       }
                                   }

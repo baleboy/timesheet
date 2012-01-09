@@ -6,12 +6,14 @@ Timer {
     id: myTimer
 
     property int elapsed: 0
-    property int delta
+    property int delta: 0
 
     interval:  60000
     repeat:  true
     running: false
-    triggeredOnStart: true
+    triggeredOnStart: false
+
+    signal tick;
 
     function updateElapsed()
     {
@@ -24,6 +26,8 @@ Timer {
     onTriggered: {
         updateElapsed()
         console.log("Timer ticked. Elapsed: " + elapsed + ", delta: " + delta)
+        myTimer.tick()
+
     }
 
     onRunningChanged: if (running) {

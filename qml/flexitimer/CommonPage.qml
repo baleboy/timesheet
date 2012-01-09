@@ -29,6 +29,7 @@ Page {
                 leftMargin: Const.margin
             }
             font.pixelSize: Const.fontLarge
+            font.family: "Nokia Pure Text Light"
             color: "white"
         }
     }

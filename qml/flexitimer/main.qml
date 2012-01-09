@@ -8,12 +8,19 @@ PageStackWindow {
 
     initialPage: mainPage
 
-    MainPage {
-        id: mainPage
+    Component {
+         id: mainPage
+         MainPage {}
     }
 
-    DetailPage {
+    Component {
         id: detailPage
+        DetailPage {}
+    }
+
+    Component {
+        id: reportsPage
+        ReportsPage {}
     }
 
     ToolBarLayout {
@@ -23,6 +30,13 @@ PageStackWindow {
         ToolIcon {
             platformIconId: "toolbar-add"
             onClicked: addProjectDialog.open()
+        }
+
+        ToolIcon {
+            iconSource: "images/document-icon.png"
+            onClicked: pageStack.push(reportsPage)
+            scale: 0.6
+            smooth: true
         }
 
         ToolIcon {
@@ -69,7 +83,8 @@ PageStackWindow {
       }
       onAccepted: if (projectNameInput.text != "") {
                       projectsModel.append({"name": projectNameInput.text,
-                                          "elapsed": 0})
+                                          "elapsedTotal": 0,
+                                          "elapsedToday": 0})
                       Db.addProject(projectNameInput.text)
                   }
 

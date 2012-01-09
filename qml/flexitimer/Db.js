@@ -30,10 +30,33 @@ function addProject(name)
 function populateProjectsModel(model)
 {
     model.clear();
+/*
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('SELECT \
+                                              project \
+                                              ,SUM(endTime - startTime) AS elapsedTotal \
+                                              ,SUM(CASE WHEN startTime >= ? AND startTime <= ? THEN endTime - startTime ELSE 0 END) AS elapsedToday \
+                                          FROM \
+                                              Details \
+                                          GROUP BY \
+                                              project')
+                       console.log("rows: " + rs.rows.length)
+                       for(var i = 0; i < rs.rows.length; i++) {
+                           console.log("elapsed total: " + rs.rows.item(i).elapsedTotal + ", today: " + rs.rows.item(i).elapsedToday)
+                           model.append({
+                                            name: rs.rows.item(i).name,
+                                            elapsedTotal: rs.rows.item(i).elapsedTotal,
+                                            elapsedToday: rs.rows.item(i).elapsedToday
+                                        });
+                       }
+                   })
+                   */
+
     db.transaction(function(tx) {
         var rs = tx.executeSql('SELECT * FROM Projects');
+        console.log("rows: " + rs.rows.length)
         for(var i = 0; i < rs.rows.length; i++) {
-            model.append({name: rs.rows.item(i).name, elapsed: rs.rows.item(i).elapsed});
+            model.append({name: rs.rows.item(i).name, elapsedTotal: rs.rows.item(i).elapsed});
         }
     });
 }
@@ -75,7 +98,7 @@ function populateProjectDetails(model, project)
         for(var i = 0; i < rs.rows.length; i++) {
             var date1 = new Date
             date1.setTime(rs.rows.item(i).startTime)
-            var endTimeText = qsTr("--:--");
+            var endTimeText = "";
             var elapsed = ""
             if(rs.rows.item(i).endTime !== "") {
                 var date2 = new Date
@@ -97,6 +120,7 @@ function populateProjectDetails(model, project)
 
 function clearAll()
 {
+    /*
     db.transaction(function(tx) {
         tx.executeSql('DELETE FROM Projects');
     });
@@ -107,6 +131,19 @@ function clearAll()
 
     db.transaction(function(tx) {
         tx.executeSql('DELETE FROM Properties');
+    });
+    */
+
+    db.transaction(function(tx) {
+        tx.executeSql('DROP TABLE Projects');
+    });
+
+    db.transaction(function(tx) {
+        tx.executeSql('DROP TABLE Details');
+    });
+
+    db.transaction(function(tx) {
+        tx.executeSql('DROP TABLE Properties');
     });
 }
 
@@ -151,24 +188,37 @@ function printAll()
     console.log("LastID: " + lastId)
 }
 
-function todaysTotal()
+function dayStart()
 {
     var start = new Date()
     start.setHours(0)
     start.setMinutes(0)
     start.setSeconds(0)
     start.setMilliseconds(0)
+    return start.getTime()
+}
+
+function dayEnd()
+{
     var end = new Date()
     end.setHours(23)
     end.setMinutes(59)
     end.setSeconds(59)
     end.setMilliseconds(999)
+    return end.getTime()
+}
 
-    var result = 0;
+function todaysTotal()
+{
+    var result;
     db.transaction(function(tx) {
                        var rs = tx.executeSql('SELECT SUM (endTime - startTime) AS total FROM DETAILS WHERE startTime >= ? AND startTime <= ?',
-                                              [start.getTime(), end.getTime()]);
+                                              [dayStart(), dayEnd()]);
                        result = rs.rows.item(0).total
     });
-    return result
+    console.log("day's total: " + result)
+    if (result === "")
+        return 0
+    else
+        return result
 }

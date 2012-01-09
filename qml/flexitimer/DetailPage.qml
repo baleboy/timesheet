@@ -12,7 +12,7 @@ CommonPage {
             font.pixelSize: Const.fontLarge
             color: "gray"
             anchors.centerIn: parent
-            text: qsTr("No records")
+            text: qsTr("No sessions")
 
             visible: model.count === 0
         }
@@ -42,7 +42,7 @@ CommonPage {
             width: parent.width
 
             Label {
-                text: startTime + " - " + endTime
+                text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
                 font.pixelSize: Const.fontMedium
                 width: 320
                 anchors {
