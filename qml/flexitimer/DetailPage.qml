@@ -1,10 +1,15 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import "Constants.js" as Const
+import "Details.js" as Details
 
 CommonPage {
 
-    property alias model: listView.model
+    property alias model: detailsList.model
+
+    property date startTime
+    property date endTime
+    property string project
 
     Item {
         anchors.fill: parent
@@ -19,7 +24,7 @@ CommonPage {
     }
 
     ListView {
-        id: listView
+        id: detailsList
 
         visible: model.count > 0
 
@@ -89,4 +94,6 @@ CommonPage {
             onClicked: pageStack.pop()
         }
     }
+
+    Component.onCompleted: Details.populateProjectDetails()
 }

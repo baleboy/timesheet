@@ -1,4 +1,6 @@
 import QtQuick 1.1
+import Qt.labs.gestures 1.0
+
 import com.nokia.meego 1.0
 import "Constants.js" as Const
 import "Reports.js" as Reports
@@ -7,13 +9,16 @@ import "Utils.js" as Utils
 CommonPage {
 
     title: qsTr("Reports")
+    property date startTime: new Date(0)
+    property date endTime: new Date()
 
-    Label {
+    Button {
         id: reportTitle
-        text: qsTr("All Time")
+        width: 400
+        text: Reports.getTitle(typeDialog.selected)
 
         font {
-            pixelSize: Const.fontLarge
+            pixelSize: Const.fontMedium
         }
 
         anchors {
@@ -21,13 +26,15 @@ CommonPage {
             topMargin: Const.headerHeight + Const.margin
             horizontalCenter: parent.horizontalCenter
         }
+
+        onClicked: typeDialog.open()
     }
 
     ListModel {
         id: reportModel
     }
 
-    Component.onCompleted: Reports.populateReportsModel()
+    Component.onCompleted: Reports.populateReportsModel(startTime, endTime)
 
 
     Component {
@@ -58,6 +65,14 @@ CommonPage {
                     bottom: parent.bottom
                     bottomMargin: Const.margin
                     left: nameLabel.left
+                }
+            }
+
+            MoreIndicator {
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: Const.margin
                 }
             }
 
@@ -92,7 +107,33 @@ CommonPage {
         model: reportModel
 
         delegate: reportDelegate
+    }
 
+    SelectionDialog {
+        id: typeDialog
+        titleText: "Report Type"
+        selectedIndex: 0
+
+        property int selected: model.get(selectedIndex).type
+
+        model: ListModel {
+            // unfortunately I can't use the constants from Reports.js
+            // in ListElement, see QTBUG-16289
+            ListElement { name: "All Time"; type: 0 }
+            ListElement { name: "Month"; type: 1 }
+            ListElement { name: "Week"; type: 2 }
+            ListElement { name: "Day"; type: 3 }
+        }
+
+        onSelectedIndexChanged: {
+            console.log("index changed")
+            if (selected == Reports.reportTypeDay) {
+                var now = new Date
+                startTime = Utils.dayStart(now)
+                endTime = Utils.dayEnd(now)
+                Reports.populateReportsModel(startTime, endTime)
+            }
+        }
     }
 
     tools: ToolBarLayout {

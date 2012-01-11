@@ -11,8 +11,7 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            pageStack.push(detailPage, { title: name })
-            Db.populateProjectDetails(detailsModel, name)
+            pageStack.push(detailPage, { title: name, project: name, startTime: new Date(0), endTime: new Date() })
         }
     }
 

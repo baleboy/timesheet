@@ -90,33 +90,6 @@ function saveElapsed(project, elapsed)
 
 }
 
-function populateProjectDetails(model, project)
-{
-    model.clear();
-    db.transaction(function(tx) {
-        var rs = tx.executeSql('SELECT * FROM Details WHERE project=?', [project]);
-        for(var i = 0; i < rs.rows.length; i++) {
-            var date1 = new Date
-            date1.setTime(rs.rows.item(i).startTime)
-            var endTimeText = "";
-            var elapsed = ""
-            if(rs.rows.item(i).endTime !== "") {
-                var date2 = new Date
-                date2.setTime(rs.rows.item(i).endTime)
-                endTimeText = Qt.formatTime(date2, "hh:mm")
-                elapsed = toTime(date2.getTime() - date1.getTime())
-            }
-
-            model.append({startTime: Qt.formatTime(date1, "hh:mm"),
-                             endTime: endTimeText,
-                             elapsed: elapsed,
-                             date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
-                             });
-        }
-    });
-
-
-}
 
 function clearAll()
 {
@@ -188,32 +161,14 @@ function printAll()
     console.log("LastID: " + lastId)
 }
 
-function dayStart()
-{
-    var start = new Date()
-    start.setHours(0)
-    start.setMinutes(0)
-    start.setSeconds(0)
-    start.setMilliseconds(0)
-    return start.getTime()
-}
-
-function dayEnd()
-{
-    var end = new Date()
-    end.setHours(23)
-    end.setMinutes(59)
-    end.setSeconds(59)
-    end.setMilliseconds(999)
-    return end.getTime()
-}
-
 function todaysTotal()
 {
     var result;
+    var now = new Date()
+    console.log("today's date: " + now + ", day start: "  + dayStart(now) + ", day end: " + dayEnd(now))
     db.transaction(function(tx) {
                        var rs = tx.executeSql('SELECT SUM (endTime - startTime) AS total FROM DETAILS WHERE startTime >= ? AND startTime <= ?',
-                                              [dayStart(), dayEnd()]);
+                                              [dayStart(now).getTime(), dayEnd(now).getTime()]);
                        result = rs.rows.item(0).total
     });
     console.log("day's total: " + result)
