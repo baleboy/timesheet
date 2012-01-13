@@ -49,30 +49,25 @@ Item {
 
         delegate: ProjectDelegate {}
 
-        BackgroundTimer {
-            id: workTimer
-            onTick: {
-                todaysTotal += workTimer.delta
-                var t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedToday) + workTimer.delta
-                console.log("elapsed today: " + t)
-                projectList.model.setProperty(projectList.inProgressIndex, "elapsedToday", t)
-                t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedTotal) + workTimer.delta
-                console.log("elapsed total: " + t)
-                projectList.model.setProperty(projectList.inProgressIndex, "elapsedTotal", t)
-            }
-        }
+    }
 
-        Component.onCompleted: {
-            Projects.populate()
-            if (inProgress !== "") {
-                Projects.findInProgressIndex()
-                workTimer.start()
-            }
+    BackgroundTimer {
+        id: workTimer
+        onTick: {
+            todaysTotal += workTimer.delta
+            var t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedToday) + workTimer.delta
+            console.log("elapsed today: " + t)
+            projectList.model.setProperty(projectList.inProgressIndex, "elapsedToday", t)
+            t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedTotal) + workTimer.delta
+            console.log("elapsed total: " + t)
+            projectList.model.setProperty(projectList.inProgressIndex, "elapsedTotal", t)
         }
     }
 
     Component.onCompleted: {
-
+        Projects.populate()
+        Projects.restoreOngoingSession()
         todaysTotal = Db.todaysTotal()
+        workTimer.initialize()
     }
 }

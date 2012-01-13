@@ -7,5 +7,6 @@ var fontSmall = 22
 var spacing = 16
 var mediumButtonWidth = 200
 var margin = 16
-var bigMargin = 2 * margin
+var bigMargin = 32
+var smallMargin = 8
 var headerHeight = 72

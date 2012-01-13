@@ -1,32 +1,36 @@
 Qt.include("Db.js")
 
-const reportTypeAll = 0
-const reportTypeMonth = 1
-const reportTypeWeek = 2
-const reportTypeDay = 3
-
-function populateReportsModel(startTime, endTime) {
-
+function populateReportsModel()
+{
     reportModel.clear();
 
-    db.transaction(function(tx) {
-                           var rs = tx.executeSql('SELECT \
-                                                  project \
-                                                  ,SUM(CASE WHEN startTime >= ? AND startTime <= ? THEN endTime - startTime ELSE 0 END) AS elapsedTotal \
-                                                  FROM \
-                                                  Details \
-                                              GROUP BY \
-                                                  project', [startTime, endTime])
-                           console.log("rows: " + rs.rows.length)
-                           for(var i = 0; i < rs.rows.length; i++) {
-                               console.log("elapsed total: " + rs.rows.item(i).elapsedTotal)
-                               reportModel.append({
-                                                name: rs.rows.item(i).project,
-                                                elapsedTotal: rs.rows.item(i).elapsedTotal
+    console.log("populateReportsModel: " + startTime + ", " + endTime)
 
-                                            });
-                           }
-                       })
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('SELECT * FROM Details WHERE startTime >= ? AND startTime <= ? ORDER BY startTime DESC',
+                                              [startTime.getTime(), endTime.getTime()]);
+        for(var i = 0; i < rs.rows.length; i++) {
+            var date1 = new Date
+            date1.setTime(rs.rows.item(i).startTime)
+            var endTimeText = "";
+            var elapsed = ""
+            if(rs.rows.item(i).endTime !== "") {
+                var date2 = new Date
+                date2.setTime(rs.rows.item(i).endTime)
+                endTimeText = Qt.formatTime(date2, "hh:mm")
+                elapsed = toTime(date2.getTime() - date1.getTime())
+
+                reportModel.append({
+                                 project: rs.rows.item(i).project,
+                                 startTime: Qt.formatTime(date1, "hh:mm"),
+                                 endTime: endTimeText,
+                                 elapsed: elapsed,
+                                 date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
+                                 });
+            }
+
+        }
+    });
 
 
 }
@@ -41,16 +45,16 @@ function getTitle(type)
     var now = new Date
 
     switch (type) {
-    case reportTypeAll:
+    case "all":
         return qsTr("All Time")
 
-    case reportTypeMonth:
+    case "month":
         return Qt.formatDate(now, "MMMM yyyy")
 
-    case reportTypeWeek:
+    case "week":
         return "Week " + now.getWeek() + ", " + now.getFullYear()
 
-    case reportTypeDay:
+    case "day":
         return Qt.formatDate(now, "dddd, MMMM dd yyyy")
     }
 }

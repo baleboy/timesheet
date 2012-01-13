@@ -1,5 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import com.nokia.extras 1.1
+
 import "Constants.js" as Const
 import "Utils.js" as Utils
 import "Db.js" as Db
@@ -21,10 +23,11 @@ Item {
         height: 58
         width: 58
         text: checked ? "||" : ">"
-        checked: projectList.inProgress == name
+        checked: projectList.inProgress === name
 
         anchors {
-            verticalCenter: parent.verticalCenter
+            top: parent.top
+            topMargin: Const.margin
             left: parent.left
             leftMargin: Const.margin
         }
@@ -78,10 +81,9 @@ Item {
         color: "gray"
         font.pixelSize: Const.fontSmall
         anchors {
-            bottom: parent.bottom
-            bottomMargin: Const.margin
+            top: nameLabel.bottom
+            topMargin: Const.smallMargin
             left: nameLabel.left
-            topMargin: Const.margin
         }
     }
 
@@ -100,7 +102,7 @@ Item {
     MoreIndicator {
         id: moreIndicator
         anchors {
-            verticalCenter: parent.verticalCenter
+            verticalCenter: startButton.verticalCenter
             right: parent.right
             rightMargin: Const.margin
         }

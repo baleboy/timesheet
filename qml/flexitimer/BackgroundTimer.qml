@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "Timer.js" as Data
+import "Timer.js" as TimerImp
 
 Timer {
 
@@ -7,33 +7,40 @@ Timer {
 
     property int elapsed: 0
     property int delta: 0
+    property bool initCompleted
+
+    function initialize()
+    {
+        initCompleted = false
+        TimerImp.restoreState()
+        if (!running) initCompleted = true
+    }
 
     interval:  60000
     repeat:  true
     running: false
-    triggeredOnStart: false
+    triggeredOnStart: true
 
     signal tick;
 
-    function updateElapsed()
-    {
-        var currentTime = new Date
-        delta = (currentTime.getTime() - Data.previousTime.getTime())
-        Data.previousTime = currentTime
-        elapsed += delta
-    }
-
     onTriggered: {
-        updateElapsed()
+        TimerImp.updateElapsed()
         console.log("Timer ticked. Elapsed: " + elapsed + ", delta: " + delta)
         myTimer.tick()
 
     }
 
-    onRunningChanged: if (running) {
-                          Data.previousTime = new Date
-                      }
-                      else {
-                          updateElapsed()
-                      }
+    onRunningChanged: {
+        if (initCompleted) { // skip the first start if it was due to restoring a running timer
+            if (running) {
+                TimerImp.previousTime = new Date
+            }
+            else {
+                TimerImp.updateElapsed()
+            }
+            TimerImp.saveState()
+        }
+        else
+            initCompleted = true
+    }
 }

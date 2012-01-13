@@ -14,6 +14,9 @@ function toTime(msec) {
 
 function dayStart(date)
 {
+    if (date === undefined)
+        date = new Date()
+
     return new Date(date.getFullYear(),
                           date.getMonth(),
                           date.getDate())
@@ -21,8 +24,31 @@ function dayStart(date)
 
 function dayEnd(date)
 {
+    if (date === undefined)
+        date = new Date()
+
     return new Date(date.getFullYear(),
                           date.getMonth(),
                           date.getDate(),
+                          23, 59, 59)
+}
+
+function monthStart(date)
+{
+    if (date === undefined)
+        date = new Date()
+
+    return new Date(date.getFullYear(),
+                          date.getMonth())
+}
+
+function monthEnd(date)
+{
+    if (date === undefined)
+        date = new Date()
+
+    return new Date(date.getFullYear(),
+                          date.getMonth() + 1,
+                          0,
                           23, 59, 59)
 }

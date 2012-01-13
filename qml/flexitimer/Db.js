@@ -27,40 +27,6 @@ function addProject(name)
     });
 }
 
-function populateProjectsModel(model)
-{
-    model.clear();
-/*
-    db.transaction(function(tx) {
-                       var rs = tx.executeSql('SELECT \
-                                              project \
-                                              ,SUM(endTime - startTime) AS elapsedTotal \
-                                              ,SUM(CASE WHEN startTime >= ? AND startTime <= ? THEN endTime - startTime ELSE 0 END) AS elapsedToday \
-                                          FROM \
-                                              Details \
-                                          GROUP BY \
-                                              project')
-                       console.log("rows: " + rs.rows.length)
-                       for(var i = 0; i < rs.rows.length; i++) {
-                           console.log("elapsed total: " + rs.rows.item(i).elapsedTotal + ", today: " + rs.rows.item(i).elapsedToday)
-                           model.append({
-                                            name: rs.rows.item(i).name,
-                                            elapsedTotal: rs.rows.item(i).elapsedTotal,
-                                            elapsedToday: rs.rows.item(i).elapsedToday
-                                        });
-                       }
-                   })
-                   */
-
-    db.transaction(function(tx) {
-        var rs = tx.executeSql('SELECT * FROM Projects');
-        console.log("rows: " + rs.rows.length)
-        for(var i = 0; i < rs.rows.length; i++) {
-            model.append({name: rs.rows.item(i).name, elapsedTotal: rs.rows.item(i).elapsed});
-        }
-    });
-}
-
 function addProjectStart(project)
 {
     var now = new Date()

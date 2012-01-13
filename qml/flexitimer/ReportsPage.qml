@@ -9,8 +9,9 @@ import "Utils.js" as Utils
 CommonPage {
 
     title: qsTr("Reports")
-    property date startTime: new Date(0)
-    property date endTime: new Date()
+
+    property date startTime: Utils.dayStart()
+    property date endTime: Utils.dayEnd()
 
     Button {
         id: reportTitle
@@ -46,7 +47,7 @@ CommonPage {
 
             Label {
                 id: nameLabel
-                text: name
+                text: project
                 font.pixelSize: Const.fontMedium
                 anchors {
                     top: parent.top
@@ -57,20 +58,25 @@ CommonPage {
             }
 
             Label {
-                id: timeLabel
-                text: Utils.toTime(elapsedTotal)
-                color: "gray"
+                text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
                 font.pixelSize: Const.fontMedium
+                color: "gray"
+                width: 320
                 anchors {
-                    bottom: parent.bottom
-                    bottomMargin: Const.margin
-                    left: nameLabel.left
+                    top: nameLabel.bottom
+                    topMargin: Const.margin
+                    left: parent.left
+                    leftMargin: Const.margin
                 }
             }
 
-            MoreIndicator {
+            Label {
+                text: elapsed
+                font.pixelSize: Const.fontMedium
+                color: "gray"
                 anchors {
-                    verticalCenter: parent.verticalCenter
+                    top: nameLabel.bottom
+                    topMargin: Const.margin
                     right: parent.right
                     rightMargin: Const.margin
                 }
@@ -79,7 +85,24 @@ CommonPage {
         }
 
     }
+    Component {
+        id: sectionDelegate
+        Rectangle {
+            width: parent.width
+            height: 40
+            color: "lightSteelBlue"
 
+            Label {
+                text: section
+                font.bold: true
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: 8
+                }
+            }
+        }
+    }
     Item {
         anchors.fill: parent
         Label {
@@ -104,9 +127,14 @@ CommonPage {
             right: parent.right
         }
 
+        section.property: "date"
+        section.criteria: ViewSection.FullString
+
         model: reportModel
 
         delegate: reportDelegate
+
+        section.delegate: sectionDelegate
     }
 
     SelectionDialog {
@@ -114,25 +142,36 @@ CommonPage {
         titleText: "Report Type"
         selectedIndex: 0
 
-        property int selected: model.get(selectedIndex).type
+        property string selected: model.get(selectedIndex).type
 
         model: ListModel {
             // unfortunately I can't use the constants from Reports.js
             // in ListElement, see QTBUG-16289
-            ListElement { name: "All Time"; type: 0 }
-            ListElement { name: "Month"; type: 1 }
-            ListElement { name: "Week"; type: 2 }
-            ListElement { name: "Day"; type: 3 }
+            ListElement { name: "Day"; type: "day" }
+            ListElement { name: "Month"; type: "month" }
+            ListElement { name: "All Time"; type: "all" }
         }
 
         onSelectedIndexChanged: {
-            console.log("index changed")
-            if (selected == Reports.reportTypeDay) {
-                var now = new Date
+            console.log("new report type: " + model.get(selectedIndex).type)
+            var now = new Date()
+            switch (model.get(selectedIndex).type) {
+            case "day":
                 startTime = Utils.dayStart(now)
                 endTime = Utils.dayEnd(now)
-                Reports.populateReportsModel(startTime, endTime)
+                break;
+            case "month":
+                startTime = Utils.monthStart(now)
+                endTime = Utils.monthEnd(now)
+                break;
+            case "all":
+                startTime = new Date(0)
+                endTime = now
+                break;
             }
+
+            Reports.populateReportsModel()
+
         }
     }
 
