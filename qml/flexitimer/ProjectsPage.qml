@@ -64,6 +64,27 @@ Item {
         }
     }
 
+    ContextMenu {
+        id: projectMenu
+        property int projectIndex
+        property string projectName
+
+        MenuLayout {
+            MenuItem {text: qsTr("Delete"); onClicked: deleteProjectDialog.open() }
+        }
+    }
+
+    QueryDialog {
+
+        id: deleteProjectDialog
+        titleText: qsTr("Delete Project")
+        message:qsTr("Do you want to delete project " +
+                      projectMenu.projectName + " and all its related data?")
+        acceptButtonText: qsTr("Yes")
+        rejectButtonText: qsTr("No")
+        onAccepted: Projects.deleteProject(projectMenu.projectName, projectMenu.projectIndex)
+    }
+
     Component.onCompleted: {
         Projects.populate()
         Projects.restoreOngoingSession()

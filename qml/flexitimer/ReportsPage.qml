@@ -87,6 +87,7 @@ CommonPage {
     }
     Component {
         id: sectionDelegate
+
         Rectangle {
             width: parent.width
             height: 40
@@ -95,6 +96,7 @@ CommonPage {
             Label {
                 text: section
                 font.bold: true
+
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
@@ -145,8 +147,6 @@ CommonPage {
         property string selected: model.get(selectedIndex).type
 
         model: ListModel {
-            // unfortunately I can't use the constants from Reports.js
-            // in ListElement, see QTBUG-16289
             ListElement { name: "Day"; type: "day" }
             ListElement { name: "Month"; type: "month" }
             ListElement { name: "All Time"; type: "all" }

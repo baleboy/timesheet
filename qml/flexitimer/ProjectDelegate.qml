@@ -15,6 +15,11 @@ Item {
         onClicked: {
             pageStack.push(detailPage, { title: name, project: name, startTime: new Date(0), endTime: new Date() })
         }
+        onPressAndHold: {
+            projectMenu.projectIndex = index
+            projectMenu.projectName = name
+            projectMenu.open()
+        }
     }
 
     Button {

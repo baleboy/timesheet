@@ -115,7 +115,7 @@ function printAll()
 
                        rs = tx.executeSql('SELECT * FROM Details');
                        for(i = 0; i < rs.rows.length; i++) {
-                           console.log(rs.rows.item(i).project + " " + rs.rows.item(i).start + " " + rs.rows.item(i).end)
+                           console.log(rs.rows.item(i).project + " " + rs.rows.item(i).startTime + " " + rs.rows.item(i).endTime)
                        }
 
                        rs = tx.executeSql('SELECT * FROM Properties');

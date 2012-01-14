@@ -41,3 +41,17 @@ function restoreOngoingSession()
 
     }
 }
+
+function deleteProject(name, index)
+{
+    db.transaction(function(tx) {
+                       var now = new Date()
+                       var rs = tx.executeSql('DELETE FROM Projects WHERE name = ?', [name])
+                   })
+
+    db.transaction(function(tx) {
+                       var now = new Date()
+                       var rs = tx.executeSql('DELETE FROM Details WHERE project = ?', [name])
+                   })
+    projectsModel.remove(index)
+}
