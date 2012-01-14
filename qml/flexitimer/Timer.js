@@ -31,7 +31,7 @@ function restoreState()
 function updateElapsed()
 {
     var currentTime = new Date
-    delta = (currentTime.getTime() - previousTime.getTime())
+    delta = Math.round((currentTime.getTime() - previousTime.getTime()) / 60000) * 60000
     previousTime = currentTime
     elapsed += delta
 }

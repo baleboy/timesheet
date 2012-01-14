@@ -89,7 +89,7 @@ Item {
 
     Label {
         id: timeLabel2
-        text: "Total " + Utils.toTime(elapsedToday)
+        text: "Total " + Utils.toTime(elapsedTotal)
         color: "gray"
         font.pixelSize: Const.fontSmall
         anchors {
