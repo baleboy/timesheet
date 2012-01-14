@@ -53,5 +53,12 @@ function deleteProject(name, index)
                        var now = new Date()
                        var rs = tx.executeSql('DELETE FROM Details WHERE project = ?', [name])
                    })
+    if (index === projectList.inProgressIndex) {
+        workTimer.stop()
+        projectList.inProgress = ""
+    }
+    projectsPage.todaysTotal -= projectsModel.get(index).elapsedToday
     projectsModel.remove(index)
+    if (projectList.inProgressIndex > index)
+        projectList.inProgressIndex--
 }
