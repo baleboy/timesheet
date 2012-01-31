@@ -24,9 +24,18 @@ function populateProjectDetails()
                              endTime: endTimeText,
                              elapsed: elapsed,
                              date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
+                             recordId: date1.getTime()
                              });
         }
     });
 
+}
 
+function deleteRecord(project, recordId, index)
+{
+    console.log("Details.deleteRecord: " + project + ", " + recordId + ", " + index)
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('DELETE FROM Details WHERE project=? AND startTime = ?',
+                                              [project, recordId])});
+    detailsModel.remove(index)
 }

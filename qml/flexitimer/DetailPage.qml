@@ -46,6 +46,16 @@ CommonPage {
             height: 70
             width: parent.width
 
+            MouseArea {
+                anchors.fill: parent
+                onPressAndHold: {
+                    sessionMenu.deleteEnabled =  endTime !== ""
+                    sessionMenu.sessionIndex = index
+                    sessionMenu.recordId = recordId
+                    sessionMenu.open()
+                }
+            }
+
             Label {
                 text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
                 font.pixelSize: Const.fontMedium
@@ -92,6 +102,22 @@ CommonPage {
         ToolIcon {
             platformIconId: "toolbar-back"
             onClicked: pageStack.pop()
+        }
+    }
+
+    ContextMenu {
+        id: sessionMenu
+        property alias deleteEnabled: deleteMenuItem.enabled
+        property int sessionIndex
+        property double recordId
+
+        MenuLayout {
+            MenuItem {
+                id: deleteMenuItem
+                text: qsTr("Delete");
+                onClicked: Details.deleteRecord(project,
+                                                sessionMenu.recordId,
+                                                sessionMenu.sessionIndex) }
         }
     }
 
