@@ -115,10 +115,20 @@ CommonPage {
             MenuItem {
                 id: deleteMenuItem
                 text: qsTr("Delete");
-                onClicked: Details.deleteRecord(project,
-                                                sessionMenu.recordId,
-                                                sessionMenu.sessionIndex) }
+                onClicked: deleteSessionDialog.open() }
         }
+    }
+
+    QueryDialog {
+
+        id: deleteSessionDialog
+        titleText: qsTr("Delete Session")
+        message:qsTr("Do you want to delete this session?")
+        acceptButtonText: qsTr("Yes")
+        rejectButtonText: qsTr("No")
+        onAccepted: Details.deleteRecord(project,
+                                         sessionMenu.recordId,
+                                         sessionMenu.sessionIndex)
     }
 
     Component.onCompleted: Details.populateProjectDetails()
