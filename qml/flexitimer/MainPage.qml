@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "Constants.js" as Const
+import "UiConstants.js" as Const
 import "Utils.js" as Utils
 import "Db.js" as Db
 

@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import "Db.js" as Db
-import "Constants.js" as Const
+import "UiConstants.js" as Const
 import "Utils.js" as Utils
 import "Projects.js" as Projects
 
@@ -31,7 +31,7 @@ Item {
 
         Label {
             font.pixelSize: Const.fontHuge
-            text: Utils.toTime(todaysTotal)
+            text: Utils.toTime(todaysTotal + (projectList.inProgress !== "" ? workTimer.elapsed : 0))
             anchors.centerIn: parent
             color: "white"
         }
@@ -55,19 +55,6 @@ Item {
 
         delegate: ProjectDelegate {}
 
-    }
-
-    BackgroundTimer {
-        id: workTimer
-        onTick: {
-            todaysTotal += workTimer.delta
-            var t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedToday) + workTimer.delta
-            console.log("elapsed today: " + t)
-            projectList.model.setProperty(projectList.inProgressIndex, "elapsedToday", t)
-            t = parseFloat(projectList.model.get(projectList.inProgressIndex).elapsedTotal) + workTimer.delta
-            console.log("elapsed total: " + t)
-            projectList.model.setProperty(projectList.inProgressIndex, "elapsedTotal", t)
-        }
     }
 
     ContextMenu {
@@ -94,6 +81,6 @@ Item {
     Component.onCompleted: {
         update()
         Projects.restoreOngoingSession()
-        workTimer.initialize()
+        // workTimer.initialize()
     }
 }

@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "Constants.js" as Const
+import "UiConstants.js" as Const
 import "Db.js" as Db
 
 PageStackWindow {
@@ -98,5 +98,9 @@ PageStackWindow {
 
     ListModel {
         id: detailsModel
+    }
+
+    BackgroundTimer {
+        id: workTimer
     }
 }

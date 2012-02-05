@@ -6,7 +6,7 @@ function populateProjectDetails()
 
     console.log("populateProjectsDetails: " + project + ", " + startTime + ", " + endTime)
     db.transaction(function(tx) {
-                       var rs = tx.executeSql('SELECT * FROM Details WHERE project=? AND startTime >= ? AND startTime <= ? ORDER BY startTime DESC',
+                       var rs = tx.executeSql('SELECT * FROM Details WHERE project=? AND startTime >= ? AND startTime <= ? ORDER BY endTime DESC',
                                               [project, startTime.getTime(), endTime.getTime()]);
         for(var i = 0; i < rs.rows.length; i++) {
             var date1 = new Date
@@ -20,13 +20,24 @@ function populateProjectDetails()
                 elapsed = toTime(date2.getTime() - date1.getTime())
             }
 
+            if (endTimeText !== "") {
             detailsList.model.append({startTime: Qt.formatTime(date1, "hh:mm"),
                              endTime: endTimeText,
                              elapsed: elapsed,
                              date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
                              recordId: rs.rows.item(i).recordId,
                              comments: rs.rows.item(i).comments
-                             });
+                             })
+            }
+            else {
+                detailsList.model.insert(0, {startTime: Qt.formatTime(date1, "hh:mm"),
+                                 endTime: endTimeText,
+                                 elapsed: elapsed,
+                                 date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
+                                 recordId: rs.rows.item(i).recordId,
+                                 comments: rs.rows.item(i).comments
+                                 })
+            }
         }
     });
 
@@ -49,7 +60,12 @@ function populateEditSessionPage()
                                               [editSessionPage.recordId]);
                        console.log("Start time: ", rs.rows.item(0).startTime)
                        startTimeUTC = rs.rows.item(0).startTime
-                       endTimeUTC = rs.rows.item(0).endTime
+                       if (rs.rows.item(0).endTime !== "") {
+                           endTimeUTC = rs.rows.item(0).endTime
+                           inProgress = false
+                       }
+                       else
+                           inProgress = true
 
                        if (rs.rows.item(0).comments !== undefined)
                            text1.text = rs.rows.item(0).comments

@@ -20,7 +20,8 @@ function populate() {
                                              GROUP BY \
                                                  project', [dayStart(now).getTime(), dayEnd(now).getTime()]);
                           for(var i = 0; i < rs.rows.length; i++) {
-                              projectList.model.append({name: rs.rows.item(i).project, elapsedTotal: rs.rows.item(i).elapsedTotal, elapsedToday: rs.rows.item(i).elapsedToday});
+                              projectList.model.append({name: rs.rows.item(i).project, elapsedTotal: parseFloat(rs.rows.item(i).elapsedTotal),
+                                                           elapsedToday: parseFloat(rs.rows.item(i).elapsedToday)});
 
                           }
                       });
@@ -38,7 +39,14 @@ function restoreOngoingSession()
                 console.log("Project in progress: " + projectList.inProgress + ", index: " + i)
             }
         }
-
+        // set the timer start time to the start time of the ongoing session
+        db.transaction(function(tx) {
+                           var rs = tx.executeSql('SELECT startTime FROM Details WHERE ROWID=?', [lastId]);
+                           if (rs.rows.length > 0) {
+                               workTimer.setStartTime(parseFloat(rs.rows.item(0).startTime))
+                               workTimer.resumeTimer()
+                           }
+                       })
     }
 }
 

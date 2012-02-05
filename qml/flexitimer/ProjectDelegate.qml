@@ -2,11 +2,13 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
 
-import "Constants.js" as Const
+import "UiConstants.js" as Const
 import "Utils.js" as Utils
 import "Db.js" as Db
 
 Item {
+    id: root
+
     height: 105
     width: parent.width
 
@@ -44,10 +46,17 @@ Item {
 
         function stopCurrentProject()
         {
-            workTimer.stop()
+            workTimer.stopTimer()
+            console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
             Db.addProjectEnd()
-            // projectsModel.setProperty(projectList.inProgressIndex, "elapsed", workTimer.elapsed)
             Db.saveElapsed(projectList.inProgress, workTimer.elapsed)
+            projectsModel.setProperty(projectList.inProgressIndex,
+                                      "elapsedToday",
+                                      elapsedToday + workTimer.elapsed)
+            projectsModel.setProperty(projectList.inProgressIndex,
+                                      "elapsedTotal",
+                                      elapsedTotal + workTimer.elapsed)
+            projectsPage.todaysTotal += workTimer.elapsed
         }
 
         onClicked: {
@@ -65,7 +74,7 @@ Item {
                 projectList.inProgress = name
                 projectList.inProgressIndex = index
                 Db.addProjectStart(name)
-                workTimer.start()
+                workTimer.startTimer()
                 console.log("elapsed today: " + elapsedToday)
             }
             console.log("new in progress:" + projectList.inProgress)
@@ -87,7 +96,8 @@ Item {
 
     Label {
         id: timeLabel
-        text: "Today " + Utils.toTime(elapsedToday)
+        text: "Today " + Utils.toTime(elapsedToday +
+                                      (projectList.inProgress === name ? workTimer.elapsed : 0))
         color: "gray"
         font.pixelSize: Const.fontSmall
         anchors {
@@ -99,7 +109,8 @@ Item {
 
     Label {
         id: timeLabel2
-        text: "Total " + Utils.toTime(elapsedTotal)
+        text: "Total " + Utils.toTime(elapsedTotal +
+                                  (projectList.inProgress === name ? workTimer.elapsed : 0))
         color: "gray"
         font.pixelSize: Const.fontSmall
         anchors {

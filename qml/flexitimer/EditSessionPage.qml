@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.0
-import "Constants.js" as Const
+import "UiConstants.js" as Const
 import "Details.js" as Details
 import "Projects.js" as Projects
 
@@ -13,6 +13,7 @@ CommonPage {
     property double recordId
     property double startTimeUTC
     property double endTimeUTC
+    property bool inProgress
 
     function formatDate(utc) {
         var d = new Date
@@ -51,8 +52,9 @@ CommonPage {
 
         TumblerButton {
             id: endSelector
-            text: formatDate(endTimeUTC)
+            text: inProgress ? qsTr("In progress") : formatDate(endTimeUTC)
             width: startSelector.width
+            enabled: !inProgress
             onClicked: { endPicker.setUtcTime(endTimeUTC); endPicker.open() }
         }
     }
@@ -99,10 +101,15 @@ CommonPage {
         id: startPicker
 
         onPicked: {
-            if (startPicker.toDateTimeUTC() < endTimeUTC) {
+            if (((startPicker.toDateTimeUTC() < endTimeUTC) && !inProgress) ||
+                 ((startPicker.toDateTimeUTC() < new Date) && inProgress)) {
 
                 startTimeUTC = startPicker.toDateTimeUTC()
                 Details.saveStartTime(recordId, startTimeUTC)
+
+                if (inProgress) {
+                    workTimer.setStartTime(startTimeUTC)
+                }
 
                 mainPage.update()
                 detailPage.update()

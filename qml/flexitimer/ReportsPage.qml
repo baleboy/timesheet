@@ -2,7 +2,7 @@ import QtQuick 1.1
 import Qt.labs.gestures 1.0
 
 import com.nokia.meego 1.0
-import "Constants.js" as Const
+import "UiConstants.js" as Const
 import "Reports.js" as Reports
 import "Utils.js" as Utils
 

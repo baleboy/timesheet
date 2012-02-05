@@ -30,16 +30,6 @@ TumblerDialog {
         day = d.getDate()
         hour = d.getHours()
         minute = d.getMinutes()
-
-        monthColumn.selectedIndex = month - 1
-        dayColumn.selectedIndex = day - 1
-        hourColumn.selectedIndex = hour
-        minuteColumn.selectedIndex = minute
-
-        console.log("New indexes: " + monthColumn.selectedIndex + " "
-                    + dayColumn.selectedIndex + " " +
-                    hourColumn.selectedIndex + " " +
-                    minuteColumn.selectedIndex)
     }
 
     function toDateTime() {
@@ -57,66 +47,45 @@ TumblerDialog {
 
     TumblerColumn {
         id: monthColumn
-        items: monthList
         label: qsTr("MONTH")
         selectedIndex: root.month - 1
 
-        ListModel {
+        items: ListModel {
             id: monthList
-            Component.onCompleted: {
-                for (var i = 1 ; i <= 12 ; i++)
-                    monthList.append({"value": dateTime.shortMonthName(i)})
-            }
         }
     }
 
+
     TumblerColumn {
         id: dayColumn
-        items: dayList
         label: qsTr("DAY")
         selectedIndex: root.day - 1
 
-        ListModel {
+        items: ListModel {
             id: dayList
-
-            Component.onCompleted: {
-                for (var i = 1 ; i <= dateTime.daysInMonth(dateTime.currentYear, root.month) ; i++)
-                    dayList.append({"value": i})
-            }
         }
     }
 
     TumblerColumn {
         id: hourColumn
-        items: hourList
         label: qsTr("HOUR")
         selectedIndex: root.hour
 
-        ListModel {
+        items: ListModel {
             id: hourList
-
-            Component.onCompleted: {
-                for (var i = 0 ; i <= 23 ; i++)
-                    hourList.append({"value": (i <= 9 ? "0" : "") + i })
-            }
         }
     }
 
     TumblerColumn {
         id: minuteColumn
-        items: minuteList
         label: qsTr("MIN")
         selectedIndex: root.minute
 
-        ListModel {
+        items: ListModel {
             id: minuteList
-
-            Component.onCompleted: {
-                for (var i = 0 ; i <= 59 ; i++)
-                    minuteList.append({"value": (i <= 9 ? "0" : "") + i })
-            }
         }
     }
+
     onAccepted: {
         root.month = monthColumn.selectedIndex + 1
         root.day = dayColumn.selectedIndex + 1
@@ -124,4 +93,19 @@ TumblerDialog {
         root.minute = minuteColumn.selectedIndex
         root.picked()
     }
+
+    function initializeDataModels()
+    {
+        var i
+        for (i = 1 ; i <= 12 ; i++)
+            monthList.append({"value": dateTime.shortMonthName(i)})
+        for (i = 1 ; i <= dateTime.daysInMonth(dateTime.currentYear, root.month) ; i++)
+            dayList.append({"value": i})
+        for (i = 0 ; i <= 23 ; i++)
+            hourList.append({"value": (i <= 9 ? "0" : "") + i })
+        for (i = 0 ; i <= 59 ; i++)
+            minuteList.append({"value": (i <= 9 ? "0" : "") + i })
+    }
+
+    Component.onCompleted: initializeDataModels()
 }

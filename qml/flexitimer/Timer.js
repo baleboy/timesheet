@@ -1,37 +1,42 @@
 Qt.include("Db.js")
 
-// Date object used by BackgroundTimer
-var previousTime
+var startTime = new Date
 
-function saveState()
+function startTimer()
 {
-    console.log("Timer.saveState")
-    if (running) {
-        console.log("saving time: " + previousTime)
-        setProperty("previousTime", previousTime.getTime())
-    }
-    else {
-        console.log("clearing time")
-        setProperty("previousTime", "")
-    }
+    elapsed = 0
+    startTime = new Date
+    setProperty("timerStart", startTime.getTime())
+    myTimer.start()
+    console.log("Timer started. Start time: " + Qt.formatDateTime(startTime))
 }
 
-function restoreState()
+function stopTimer()
 {
-    console.log("Timer.restoreState")
-    var storedTime = getProperty("previousTime")
-    if (storedTime !== "") {
-        previousTime = new Date(parseFloat(storedTime))
-        console.log("restored previous time: " + previousTime)
-        workTimer.start()
-    }
+    myTimer.stop()
+    setProperty("timerStart", "")
+    console.log("Timer stopped. Elapsed: " + myTimer.elapsed)
 }
-
 
 function updateElapsed()
 {
-    var currentTime = new Date
-    delta = Math.round((currentTime.getTime() - previousTime.getTime()) / 60000) * 60000
-    previousTime = currentTime
-    elapsed += delta
+    var now = new Date
+    elapsed = now.getTime() - startTime.getTime()
+    console.log("Timer updated. Elapsed: " + myTimer.elapsed)
+}
+
+function setStartTime(utc)
+{
+    // if the timer is running, pause it
+    // and start it again (this will trigger a tick
+    // and protect from race conditions)
+    var needResume = myTimer.running
+    if (myTimer.running) {
+        myTimer.stop()
+    }
+    startTime.setTime(utc)
+    if (needResume)
+        myTimer.start()
+
+    console.log("set start time: " + startTime)
 }
