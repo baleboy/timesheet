@@ -9,7 +9,7 @@ function init()
     var instance = openDatabaseSync("Flexo", "1.0", "Flexo DB", 1000000);
     instance.transaction(function(tx) {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Projects(name STRING UNIQUE, elapsed INTEGER)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Details(project STRING, startTime INTEGER, endTime INTEGER)');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS Details(recordId INTEGER, project STRING, startTime INTEGER, endTime INTEGER, comments TEXT)');
         tx.executeSql('CREATE TABLE IF NOT EXISTS Properties(name STRING UNIQUE, value STRING)');
         var rs = tx.executeSql('SELECT * FROM Properties WHERE name=?', ["pendingRecordId"]);
         if (rs.rows.length > 0) {
@@ -31,7 +31,7 @@ function addProjectStart(project)
 {
     var now = new Date()
     db.transaction(function(tx) {
-                       var rs = tx.executeSql('INSERT INTO Details (project, startTime) VALUES (?, ?)', [project, now.getTime()])
+                       var rs = tx.executeSql('INSERT INTO Details (recordId, project, startTime) VALUES (?, ?, ?)', [now.getTime(), project, now.getTime()])
                        lastId = rs.insertId
                        setProperty("pendingRecordId", lastId)
                        console.log("Opened record " + lastId)
@@ -115,7 +115,7 @@ function printAll()
 
                        rs = tx.executeSql('SELECT * FROM Details');
                        for(i = 0; i < rs.rows.length; i++) {
-                           console.log(rs.rows.item(i).project + " " + rs.rows.item(i).startTime + " " + rs.rows.item(i).endTime)
+                           console.log(rs.rows.item(i).recordId + " " + rs.rows.item(i).project + " " + rs.rows.item(i).startTime + " " + rs.rows.item(i).endTime)
                        }
 
                        rs = tx.executeSql('SELECT * FROM Properties');

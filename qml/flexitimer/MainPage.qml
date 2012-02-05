@@ -9,6 +9,11 @@ CommonPage {
     tools: commonTools
     title: today()
 
+    function update()
+    {
+        projectListPage.update()
+    }
+
     function today() {
         var now = new Date()
         return Qt.formatDate(now, "MMMM dd, yyyy")
@@ -19,6 +24,7 @@ CommonPage {
     }
 
     ProjectsPage {
+        id: projectListPage
         visible: projectsModel.count != 0
     }
 }

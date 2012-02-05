@@ -12,6 +12,12 @@ Item {
     anchors.fill: parent
     property int todaysTotal
 
+    function update()
+    {
+        Projects.populate()
+        todaysTotal = Db.todaysTotal()
+    }
+
     Rectangle {
 
         id: rect1
@@ -86,9 +92,8 @@ Item {
     }
 
     Component.onCompleted: {
-        Projects.populate()
+        update()
         Projects.restoreOngoingSession()
-        todaysTotal = Db.todaysTotal()
         workTimer.initialize()
     }
 }

@@ -11,6 +11,11 @@ CommonPage {
     property date endTime
     property string project
 
+    function update()
+    {
+        Details.populateProjectDetails()
+    }
+
     Item {
         anchors.fill: parent
         Label {
@@ -43,11 +48,12 @@ CommonPage {
         clip: true
 
         delegate: Item {
-            height: 70
+            height: 100
             width: parent.width
 
             MouseArea {
                 anchors.fill: parent
+                onClicked: { pageStack.push(editSessionPage, { recordId: recordId }) }
                 onPressAndHold: {
                     sessionMenu.deleteEnabled =  endTime !== ""
                     sessionMenu.sessionIndex = index
@@ -57,24 +63,41 @@ CommonPage {
             }
 
             Label {
+                id: startLabel
                 text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
                 font.pixelSize: Const.fontMedium
                 width: 320
                 anchors {
-                    verticalCenter: parent.verticalCenter
+                    top: parent.top
+                    topMargin: Const.margin
                     left: parent.left
                     leftMargin: Const.margin
                 }
             }
 
             Label {
+                id: elapsedLabel
                 text: elapsed
                 font.pixelSize: Const.fontMedium
                 color: "gray"
                 anchors {
-                    verticalCenter: parent.verticalCenter
+                    top: startLabel.top
                     right: parent.right
                     rightMargin: Const.margin
+                }
+            }
+
+            Label {
+                text: comments
+                elide: Text.ElideRight
+                maximumLineCount: 1
+                color: "grey"
+                anchors {
+                    left: parent.left
+                    leftMargin: Const.margin
+                    bottom: parent.bottom
+                    bottomMargin: Const.margin
+                    right: elapsedLabel.left
                 }
             }
 
@@ -97,13 +120,7 @@ CommonPage {
         }
     }
 
-    tools: ToolBarLayout {
-
-        ToolIcon {
-            platformIconId: "toolbar-back"
-            onClicked: pageStack.pop()
-        }
-    }
+    tools: DefaultToolbar { }
 
     ContextMenu {
         id: sessionMenu
@@ -126,10 +143,13 @@ CommonPage {
         message:qsTr("Do you want to delete this session?")
         acceptButtonText: qsTr("Yes")
         rejectButtonText: qsTr("No")
-        onAccepted: Details.deleteRecord(project,
-                                         sessionMenu.recordId,
-                                         sessionMenu.sessionIndex)
+        onAccepted: {
+            Details.deleteRecord(project,
+                                 sessionMenu.recordId,
+                                 sessionMenu.sessionIndex)
+            mainPage.update()
+        }
     }
 
-    Component.onCompleted: Details.populateProjectDetails()
+    // Component.onCompleted: update()
 }

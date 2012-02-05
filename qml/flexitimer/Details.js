@@ -24,7 +24,8 @@ function populateProjectDetails()
                              endTime: endTimeText,
                              elapsed: elapsed,
                              date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
-                             recordId: date1.getTime()
+                             recordId: rs.rows.item(i).recordId,
+                             comments: rs.rows.item(i).comments
                              });
         }
     });
@@ -35,7 +36,44 @@ function deleteRecord(project, recordId, index)
 {
     console.log("Details.deleteRecord: " + project + ", " + recordId + ", " + index)
     db.transaction(function(tx) {
-                       var rs = tx.executeSql('DELETE FROM Details WHERE project=? AND startTime = ?',
+                       var rs = tx.executeSql('DELETE FROM Details WHERE project=? AND recordId = ?',
                                               [project, recordId])});
     detailsModel.remove(index)
+}
+
+function populateEditSessionPage()
+{
+    console.log("Edit session page - record Id: ", editSessionPage.recordId)
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('SELECT * FROM Details WHERE recordId = ? ',
+                                              [editSessionPage.recordId]);
+                       console.log("Start time: ", rs.rows.item(0).startTime)
+                       startTimeUTC = rs.rows.item(0).startTime
+                       endTimeUTC = rs.rows.item(0).endTime
+
+                       if (rs.rows.item(0).comments !== undefined)
+                           text1.text = rs.rows.item(0).comments
+                   })
+}
+
+function saveComments(recordId, text)
+{
+    console.log("Details.saveComments. Record ID: " +  recordId + " text: " + text)
+    db.transaction(function(tx) {
+                       tx.executeSql('UPDATE Details SET comments=? WHERE recordId=?', [text, recordId])
+    });
+}
+
+function saveStartTime(recordId, t)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('UPDATE Details SET startTime=? WHERE recordId=?', [t, recordId])
+    });
+}
+
+function saveEndTime(recordId, t)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('UPDATE Details SET endTime=? WHERE recordId=?', [t, recordId])
+    });
 }

@@ -8,19 +8,22 @@ PageStackWindow {
 
     initialPage: mainPage
 
-    Component {
-         id: mainPage
-         MainPage {}
+    MainPage {
+        id: mainPage
     }
 
-    Component {
+    DetailPage {
         id: detailPage
-        DetailPage {}
     }
 
     Component {
         id: reportsPage
         ReportsPage {}
+    }
+
+    Component {
+        id: editSessionPage
+        EditSessionPage {}
     }
 
     ToolBarLayout {

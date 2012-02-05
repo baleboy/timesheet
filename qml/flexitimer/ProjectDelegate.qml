@@ -13,7 +13,12 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            pageStack.push(detailPage, { title: name, project: name, startTime: new Date(0), endTime: new Date() })
+            detailPage.title = name
+            detailPage.project = name
+            detailPage.startTime = new Date(0)
+            detailPage.endTime = new Date()
+            detailPage.update()
+            pageStack.push(detailPage)
         }
         onPressAndHold: {
             projectMenu.projectIndex = index
