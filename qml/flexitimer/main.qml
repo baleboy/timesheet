@@ -90,7 +90,8 @@ PageStackWindow {
                                           "elapsedToday": 0})
                       Db.addProject(projectNameInput.text)
                   }
-
+      onStatusChanged: if (status === DialogStatus.Opening)
+                           projectNameInput.text = ""
     }
     ListModel {
         id: projectsModel

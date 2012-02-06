@@ -1,5 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import com.nokia.extras 1.0
+
 import "UiConstants.js" as Const
 import "Details.js" as Details
 
@@ -82,9 +84,19 @@ CommonPage {
                 color: "gray"
                 anchors {
                     top: startLabel.top
+                    right: moreIndicator.left
+                    rightMargin: Const.margin
+                }
+            }
+
+            MoreIndicator {
+                id: moreIndicator
+                anchors {
+                    verticalCenter: parent.verticalCenter
                     right: parent.right
                     rightMargin: Const.margin
                 }
+
             }
 
             Label {
@@ -97,7 +109,7 @@ CommonPage {
                     leftMargin: Const.margin
                     bottom: parent.bottom
                     bottomMargin: Const.margin
-                    right: elapsedLabel.left
+                    right: moreIndicator.left
                 }
             }
 

@@ -84,6 +84,13 @@ CommonPage {
         }
         onActiveFocusChanged: if (!activeFocus)
                               {
+                                  // the following line is needed to ensure
+                                  // that the last word of the input text is
+                                  // taken in consideration (it makes the pre-edit buffer
+                                  // to be copied to the actual buffer)
+                                  // For reference see https://bugs.meego.com/show_bug.cgi?id=21748
+                                  // 'inputContext' is a C++ object exposed by Qt components
+                                  inputContext.reset()
                                   Details.saveComments(recordId, text)
                                   detailPage.update()
                               }
