@@ -50,71 +50,7 @@ CommonPage {
 
         clip: true
 
-        delegate: Item {
-            height: 100
-            width: parent.width
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: { pageStack.push(editSessionPage, { recordId: recordId }) }
-                onPressAndHold: {
-                    sessionMenu.deleteEnabled =  endTime !== ""
-                    sessionMenu.sessionIndex = index
-                    sessionMenu.recordId = recordId
-                    sessionMenu.open()
-                }
-            }
-
-            Label {
-                id: startLabel
-                text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
-                font.pixelSize: Const.fontMedium
-                width: 320
-                anchors {
-                    top: parent.top
-                    topMargin: Const.margin
-                    left: parent.left
-                    leftMargin: Const.margin
-                }
-            }
-
-            Label {
-                id: elapsedLabel
-                text: elapsed !== "" ? elapsed : Utils.toTime(workTimer.elapsed)
-                font.pixelSize: Const.fontMedium
-                color: "gray"
-                anchors {
-                    top: startLabel.top
-                    right: moreIndicator.left
-                    rightMargin: Const.margin
-                }
-            }
-
-            MoreIndicator {
-                id: moreIndicator
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    right: parent.right
-                    rightMargin: Const.margin
-                }
-
-            }
-
-            Label {
-                text: comments
-                elide: Text.ElideRight
-                maximumLineCount: 1
-                color: "grey"
-                anchors {
-                    left: parent.left
-                    leftMargin: Const.margin
-                    bottom: parent.bottom
-                    bottomMargin: Const.margin
-                    right: moreIndicator.left
-                }
-            }
-
-        }
+        delegate: DetailsDelegate {}
 
         section.delegate: Rectangle {
             width: parent.width

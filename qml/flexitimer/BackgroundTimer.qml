@@ -34,7 +34,6 @@ Timer {
     triggeredOnStart: true
 
     onTriggered: {
-        console.log("Timer ticked")
         Impl.updateElapsed()
         myTimer.tick()
     }

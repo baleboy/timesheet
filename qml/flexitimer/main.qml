@@ -63,7 +63,11 @@ PageStackWindow {
         }
     }
 
-    Dialog {
+    AddProjectDialog {
+        id: addProjectDialog
+    }
+
+    /* Dialog {
       id: addProjectDialog
       title: Label { color: "white"; text: qsTr("Add Project")}
 
@@ -92,7 +96,7 @@ PageStackWindow {
                   }
       onStatusChanged: if (status === DialogStatus.Opening)
                            projectNameInput.text = ""
-    }
+    } */
     ListModel {
         id: projectsModel
     }
