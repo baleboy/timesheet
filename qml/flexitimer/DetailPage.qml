@@ -4,6 +4,7 @@ import com.nokia.extras 1.0
 
 import "UiConstants.js" as Const
 import "Details.js" as Details
+import "Utils.js" as Utils
 
 CommonPage {
 
@@ -79,7 +80,7 @@ CommonPage {
 
             Label {
                 id: elapsedLabel
-                text: elapsed
+                text: elapsed !== "" ? elapsed : Utils.toTime(workTimer.elapsed)
                 font.pixelSize: Const.fontMedium
                 color: "gray"
                 anchors {
