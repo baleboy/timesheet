@@ -20,47 +20,6 @@ CommonPage {
         Details.populateProjectDetails()
     }
 
-    Button {
-        id: startButton
-        style: PositiveButtonStyle {}
-        text: qsTr("Start")
-        width: Const.mediumButtonWidth
-        visible: project !== inProgress
-
-        anchors {
-            top: parent.top
-            topMargin: headerHeight + Const.margin
-            horizontalCenter: parent.horizontalCenter
-        }
-        onClicked: {
-            var recordId = appWindow.startProject(project, projectIndex)
-            var now = new Date
-            detailsModel.insert(0, {
-                                    startTime: Qt.formatTime(now, "hh:mm"),
-                                    endTime: "",
-                                    elapsed: "",
-                                    date: Qt.formatDate(now, "dddd, MMMM dd yyyy"),
-                                    recordId: recordId,
-                                    comments: ""
-                                })
-        }
-    }
-
-    Button {
-        id: stopButton
-        style: NegativeButtonStyle {}
-        text: qsTr("Stop")
-        width: Const.mediumButtonWidth
-        visible: project === inProgress
-        anchors.centerIn: startButton
-        onClicked: {
-            appWindow.stopCurrentProject()
-            detailsModel.setProperty(0, "endTime", Qt.formatDateTime(new Date, "hh:mm"))
-            detailsModel.setProperty(0, "elapsed", Utils.toTime(workTimer.elapsed))
-            mainPage.update()
-        }
-    }
-
     Item {
         anchors.fill: parent
         Label {
@@ -81,8 +40,8 @@ CommonPage {
         model: detailsModel
 
         anchors {
-            top: startButton.bottom
-            topMargin: Const.margin
+            top: parent.top
+            topMargin: headerHeight
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -97,7 +56,7 @@ CommonPage {
         section.delegate: Rectangle {
             width: parent.width
             height: 40
-            color: "lightSteelBlue"
+            color: "lightGray"
 
             Label {
                 text: section
@@ -111,7 +70,48 @@ CommonPage {
         }
     }
 
-    tools: DefaultToolbar { }
+    tools: DefaultToolbar {
+
+        Button {
+            id: startButton
+            style: PositiveButtonStyle {}
+            text: qsTr("Start")
+            width: Const.mediumButtonWidth
+            visible: project !== inProgress
+
+            anchors.centerIn: parent
+
+            onClicked: {
+                var recordId = appWindow.startProject(project, projectIndex)
+                var now = new Date
+                detailsModel.insert(0, {
+                                        startTime: Qt.formatTime(now, "hh:mm"),
+                                        endTime: "",
+                                        elapsed: "",
+                                        date: Qt.formatDate(now, "dddd, MMMM dd yyyy"),
+                                        recordId: recordId,
+                                        comments: ""
+                                    })
+            }
+        }
+
+        Button {
+            id: stopButton
+            style: NegativeButtonStyle {}
+            text: qsTr("Stop")
+            width: startButton.width
+            visible: project === inProgress
+            anchors.centerIn: startButton
+            onClicked: {
+                appWindow.stopCurrentProject()
+                detailsModel.setProperty(0, "endTime", Qt.formatDateTime(new Date, "hh:mm"))
+                detailsModel.setProperty(0, "elapsed", Utils.toTime(workTimer.elapsed))
+                mainPage.update()
+            }
+        }
+
+
+    }
 
     ContextMenu {
         id: sessionMenu
@@ -142,5 +142,4 @@ CommonPage {
         }
     }
 
-    // Component.onCompleted: update()
 }
