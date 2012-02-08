@@ -11,12 +11,33 @@ CommonPage {
 
     function update()
     {
+        var t = today()
+        if (title !== t) title = t // day change
         projectListPage.update()
     }
 
     function today() {
         var now = new Date()
         return Qt.formatDate(now, "MMMM dd, yyyy")
+    }
+
+    function checkDate()
+    {
+        console.log("Check date")
+        var t = today()
+        if (title !== t) {
+            title = t
+            projectListPage.update()
+        }
+    }
+
+    Connections {
+        target: platformWindow
+        onActiveChanged: {
+            console.log("active changed: " + platformWindow.active)
+            if (platformWindow.active)
+                              checkDate()
+        }
     }
 
     EmptyPage {
