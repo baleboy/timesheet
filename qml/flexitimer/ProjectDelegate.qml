@@ -19,6 +19,7 @@ Item {
             detailPage.project = name
             detailPage.startTime = new Date(0)
             detailPage.endTime = new Date()
+            detailPage.projectIndex = index
             detailPage.update()
             pageStack.push(detailPage)
         }
@@ -35,7 +36,7 @@ Item {
         height: 58
         width: 58
         text: checked ? "||" : ">"
-        checked: projectList.inProgress === name
+        checked: inProgress === name
 
         anchors {
             top: parent.top
@@ -44,41 +45,28 @@ Item {
             leftMargin: Const.margin
         }
 
-        function stopCurrentProject()
-        {
-            workTimer.stopTimer()
-            console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
-            Db.addProjectEnd()
-            Db.saveElapsed(projectList.inProgress, workTimer.elapsed)
-            projectsModel.setProperty(projectList.inProgressIndex,
-                                      "elapsedToday",
-                                      elapsedToday + workTimer.elapsed)
-            projectsModel.setProperty(projectList.inProgressIndex,
-                                      "elapsedTotal",
-                                      elapsedTotal + workTimer.elapsed)
-            projectsPage.todaysTotal += workTimer.elapsed
-        }
-
         onClicked: {
-            console.log("old in progress:" + projectList.inProgress)
+            console.log("old in progress:" + inProgress)
             if (checked) {
                 // this task was stopped by pressing the pause button
-                stopCurrentProject()
-                projectList.inProgress = ""
+                appWindow.stopCurrentProject()
             }
             else {
-                if (projectList.inProgress != "") {
+                appWindow.startProject(name, index)
+            }/*
+                if (inProgress !== "") {
                     // previous task stopped implicitly
-                    stopCurrentProject()
+                    appWindow.stopCurrentProject()
                 }
-                projectList.inProgress = name
-                projectList.inProgressIndex = index
+                inProgress = name
+                inProgressIndex = index
                 Db.addProjectStart(name)
                 workTimer.startTimer()
                 console.log("elapsed today: " + elapsedToday)
+                Db.setProperty("projectInProgress", inProgress)
             }
-            console.log("new in progress:" + projectList.inProgress)
-            Db.setProperty("projectInProgress", projectList.inProgress)
+            */
+            console.log("new in progress:" + inProgress)
         }
     }
 
@@ -97,7 +85,7 @@ Item {
     Label {
         id: timeLabel
         text: "Today " + Utils.toTime(elapsedToday +
-                                      (projectList.inProgress === name ? workTimer.elapsed : 0))
+                                      (inProgress === name ? workTimer.elapsed : 0))
         color: "gray"
         font.pixelSize: Const.fontSmall
         anchors {
@@ -110,7 +98,7 @@ Item {
     Label {
         id: timeLabel2
         text: "Total " + Utils.toTime(elapsedTotal +
-                                  (projectList.inProgress === name ? workTimer.elapsed : 0))
+                                  (inProgress === name ? workTimer.elapsed : 0))
         color: "gray"
         font.pixelSize: Const.fontSmall
         anchors {

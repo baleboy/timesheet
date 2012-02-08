@@ -3,6 +3,7 @@ import com.nokia.meego 1.0
 import com.nokia.extras 1.0
 
 import "UiConstants.js" as Const
+import "Utils.js" as Utils
 
 Item {
     height: 100
@@ -26,7 +27,7 @@ Item {
         width: 320
         anchors {
             top: parent.top
-            topMargin: Const.margin
+            topMargin: comments !== "" ? Const.margin : 2*Const.margin
             left: parent.left
             leftMargin: Const.margin
         }
@@ -34,7 +35,7 @@ Item {
 
     Label {
         id: elapsedLabel
-        text: elapsed !== "" ? elapsed : Utils.toTime(workTimer.elapsed)
+        text: elapsed === "" ? Utils.toTime(workTimer.elapsed) : elapsed
         font.pixelSize: Const.fontMedium
         color: "gray"
         anchors {

@@ -13,10 +13,52 @@ CommonPage {
     property date startTime
     property date endTime
     property string project
+    property int projectIndex
 
     function update()
     {
         Details.populateProjectDetails()
+    }
+
+    Button {
+        id: startButton
+        style: PositiveButtonStyle {}
+        text: qsTr("Start")
+        width: Const.mediumButtonWidth
+        visible: project !== inProgress
+
+        anchors {
+            top: parent.top
+            topMargin: headerHeight + Const.margin
+            horizontalCenter: parent.horizontalCenter
+        }
+        onClicked: {
+            var recordId = appWindow.startProject(project, projectIndex)
+            var now = new Date
+            detailsModel.insert(0, {
+                                    startTime: Qt.formatTime(now, "hh:mm"),
+                                    endTime: "",
+                                    elapsed: "",
+                                    date: Qt.formatDate(now, "dddd, MMMM dd yyyy"),
+                                    recordId: recordId,
+                                    comments: ""
+                                })
+        }
+    }
+
+    Button {
+        id: stopButton
+        style: NegativeButtonStyle {}
+        text: qsTr("Stop")
+        width: Const.mediumButtonWidth
+        visible: project === inProgress
+        anchors.centerIn: startButton
+        onClicked: {
+            appWindow.stopCurrentProject()
+            detailsModel.setProperty(0, "endTime", Qt.formatDateTime(new Date, "hh:mm"))
+            detailsModel.setProperty(0, "elapsed", Utils.toTime(workTimer.elapsed))
+            mainPage.update()
+        }
     }
 
     Item {
@@ -39,8 +81,8 @@ CommonPage {
         model: detailsModel
 
         anchors {
-            top: parent.top
-            topMargin: headerHeight
+            top: startButton.bottom
+            topMargin: Const.margin
             bottom: parent.bottom
             left: parent.left
             right: parent.right

@@ -30,13 +30,13 @@ function populate() {
 
 function restoreOngoingSession()
 {
-    projectList.inProgress = getProperty("projectInProgress")
+    inProgress = getProperty("projectInProgress")
 
-    if (projectList.inProgress !== "") {
+    if (inProgress !== "") {
         for (var i = 0 ; i < projectList.model.count ; i++) {
-            if (projectList.model.get(i).name === projectList.inProgress) {
-                projectList.inProgressIndex = i
-                console.log("Project in progress: " + projectList.inProgress + ", index: " + i)
+            if (projectList.model.get(i).name === inProgress) {
+                inProgressIndex = i
+                console.log("Project in progress: " + inProgress + ", index: " + i)
             }
         }
         // set the timer start time to the start time of the ongoing session
@@ -61,12 +61,34 @@ function deleteProject(name, index)
                        var now = new Date()
                        var rs = tx.executeSql('DELETE FROM Details WHERE project = ?', [name])
                    })
-    if (index === projectList.inProgressIndex) {
+    if (index === inProgressIndex) {
         workTimer.stop()
-        projectList.inProgress = ""
+        inProgress = ""
     }
     projectsPage.todaysTotal -= projectsModel.get(index).elapsedToday
     projectsModel.remove(index)
-    if (projectList.inProgressIndex > index)
-        projectList.inProgressIndex--
+    if (inProgressIndex > index)
+        inProgressIndex--
 }
+/*
+function stopCurrentProject()
+{
+    workTimer.stopTimer()
+
+    var elapsedToday = projectsModel.get(inProgressIndex).elapsedToday
+    var elapsedTotal = projectsModel.get(inProgressIndex).elapsedTotal
+
+    console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
+    addProjectEnd()
+    saveElapsed(inProgress, workTimer.elapsed)
+    projectsModel.setProperty(inProgressIndex,
+                              "elapsedToday",
+                              elapsedToday + workTimer.elapsed)
+    projectsModel.setProperty(inProgressIndex,
+                              "elapsedTotal",
+                              elapsedTotal + workTimer.elapsed)
+    todaysTotal += workTimer.elapsed
+    inProgress = ""
+}
+*/
+

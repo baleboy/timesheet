@@ -10,7 +10,7 @@ Item {
     id: projectsPage
 
     anchors.fill: parent
-    property int todaysTotal
+    // property int todaysTotal
 
     function update()
     {
@@ -31,7 +31,7 @@ Item {
 
         Label {
             font.pixelSize: Const.fontHuge
-            text: Utils.toTime(todaysTotal + (projectList.inProgress !== "" ? workTimer.elapsed : 0))
+            text: Utils.toTime(todaysTotal + (inProgress !== "" ? workTimer.elapsed : 0))
             anchors.centerIn: parent
             color: "white"
         }
@@ -40,8 +40,6 @@ Item {
     ListView {
 
         id: projectList
-        property string inProgress
-        property int inProgressIndex
 
         anchors {
             top: rect1.bottom

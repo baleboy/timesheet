@@ -8,6 +8,45 @@ PageStackWindow {
 
     initialPage: mainPage
 
+    property string inProgress
+    property int inProgressIndex
+    property double todaysTotal
+
+    function stopCurrentProject()
+    {
+        workTimer.stopTimer()
+
+        var elapsedToday = projectsModel.get(inProgressIndex).elapsedToday
+        var elapsedTotal = projectsModel.get(inProgressIndex).elapsedTotal
+
+        console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
+        Db.addProjectEnd()
+        Db.saveElapsed(inProgress, workTimer.elapsed)
+        projectsModel.setProperty(inProgressIndex,
+                                  "elapsedToday",
+                                  elapsedToday + workTimer.elapsed)
+        projectsModel.setProperty(inProgressIndex,
+                                  "elapsedTotal",
+                                  elapsedTotal + workTimer.elapsed)
+        todaysTotal += workTimer.elapsed
+        inProgress = ""
+        Db.setProperty("projectInProgress", "")
+    }
+
+    function startProject(name, index)
+    {
+        if (inProgress !== "") {
+            // previous task stopped implicitly
+            appWindow.stopCurrentProject()
+        }
+        inProgress = name
+        inProgressIndex = index
+        var recordId = Db.addProjectStart(name)
+        workTimer.startTimer()
+        Db.setProperty("projectInProgress", inProgress)
+        return recordId
+    }
+
     MainPage {
         id: mainPage
     }

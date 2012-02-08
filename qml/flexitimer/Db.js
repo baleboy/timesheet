@@ -36,6 +36,8 @@ function addProjectStart(project)
                        setProperty("pendingRecordId", lastId)
                        console.log("Opened record " + lastId)
     });
+    // return recordId
+    return now.getTime()
 }
 
 function addProjectEnd()
