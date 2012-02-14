@@ -18,6 +18,18 @@ Item {
         todaysTotal = Db.todaysTotal()
     }
 
+    function move(index1, index2)
+    {
+        var project = projectsModel.get(index1).name
+        var etoday = projectsModel.get(index1).elapsedToday
+        var etotal = projectsModel.get(index1).elapsedTotal
+
+        projectsModel.remove(index1)
+        projectList.positionViewAtBeginning()
+        projectsModel.insert(index2, { "name": project, "elapsedToday": etoday, "elapsedTotal": etotal})
+    }
+
+
     Rectangle {
 
         id: rect1
@@ -31,6 +43,7 @@ Item {
 
         Label {
             font.pixelSize: Const.fontHuge
+            font.weight: Font.Bold
             text: Utils.toTime(todaysTotal + (inProgress !== "" ? workTimer.elapsed : 0))
             anchors.centerIn: parent
             color: "white"
@@ -40,6 +53,7 @@ Item {
     ListView {
 
         id: projectList
+        currentIndex: -1
 
         anchors {
             top: rect1.bottom

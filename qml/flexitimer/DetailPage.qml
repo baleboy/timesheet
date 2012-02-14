@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.extras 1.0
+import com.nokia.extras 1.1
 
 import "UiConstants.js" as Const
 import "Details.js" as Details
@@ -34,10 +34,9 @@ CommonPage {
 
     ListView {
         id: detailsList
-
         visible: model.count > 0
-
         model: detailsModel
+        currentIndex: -1
 
         anchors {
             top: parent.top
@@ -55,7 +54,7 @@ CommonPage {
 
         section.delegate: Rectangle {
             width: parent.width
-            height: 40
+            height: 48
             color: "lightGray"
 
             Label {

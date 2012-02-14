@@ -25,10 +25,17 @@ CommonPage {
     {
         console.log("Check date")
         var t = today()
-        if (title !== t) {
+        console.log("comparing " + title + " with " + t)
+        if (title != t) {
+            console.debug("Date has changed, updating")
             title = t
             projectListPage.update()
         }
+    }
+
+    function move(index1, index2)
+    {
+        projectListPage.move(index1, index2)
     }
 
     Connections {

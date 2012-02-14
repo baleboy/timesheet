@@ -27,10 +27,13 @@ Page {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
                 leftMargin: Const.margin
+                right: parent.right
             }
             font.pixelSize: Const.fontLarge
             font.family: "Nokia Pure Text Light"
             color: "white"
+            elide: Text.ElideRight
+            maximumLineCount: 1
         }
     }
 }

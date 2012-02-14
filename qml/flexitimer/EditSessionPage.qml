@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.extras 1.0
+import com.nokia.extras 1.1
 import "UiConstants.js" as Const
 import "Details.js" as Details
 import "Projects.js" as Projects
@@ -98,12 +98,6 @@ CommonPage {
 
     tools: DefaultToolbar { }
 
-
-    InfoBanner {
-        id: errorBanner
-        text: qsTr("Start time must be earlier than end time")
-    }
-
     DateTimePicker {
         id: startPicker
 
@@ -122,6 +116,7 @@ CommonPage {
                 detailPage.update()
             }
             else {
+                errorBanner.text = qsTr("Start time must be earlier than end time")
                 errorBanner.show()
             }
         }
@@ -141,6 +136,7 @@ CommonPage {
                 detailPage.update()
             }
             else {
+                errorBanner.text = qsTr("End time must be later than start time")
                 errorBanner.show()
             }
         }

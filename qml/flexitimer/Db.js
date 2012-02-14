@@ -6,25 +6,39 @@ var lastId
 
 function init()
 {
-    var instance = openDatabaseSync("Flexo", "1.0", "Flexo DB", 1000000);
-    instance.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Projects(name STRING UNIQUE, elapsed INTEGER)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Details(recordId INTEGER, project STRING, startTime INTEGER, endTime INTEGER, comments TEXT)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Properties(name STRING UNIQUE, value STRING)');
-        var rs = tx.executeSql('SELECT * FROM Properties WHERE name=?', ["pendingRecordId"]);
-        if (rs.rows.length > 0) {
-            lastId = rs.rows.item(0).value
+    var instance
+    try {
+        instance = openDatabaseSync("Flexo", "1.0", "Flexo DB", 1000000);
+        instance.transaction(createTables);
+    }
+    catch(e) {
+        // assuming it can only fail for wrong version
+        console.log("Db.init: caught " + e)
+/*        try {
+            instance = openDatabaseSync("Flexo", "1.0", "Flexo DB", 1000000);
+            console.debug("Version 1.0 open")
+            // instance.changeVersion("1.0", "1.1", function(tx) {
+            //                            // tx.executeSql('ALTER TABLE Projects ADD timeStamp INTEGER NOT NULL DEFAULT(0)')
+            //                       })
         }
-    });
+        catch(e) {
+            console.debug("Upgrading: " + e)
+        }
+        */
+    }
 
     return instance
 }
 
-function addProject(name)
+function createTables(tx)
 {
-    db.transaction(function(tx) {
-        tx.executeSql('INSERT INTO Projects (name, elapsed) VALUES (?,?)', [name,0])
-    });
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Projects(name STRING UNIQUE, timeStamp INTEGER )');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Details(recordId INTEGER, project STRING, startTime INTEGER, endTime INTEGER, comments TEXT)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Properties(name STRING UNIQUE, value STRING)');
+    var rs = tx.executeSql('SELECT * FROM Properties WHERE name=?', ["pendingRecordId"]);
+    if (rs.rows.length > 0) {
+        lastId = rs.rows.item(0).value
+    }
 }
 
 function addProjectStart(project)
@@ -36,7 +50,10 @@ function addProjectStart(project)
                        setProperty("pendingRecordId", lastId)
                        console.log("Opened record " + lastId)
     });
-    // return recordId
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('UPDATE Projects SET timeStamp=? WHERE name=?', [now.getTime(), project])
+    });
+
     return now.getTime()
 }
 
@@ -50,18 +67,9 @@ function addProjectEnd()
 
 }
 
-function saveElapsed(project, elapsed)
-{
-    db.transaction(function(tx) {
-                       tx.executeSql('UPDATE Projects SET elapsed=? WHERE name=?', [elapsed, project])
-    });
-
-}
-
-
 function clearAll()
 {
-    /*
+
     db.transaction(function(tx) {
         tx.executeSql('DELETE FROM Projects');
     });
@@ -73,19 +81,18 @@ function clearAll()
     db.transaction(function(tx) {
         tx.executeSql('DELETE FROM Properties');
     });
-    */
+}
+
+function recreate()
+{
 
     db.transaction(function(tx) {
         tx.executeSql('DROP TABLE Projects');
-    });
-
-    db.transaction(function(tx) {
         tx.executeSql('DROP TABLE Details');
-    });
-
-    db.transaction(function(tx) {
         tx.executeSql('DROP TABLE Properties');
     });
+
+    db.transaction(createTables)
 }
 
 function setProperty(name, value)

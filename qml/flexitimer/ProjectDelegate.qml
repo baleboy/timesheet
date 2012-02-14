@@ -9,8 +9,22 @@ import "Db.js" as Db
 Item {
     id: root
 
-    height: 105
+    property int maxHeight: 105
+    height: maxHeight
     width: parent.width
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#0083C8"
+        opacity: inProgress === name ? .5 : 0
+    }
+
+    Rectangle {
+        id: highlight
+        anchors.fill: parent
+        color: "lightGray"
+        opacity: 0
+    }
 
     MouseArea {
         anchors.fill: parent
@@ -28,21 +42,21 @@ Item {
             projectMenu.projectName = name
             projectMenu.open()
         }
+        onCanceled: highlight.opacity = 0
+        onReleased: highlight.opacity = 0
+
+        onPressed: highlight.opacity = 0.7
     }
 
-    Button {
+    PlayPauseButton {
         id: startButton
 
-        height: 58
-        width: 58
-        text: checked ? "||" : ">"
         checked: inProgress === name
 
         anchors {
-            top: parent.top
-            topMargin: Const.margin
+            verticalCenter: parent.verticalCenter
             left: parent.left
-            leftMargin: Const.margin
+            leftMargin: Const.mediumMargin
         }
 
         onClicked: {
@@ -53,58 +67,40 @@ Item {
             }
             else {
                 appWindow.startProject(name, index)
-            }/*
-                if (inProgress !== "") {
-                    // previous task stopped implicitly
-                    appWindow.stopCurrentProject()
-                }
-                inProgress = name
-                inProgressIndex = index
-                Db.addProjectStart(name)
-                workTimer.startTimer()
-                console.log("elapsed today: " + elapsedToday)
-                Db.setProperty("projectInProgress", inProgress)
             }
-            */
             console.log("new in progress:" + inProgress)
         }
+
     }
 
     Label {
         id: nameLabel
         text: name
-        font.pixelSize: Const.fontMedium
+        font.pixelSize: Const.listItemTitleFont
+        elide: Text.ElideRight
+        maximumLineCount: 1
+        font.weight: Font.Bold
+        color: inProgress === name ? "white" : "black"
         anchors {
             top: parent.top
-            topMargin: Const.margin
+            topMargin: Const.mediumMargin
             left: startButton.right
             leftMargin: Const.margin
+            right: moreIndicator.left
         }
     }
 
     Label {
         id: timeLabel
-        text: "Today " + Utils.toTime(elapsedToday +
-                                      (inProgress === name ? workTimer.elapsed : 0))
-        color: "gray"
-        font.pixelSize: Const.fontSmall
+        text: Utils.toTime(elapsedToday +
+                           (inProgress === name ? workTimer.elapsed : 0))
+        color: inProgress === name ? "white" : "gray"
+        font.pixelSize: Const.listItemSubtitleFont
         anchors {
+            verticalCenter: parent.verticalCenter
+            left: nameLabel.left
             top: nameLabel.bottom
             topMargin: Const.smallMargin
-            left: nameLabel.left
-        }
-    }
-
-    Label {
-        id: timeLabel2
-        text: "Total " + Utils.toTime(elapsedTotal +
-                                  (inProgress === name ? workTimer.elapsed : 0))
-        color: "gray"
-        font.pixelSize: Const.fontSmall
-        anchors {
-            top: timeLabel.top
-            left: timeLabel.right
-            leftMargin: Const.bigMargin
         }
     }
 
@@ -113,8 +109,32 @@ Item {
         anchors {
             verticalCenter: startButton.verticalCenter
             right: parent.right
-            rightMargin: Const.margin
+            rightMargin: Const.smallMargin
         }
+    }
+
+    Image {
+        source: "images/separator.png"
+        anchors {
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
+    }
+
+    // appear and disappear animations for list items
+    ListView.onAdd: SequentialAnimation {
+        PropertyAction { target: root; property: "opacity"; value: 0 }
+        NumberAnimation { target: root; property: "height"; from: 0; to: maxHeight ; duration: 150 ; easing.type: Easing.InOutQuad }
+        NumberAnimation { target: root; property: "opacity"; from: 0; to: 1; duration: 100 }
+    }
+
+    ListView.onRemove: SequentialAnimation {
+        PropertyAction { target: root; property: "ListView.delayRemove"; value: true }
+        ParallelAnimation {
+            NumberAnimation { target: root; property: "height"; from: maxHeight; to: 0 ; duration: 150 ; easing.type: Easing.InOutQuad }
+            NumberAnimation { target: root; property: "opacity"; from: 1; to: 0; duration: 200 }
+        }
+        PropertyAction { target: root; property: "ListView.delayRemove"; value: false }
     }
 
 }

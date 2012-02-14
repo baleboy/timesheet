@@ -1,5 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import com.nokia.extras 1.1
+
 import "UiConstants.js" as Const
 import "Db.js" as Db
 
@@ -21,7 +23,6 @@ PageStackWindow {
 
         console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
         Db.addProjectEnd()
-        Db.saveElapsed(inProgress, workTimer.elapsed)
         projectsModel.setProperty(inProgressIndex,
                                   "elapsedToday",
                                   elapsedToday + workTimer.elapsed)
@@ -40,10 +41,12 @@ PageStackWindow {
             appWindow.stopCurrentProject()
         }
         inProgress = name
-        inProgressIndex = index
         var recordId = Db.addProjectStart(name)
         workTimer.startTimer()
         Db.setProperty("projectInProgress", inProgress)
+        if (index !== 0) mainPage.move(index, 0)
+        inProgressIndex = 0
+        // projectsList.positionAtBeginning()
         return recordId
     }
 
@@ -92,9 +95,14 @@ PageStackWindow {
         visualParent: pageStack
         MenuLayout {
             MenuItem {
-                text: qsTr("Clear data")
-                onClicked: { Db.clearAll(); projectsModel.clear() }
+                text: qsTr("Delete All")
+                onClicked: { eraseDialog.open() }
             }
+            MenuItem {
+                text: qsTr("Recreate DB")
+                onClicked: { Db.recreate(); projectsModel.clear() }
+            }
+
             MenuItem {
                 text: qsTr("Print all")
                 onClicked: { Db.printAll() }
@@ -106,36 +114,6 @@ PageStackWindow {
         id: addProjectDialog
     }
 
-    /* Dialog {
-      id: addProjectDialog
-      title: Label { color: "white"; text: qsTr("Add Project")}
-
-      content:Item {
-        id: name
-        height: 140
-        width: parent.width
-        TextField {
-            id: projectNameInput
-            placeholderText: qsTr("Project name")
-            anchors.centerIn: parent
-        }
-      }
-      buttons: Button {
-          platformStyle: ButtonStyle { inverted: true }
-          text: qsTr("OK")
-          width: Const.mediumButtonWidth
-          anchors.horizontalCenter: parent.horizontalCenter
-          onClicked: addProjectDialog.accept()
-      }
-      onAccepted: if (projectNameInput.text != "") {
-                      projectsModel.append({"name": projectNameInput.text,
-                                          "elapsedTotal": 0,
-                                          "elapsedToday": 0})
-                      Db.addProject(projectNameInput.text)
-                  }
-      onStatusChanged: if (status === DialogStatus.Opening)
-                           projectNameInput.text = ""
-    } */
     ListModel {
         id: projectsModel
     }
@@ -147,4 +125,20 @@ PageStackWindow {
     BackgroundTimer {
         id: workTimer
     }
+
+    QueryDialog {
+        id: eraseDialog
+        acceptButtonText :qsTr("OK")
+        rejectButtonText: qsTr("Cancel")
+        titleText: qsTr("Erase all data")
+        message: qsTr("Do you really want to erase all the data?")
+        onAccepted: { Db.clearAll() ; Db.clearAll(); projectsModel.clear() }
+    }
+
+    InfoBanner {
+        id: errorBanner
+        topMargin: 40.0
+        iconSource: "images/banner-error.png"
+    }
+
 }

@@ -6,19 +6,20 @@ function populate() {
     console.log("Projects.populate")
 
     projectList.model.clear();
-    db.transaction(function(tx) {
+    db.readTransaction(function(tx) {
                        var now = new Date()
                           var rs = tx.executeSql('SELECT \
-                                                 project \
+                                                 project, timeStamp \
                                                  ,SUM(CASE WHEN endTime IS NOT NULL THEN endTime - startTime ELSE 0 END) AS elapsedTotal \
                                                  ,SUM(CASE WHEN startTime >= ? AND startTime <= ? AND endTime IS NOT NULL THEN endTime - startTime ELSE 0 END) AS elapsedToday \
                                              FROM \
-                                                 (SELECT Projects.name as project, Details.startTime, Details.endTime \
+                                                 (SELECT Projects.name as project, Projects.timeStamp as timeStamp, Details.startTime, Details.endTime \
                                                  FROM Projects \
                                                  LEFT JOIN Details \
                                                  ON Projects.name=Details.project) \
                                              GROUP BY \
-                                                 project', [dayStart(now).getTime(), dayEnd(now).getTime()]);
+                                                 project \
+                                             ORDER BY timeStamp DESC', [dayStart(now).getTime(), dayEnd(now).getTime()]);
                           for(var i = 0; i < rs.rows.length; i++) {
                               projectList.model.append({name: rs.rows.item(i).project, elapsedTotal: parseFloat(rs.rows.item(i).elapsedTotal),
                                                            elapsedToday: parseFloat(rs.rows.item(i).elapsedToday)});
@@ -40,7 +41,7 @@ function restoreOngoingSession()
             }
         }
         // set the timer start time to the start time of the ongoing session
-        db.transaction(function(tx) {
+        db.readTransaction(function(tx) {
                            var rs = tx.executeSql('SELECT startTime FROM Details WHERE ROWID=?', [lastId]);
                            if (rs.rows.length > 0) {
                                workTimer.setStartTime(parseFloat(rs.rows.item(0).startTime))
@@ -48,6 +49,13 @@ function restoreOngoingSession()
                            }
                        })
     }
+}
+
+function addProject(name)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('INSERT INTO Projects (name, timeStamp) VALUES (?, ?)', [name, 0])
+                   });
 }
 
 function deleteProject(name, index)
@@ -65,30 +73,9 @@ function deleteProject(name, index)
         workTimer.stop()
         inProgress = ""
     }
-    projectsPage.todaysTotal -= projectsModel.get(index).elapsedToday
+    appWindow.todaysTotal -= projectsModel.get(index).elapsedToday
     projectsModel.remove(index)
     if (inProgressIndex > index)
         inProgressIndex--
 }
-/*
-function stopCurrentProject()
-{
-    workTimer.stopTimer()
-
-    var elapsedToday = projectsModel.get(inProgressIndex).elapsedToday
-    var elapsedTotal = projectsModel.get(inProgressIndex).elapsedTotal
-
-    console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
-    addProjectEnd()
-    saveElapsed(inProgress, workTimer.elapsed)
-    projectsModel.setProperty(inProgressIndex,
-                              "elapsedToday",
-                              elapsedToday + workTimer.elapsed)
-    projectsModel.setProperty(inProgressIndex,
-                              "elapsedTotal",
-                              elapsedTotal + workTimer.elapsed)
-    todaysTotal += workTimer.elapsed
-    inProgress = ""
-}
-*/
 

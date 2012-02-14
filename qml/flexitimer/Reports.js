@@ -6,7 +6,7 @@ function populateReportsModel()
 
     console.log("populateReportsModel: " + startTime + ", " + endTime)
 
-    db.transaction(function(tx) {
+    db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE startTime >= ? AND startTime <= ? ORDER BY startTime DESC',
                                               [startTime.getTime(), endTime.getTime()]);
         for(var i = 0; i < rs.rows.length; i++) {

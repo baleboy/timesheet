@@ -91,7 +91,7 @@ CommonPage {
         Rectangle {
             width: parent.width
             height: 40
-            color: "lightSteelBlue"
+            color: "lightGrey"
 
             Label {
                 text: section

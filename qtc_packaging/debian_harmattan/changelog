@@ -1,5 +1,12 @@
-flexitimer (0.0.1) unstable; urgency=low
+flexitimer (0.1.1) unstable; urgency=low
 
-  * Initial Release.
+  * Some UI improvements
 
- -- unknown <baleboy@unknown>  Mon, 12 Dec 2011 22:11:17 +0200
+ -- Francesco Balestrieri <bale@balenet.com>  Fri, 10 Feb 2012 10:00:17 +0200
+
+
+flexitimer (0.1.0) unstable; urgency=low
+
+  * First Beta
+
+ -- Francesco Balestrieri <bale@balenet.com>  Wed, 08 Feb 2012 10:00:17 +0200

@@ -4,10 +4,12 @@ function populateProjectDetails()
 {
     detailsList.model.clear();
 
-    console.log("populateProjectsDetails: " + project + ", " + startTime + ", " + endTime)
-    db.transaction(function(tx) {
+    var now = new Date
+
+    console.log("populateProjectsDetails: " + project + ", " + 0 + ", " + now)
+    db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE project=? AND startTime >= ? AND startTime <= ? ORDER BY endTime DESC',
-                                              [project, startTime.getTime(), endTime.getTime()]);
+                                              [project, 0, now.getTime()]);
         for(var i = 0; i < rs.rows.length; i++) {
             var date1 = new Date
             date1.setTime(rs.rows.item(i).startTime)
@@ -55,7 +57,7 @@ function deleteRecord(project, recordId, index)
 function populateEditSessionPage()
 {
     console.log("Edit session page - record Id: ", editSessionPage.recordId)
-    db.transaction(function(tx) {
+    db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE recordId = ? ',
                                               [editSessionPage.recordId]);
                        console.log("Start time: ", rs.rows.item(0).startTime)
