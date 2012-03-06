@@ -25,7 +25,8 @@ function populateReportsModel()
                                  startTime: Qt.formatTime(date1, "hh:mm"),
                                  endTime: endTimeText,
                                  elapsed: elapsed,
-                                 date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
+                                 date: Qt.formatDate(date1, "dd/MM/yyyy"),
+                                 comments: rs.rows.item(i).comments
                                  });
             }
 
@@ -57,4 +58,18 @@ function getTitle(type)
     case "day":
         return Qt.formatDate(now, "dddd, MMMM dd yyyy")
     }
+}
+function buildReport()
+{
+    var reportData = "Date, Start, End, Duration, Comment\n"
+
+    for (var i = 0 ; i < reportModel.count ; i++) {
+        reportData += reportModel.get(i).date + ", " +
+                reportModel.get(i).startTime + ", " +
+                reportModel.get(i).endTime + ", " +
+                reportModel.get(i).elapsed + ", " +
+                reportModel.get(i).comments + "\n"
+    }
+
+    return reportData
 }

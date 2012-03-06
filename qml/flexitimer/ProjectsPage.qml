@@ -27,6 +27,7 @@ Item {
         projectsModel.remove(index1)
         projectList.positionViewAtBeginning()
         projectsModel.insert(index2, { "name": project, "elapsedToday": etoday, "elapsedTotal": etotal})
+
     }
 
 

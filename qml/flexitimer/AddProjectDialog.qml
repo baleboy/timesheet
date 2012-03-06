@@ -38,6 +38,8 @@ Dialog {
                         errorBanner.show()
                     }
                 }
-    onStatusChanged: if (status === DialogStatus.Opening)
+    onStatusChanged: if (status === DialogStatus.Opening) {
                          projectNameInput.text = ""
+                         projectNameInput.focus = true
+                     }
 }

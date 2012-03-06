@@ -25,12 +25,16 @@ symbian:TARGET.CAPABILITY += NetworkServices
 
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 CONFIG += qdeclarative-boostable
+CONFIG += qtsparql
 
 # Add dependency to Symbian components
 # CONFIG += qt-components
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    filehandler.cpp \
+    shareuiif.cpp \
+    exporter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -47,6 +51,11 @@ OTHER_FILES += \
     qml/flexitimer/UiConstants.js
 
 RESOURCES +=
+
+HEADERS += \
+    filehandler.h \
+    shareuiif.h \
+    exporter.h
 
 
 

@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.extras 1.1
+import com.nokia.extras 1.0
 
 import "UiConstants.js" as Const
 import "Utils.js" as Utils
@@ -11,6 +11,12 @@ Item {
     property int maxHeight: 100
     height: maxHeight
     width: parent.width
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#0083C8"
+        opacity: endTime == "" ? .5 : 0
+    }
 
     Rectangle {
         id: highlight
@@ -40,6 +46,7 @@ Item {
         font.pixelSize: Const.listItemTitleFont
         font.weight: Font.Bold
         width: 320
+        color: endTime == "" ? "white" : "black"
         anchors {
             top: parent.top
             topMargin: comments !== "" ? Const.margin : 2*Const.margin
@@ -52,9 +59,9 @@ Item {
         id: elapsedLabel
         text: elapsed === "" ? Utils.toTime(workTimer.elapsed) : elapsed
         font.pixelSize: Const.listItemTitleFont
-        color: "gray"
+        color: endTime == "" ? "white" : "gray"
         anchors {
-            verticalCenter: parent.verticalCenter
+            top: startLabel.top
             right: moreIndicator.left
             rightMargin: Const.margin
         }

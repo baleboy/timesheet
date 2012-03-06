@@ -1,7 +1,8 @@
 import QtQuick 1.1
-import Qt.labs.gestures 1.0
+import Exporter 1.0
 
 import com.nokia.meego 1.0
+
 import "UiConstants.js" as Const
 import "Reports.js" as Reports
 import "Utils.js" as Utils
@@ -13,23 +14,33 @@ CommonPage {
     property date startTime: Utils.dayStart()
     property date endTime: Utils.dayEnd()
 
-    Button {
-        id: reportTitle
-        width: 400
-        text: Reports.getTitle(typeDialog.selected)
-
-        font {
-            pixelSize: Const.fontMedium
-        }
+    Rectangle {
+        id: background
+        width: parent.width
+        height: 90
+        color: "orange"
 
         anchors {
             top: parent.top
-            topMargin: Const.headerHeight + Const.margin
+            topMargin: Const.headerHeight
             horizontalCenter: parent.horizontalCenter
         }
 
-        onClicked: typeDialog.open()
+        Button {
+            id: reportTitle
+            width: 400
+            text: Reports.getTitle(typeDialog.selected)
+
+            font {
+                pixelSize: Const.fontMedium
+            }
+
+            anchors.centerIn: parent
+
+            onClicked: typeDialog.open()
+        }
     }
+
 
     ListModel {
         id: reportModel
@@ -42,16 +53,17 @@ CommonPage {
         id: reportDelegate
 
         Item {
-            height: 105
+            height: 125
             width: reportList.width
 
             Label {
                 id: nameLabel
                 text: project
-                font.pixelSize: Const.fontMedium
+                font.pixelSize: Const.listItemTitleFont
+                font.weight: Font.Bold
                 anchors {
                     top: parent.top
-                    topMargin: Const.margin
+                    topMargin: Const.smallMargin
                     left: parent.left
                     leftMargin: Const.margin
                 }
@@ -59,26 +71,47 @@ CommonPage {
 
             Label {
                 text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
-                font.pixelSize: Const.fontMedium
+                font.pixelSize: Const.listItemSubtitleFont
                 color: "gray"
                 width: 320
                 anchors {
                     top: nameLabel.bottom
-                    topMargin: Const.margin
+                    topMargin: Const.smallMargin
                     left: parent.left
                     leftMargin: Const.margin
                 }
             }
 
             Label {
+                id: elapsedLabel
                 text: elapsed
-                font.pixelSize: Const.fontMedium
+                font.pixelSize: Const.listItemSubtitleFont
                 color: "gray"
                 anchors {
                     top: nameLabel.bottom
-                    topMargin: Const.margin
+                    topMargin: Const.smallMargin
                     right: parent.right
                     rightMargin: Const.margin
+                }
+            }
+
+            Label {
+                text: comments
+                font.pixelSize: Const.listItemSubtitleFont
+                color: "gray"
+                anchors {
+                    top: elapsedLabel.bottom
+                    topMargin: Const.smallMargin
+                    left: parent.left
+                    leftMargin: Const.margin
+                }
+            }
+
+            Image {
+                source: "images/separator.png"
+                anchors {
+                    bottom: parent.bottom
+                    horizontalCenter: parent.horizontalCenter
                 }
             }
 
@@ -122,8 +155,7 @@ CommonPage {
         clip: true
 
         anchors {
-            top: reportTitle.bottom
-            topMargin: Const.margin
+            top: background.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -175,11 +207,32 @@ CommonPage {
         }
     }
 
+    Exporter {
+        id: exporter
+        folderName: "FlexiTimer"
+        mimeType: "text/plain"
+        fileName: "flexiTimer-report.csv"
+
+        onError: {
+            errorBanner.text = msg;
+            errorBanner.show()
+        }
+    }
+
     tools: ToolBarLayout {
 
         ToolIcon {
             platformIconId: "toolbar-back"
             onClicked: pageStack.pop()
+        }
+
+        ToolIcon {
+            platformIconId: enabled ? "toolbar-share" : "toolbar-share-dimmed"
+            enabled: reportModel.count != 0
+            onClicked: {
+                exporter.body = Reports.buildReport()
+                exporter.share()
+            }
         }
     }
 }

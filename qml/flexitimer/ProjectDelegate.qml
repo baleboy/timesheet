@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.extras 1.1
+import com.nokia.extras 1.0
 
 import "UiConstants.js" as Const
 import "Utils.js" as Utils
@@ -93,7 +93,9 @@ Item {
     Label {
         id: timeLabel
         text: Utils.toTime(elapsedToday +
-                           (inProgress === name ? workTimer.elapsed : 0))
+                           (inProgress === name ? workTimer.elapsed : 0)) +
+              " (" + Utils.toTime(elapsedTotal + (inProgress === name ? workTimer.elapsed : 0))
+              + ")"
         color: inProgress === name ? "white" : "gray"
         font.pixelSize: Const.listItemSubtitleFont
         anchors {

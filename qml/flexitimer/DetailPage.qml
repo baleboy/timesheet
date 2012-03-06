@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.extras 1.1
+import com.nokia.extras 1.0
 
 import "UiConstants.js" as Const
 import "Details.js" as Details
@@ -71,6 +71,35 @@ CommonPage {
 
     tools: DefaultToolbar {
 
+        ToolIcon {
+            iconId: project == inProgress ? "toolbar-mediacontrol-pause" :
+                                            "toolbar-mediacontrol-play"
+
+            onClicked: project == inProgress ? stopAction() : startAction()
+
+            function startAction() {
+                var recordId = appWindow.startProject(project, projectIndex)
+                var now = new Date
+                detailsModel.insert(0, {
+                                        startTime: Qt.formatTime(now, "hh:mm"),
+                                        endTime: "",
+                                        elapsed: "",
+                                        date: Qt.formatDate(now, "dddd, MMMM dd yyyy"),
+                                        recordId: recordId,
+                                        comments: ""
+                                    })
+
+            }
+
+            function stopAction() {
+                appWindow.stopCurrentProject()
+                detailsModel.setProperty(0, "endTime", Qt.formatDateTime(new Date, "hh:mm"))
+                detailsModel.setProperty(0, "elapsed", Utils.toTime(workTimer.elapsed))
+                mainPage.update()
+            }
+        }
+
+        /*
         Button {
             id: startButton
             style: PositiveButtonStyle {}
@@ -108,7 +137,7 @@ CommonPage {
                 mainPage.update()
             }
         }
-
+*/
 
     }
 
