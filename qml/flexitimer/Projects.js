@@ -61,12 +61,10 @@ function addProject(name)
 function deleteProject(name, index)
 {
     db.transaction(function(tx) {
-                       var now = new Date()
                        var rs = tx.executeSql('DELETE FROM Projects WHERE name = ?', [name])
                    })
 
     db.transaction(function(tx) {
-                       var now = new Date()
                        var rs = tx.executeSql('DELETE FROM Details WHERE project = ?', [name])
                    })
     if (index === inProgressIndex) {
@@ -77,5 +75,14 @@ function deleteProject(name, index)
     projectsModel.remove(index)
     if (inProgressIndex > index)
         inProgressIndex--
+}
+
+function renameProject(oldName, newName, index)
+{
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('UPDATE Projects SET name=? WHERE name=?', [newName, oldName])
+                       rs = tx.executeSql('UPDATE Details SET project=? WHERE project=?', [newName, oldName])
+                   });
+    projectsModel.setProperty(index, "name", newName)
 }
 

@@ -76,6 +76,7 @@ Item {
         property string projectName
 
         MenuLayout {
+            MenuItem {text: qsTr("Rename"); onClicked: renameProjectDialog.open() }
             MenuItem {text: qsTr("Delete"); onClicked: deleteProjectDialog.open() }
         }
     }
@@ -89,6 +90,12 @@ Item {
         acceptButtonText: qsTr("Yes")
         rejectButtonText: qsTr("No")
         onAccepted: Projects.deleteProject(projectMenu.projectName, projectMenu.projectIndex)
+    }
+
+    RenameProjectDialog {
+        id: renameProjectDialog
+        index: projectMenu.projectIndex
+        oldName: projectMenu.projectName
     }
 
     Component.onCompleted: {

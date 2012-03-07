@@ -28,7 +28,7 @@ CommonPage {
 
         Button {
             id: reportTitle
-            width: 400
+            width: 300
             text: Reports.getTitle(typeDialog.selected)
 
             font {
@@ -226,6 +226,13 @@ CommonPage {
             onClicked: pageStack.pop()
         }
 
+        ToolButton {
+            id: selectProjectsButton
+            text: Reports.selectedProjectsText(projectSelectionDialog.selectedIndexes,
+                                               projectSelectionDialog.model.count)
+            onClicked: projectSelectionDialog.open()
+        }
+
         ToolIcon {
             platformIconId: enabled ? "toolbar-share" : "toolbar-share-dimmed"
             enabled: reportModel.count != 0
@@ -234,5 +241,14 @@ CommonPage {
                 exporter.share()
             }
         }
+    }
+
+    MultiSelectionDialog {
+        id: projectSelectionDialog
+        titleText: qsTr("Select Projects")
+        model: ListModel {}
+        Component.onCompleted: Reports.getProjectList(projectSelectionDialog.model)
+        acceptButtonText: qsTr("OK")
+        onAccepted: Reports.populateReportsModel()
     }
 }
