@@ -1,4 +1,5 @@
 Qt.include("Db.js")
+Qt.include("Utils.js")
 
 function populateReportsModel()
 {
@@ -59,20 +60,18 @@ Date.prototype.getWeek = function() {
 
 function getTitle(type)
 {
-    var now = new Date
-
     switch (type) {
     case "all":
         return qsTr("All Time")
 
     case "month":
-        return Qt.formatDate(now, "MMMM yyyy")
+        return Qt.formatDate(startTime, "MMMM yyyy")
 
     case "week":
-        return "Week " + now.getWeek() + ", " + now.getFullYear()
+        return "Week " + startTime.getWeek() + ", " + startTime.getFullYear()
 
     case "day":
-        return Qt.formatDate(now, "MMMM dd yyyy")
+        return Qt.formatDate(startTime, "MMMM dd yyyy")
     }
 }
 
@@ -112,4 +111,54 @@ function selectedProjectsText(list, total)
         return qsTr("1 project")
 
     return list.length + " projects"
+}
+
+function setPreviousPeriod(periodType)
+{
+    var refTime = startTime
+    switch (periodType) {
+    case "day":
+        refTime.setDate(refTime.getDate() - 1)
+        startTime = dayStart(refTime)
+        endTime = dayEnd(refTime)
+        break;
+    case "week":
+        refTime.setDate(refTime.getDate() - 7)
+        startTime = weekStart(refTime)
+        endTime = weekEnd(refTime)
+        break;
+    case "month":
+        refTime.setMonth(refTime.getMonth() - 1)
+        startTime = monthStart(refTime)
+        endTime = monthEnd(refTime)
+        break;
+    }
+
+    console.log("Start time: " + startTime)
+    console.log("End time: " + endTime)
+}
+
+function setNextPeriod(periodType)
+{
+    var refTime = startTime
+    switch (periodType) {
+    case "day":
+        refTime.setDate(refTime.getDate() + 1)
+        startTime = dayStart(refTime)
+        endTime = dayEnd(refTime)
+        break;
+    case "week":
+        refTime.setDate(refTime.getDate() + 7)
+        startTime = weekStart(refTime)
+        endTime = weekEnd(refTime)
+        break;
+    case "month":
+        refTime.setMonth(refTime.getMonth() + 1)
+        startTime = monthStart(refTime)
+        endTime = monthEnd(refTime)
+        break;
+    }
+
+    console.log("Start time: " + startTime)
+    console.log("End time: " + endTime)
 }

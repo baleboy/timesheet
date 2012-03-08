@@ -28,6 +28,7 @@ CommonPage {
 
         Button {
             id: reportTitle
+            platformStyle: myStyle
             width: 300
             text: Reports.getTitle(typeDialog.selected)
 
@@ -38,6 +39,48 @@ CommonPage {
             anchors.centerIn: parent
 
             onClicked: typeDialog.open()
+        }
+
+        ButtonStyle {
+            id: myStyle
+            background: disabledBackground
+            textColor: "white"
+        }
+
+        Button {
+            id: leftButton
+            platformStyle: myStyle
+            visible: typeDialog.selected != "all"
+            anchors {
+                verticalCenter: reportTitle.verticalCenter
+                right: reportTitle.left
+                rightMargin: Const.margin
+            }
+            width: 48
+            height: 48
+            text: "<"
+            onClicked: {
+                Reports.setPreviousPeriod(typeDialog.selected)
+                Reports.populateReportsModel()
+            }
+        }
+
+        Button {
+            id: rightButton
+            platformStyle: myStyle
+            visible: typeDialog.selected != "all"
+            anchors {
+                verticalCenter: reportTitle.verticalCenter
+                left: reportTitle.right
+                leftMargin: Const.margin
+            }
+            width: 48
+            height: 48
+            text: ">"
+            onClicked: {
+                Reports.setNextPeriod(typeDialog.selected)
+                Reports.populateReportsModel()
+            }
         }
     }
 
@@ -180,6 +223,7 @@ CommonPage {
 
         model: ListModel {
             ListElement { name: "Day"; type: "day" }
+            ListElement { name: "Week"; type: "week" }
             ListElement { name: "Month"; type: "month" }
             ListElement { name: "All Time"; type: "all" }
         }
@@ -195,6 +239,10 @@ CommonPage {
             case "month":
                 startTime = Utils.monthStart(now)
                 endTime = Utils.monthEnd(now)
+                break;
+            case "week":
+                startTime = Utils.weekStart(now)
+                endTime = Utils.weekEnd(now)
                 break;
             case "all":
                 startTime = new Date(0)

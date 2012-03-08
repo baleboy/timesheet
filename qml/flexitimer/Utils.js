@@ -52,3 +52,21 @@ function monthEnd(date)
                           0,
                           23, 59, 59)
 }
+
+function weekStart(date)
+{
+    if (date === undefined)
+        date = new Date()
+    return new Date(date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate() - date.getDay())
+}
+
+function weekEnd(date)
+{
+    if (date === undefined)
+        date = new Date()
+    return new Date(date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate() + (6 - date.getDay()))
+}

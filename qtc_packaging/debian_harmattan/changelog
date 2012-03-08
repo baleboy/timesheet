@@ -1,8 +1,16 @@
-flexitimer (0.1.4) unstable; urgency=low
+flexitimer (0.1.5) unstable; urgency=low
 
   *
 
- -- Francesco Balestrieri <bale@balenet.com>  Sat, 18 Feb 2012 10:00:17 +0200
+ -- Francesco Balestrieri <bale@balenet.com>  Wed, 07 Mar 2012 10:00:17 +0200
+
+
+flexitimer (0.1.4) unstable; urgency=low
+
+  * Reports can be filtered by project
+  * Projects can be renamed
+
+ -- Francesco Balestrieri <bale@balenet.com>  Wed, 07 Mar 2012 10:00:17 +0200
 
 
 flexitimer (0.1.3) unstable; urgency=low
