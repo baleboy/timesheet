@@ -6,6 +6,7 @@ import com.nokia.meego 1.0
 import "UiConstants.js" as Const
 import "Reports.js" as Reports
 import "Utils.js" as Utils
+import "Projects.js" as Projects
 
 CommonPage {
 
@@ -84,6 +85,25 @@ CommonPage {
         }
     }
 
+
+    Rectangle {
+        id: totalText
+        color: "gray"
+        width: parent.width
+        height: 90
+
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: background.bottom
+        }
+
+        Label {
+            id: totalTextLabel
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: Const.fontHuge
+        }
+    }
 
     ListModel {
         id: reportModel
@@ -198,7 +218,7 @@ CommonPage {
         clip: true
 
         anchors {
-            top: background.bottom
+            top: totalText.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right

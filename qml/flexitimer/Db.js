@@ -135,20 +135,3 @@ function printAll()
 
     console.log("LastID: " + lastId)
 }
-
-function todaysTotal()
-{
-    var result;
-    var now = new Date()
-    console.log("today's date: " + now + ", day start: "  + dayStart(now) + ", day end: " + dayEnd(now))
-    db.transaction(function(tx) {
-                       var rs = tx.executeSql('SELECT SUM (endTime - startTime) AS total FROM DETAILS WHERE startTime >= ? AND startTime <= ?',
-                                              [dayStart(now).getTime(), dayEnd(now).getTime()]);
-                       result = rs.rows.item(0).total
-    });
-    console.log("day's total: " + result)
-    if (result === "")
-        return 0
-    else
-        return result
-}

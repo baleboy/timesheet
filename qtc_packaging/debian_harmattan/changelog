@@ -1,6 +1,7 @@
 flexitimer (0.1.5) unstable; urgency=low
 
-  *
+  * Weekly reports
+  * Report period can be changed
 
  -- Francesco Balestrieri <bale@balenet.com>  Wed, 07 Mar 2012 10:00:17 +0200
 

@@ -26,17 +26,22 @@ function populateReportsModel()
     db.readTransaction(function(tx) {
                            var rs = tx.executeSql(query,
                                               [startTime.getTime(), endTime.getTime()]);
-        for(var i = 0; i < rs.rows.length; i++) {
+         var totalElapsed = 0;
+
+         for(var i = 0; i < rs.rows.length; i++) {
             var date1 = new Date
             date1.setTime(rs.rows.item(i).startTime)
             var endTimeText = "";
             var elapsed = ""
+
+
             if(rs.rows.item(i).endTime !== "") {
                 var date2 = new Date
                 date2.setTime(rs.rows.item(i).endTime)
                 endTimeText = Qt.formatTime(date2, "hh:mm")
-                elapsed = toTime(date2.getTime() - date1.getTime())
-
+                var delta = date2.getTime() - date1.getTime()
+                elapsed = toTime(delta)
+                totalElapsed += delta
                 reportModel.append({
                                  project: rs.rows.item(i).project,
                                  startTime: Qt.formatTime(date1, "hh:mm"),
@@ -48,6 +53,7 @@ function populateReportsModel()
             }
 
         }
+         totalTextLabel.text = toTime(totalElapsed)
     });
 
 

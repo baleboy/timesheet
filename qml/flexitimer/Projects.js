@@ -86,3 +86,17 @@ function renameProject(oldName, newName, index)
     projectsModel.setProperty(index, "name", newName)
 }
 
+function totalWork(startTime, endTime)
+{
+    var result;
+    db.transaction(function(tx) {
+                       var rs = tx.executeSql('SELECT SUM (endTime - startTime) AS total FROM DETAILS WHERE startTime >= ? AND startTime <= ?',
+                                              [startTime.getTime(), endTime.getTime()]);
+                       result = rs.rows.item(0).total
+    });
+    console.log("total: " + result)
+    if (result === "")
+        return 0
+    else
+        return result
+}

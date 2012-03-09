@@ -15,7 +15,8 @@ Item {
     function update()
     {
         Projects.populate()
-        todaysTotal = Db.todaysTotal()
+        var now = new Date();
+        todaysTotal = Projects.totalWork(Utils.dayStart(now), Utils.dayEnd(now))
     }
 
     function move(index1, index2)
