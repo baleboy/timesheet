@@ -27,7 +27,11 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: { pageStack.push(editSessionPage, { recordId: recordId }) }
+        onClicked: {
+            sessionSheet.recordId = recordId;
+            sessionSheet.newRecord = false;
+            sessionSheet.open()
+        }
         onPressAndHold: {
             sessionMenu.deleteEnabled =  endTime !== ""
             sessionMenu.sessionIndex = index

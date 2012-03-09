@@ -56,11 +56,10 @@ function deleteRecord(project, recordId, index)
 
 function populateEditSessionPage()
 {
-    console.log("Edit session page - record Id: ", editSessionPage.recordId)
+    console.log("Edit session page - record Id: ", recordId)
     db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE recordId = ? ',
-                                              [editSessionPage.recordId]);
-                       console.log("Start time: ", rs.rows.item(0).startTime)
+                                              [recordId]);
                        startTimeUTC = rs.rows.item(0).startTime
                        if (rs.rows.item(0).endTime !== "") {
                            endTimeUTC = rs.rows.item(0).endTime
@@ -93,5 +92,19 @@ function saveEndTime(recordId, t)
 {
     db.transaction(function(tx) {
                        tx.executeSql('UPDATE Details SET endTime=? WHERE recordId=?', [t, recordId])
+    });
+}
+
+function addRecord(recordId, project, startTime, endTime, comment)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('INSERT INTO Details (recordId, project, startTime, endTime, comments) VALUES(?,?,?,?,?)', [recordId, project, startTime, endTime, comment])
+    });
+}
+
+function updateRecord(recordId, startTime, endTime, comment)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('UPDATE Details SET startTime=?, endTime=?, comment=? WHERE recordId=?', [startTime, endTime, comment, recordId])
     });
 }

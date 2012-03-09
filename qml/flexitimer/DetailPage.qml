@@ -8,6 +8,8 @@ import "Utils.js" as Utils
 
 CommonPage {
 
+    id: root
+
     property alias model: detailsList.model
 
     property date startTime
@@ -98,6 +100,20 @@ CommonPage {
                 mainPage.update()
             }
         }
+
+        ToolIcon {
+            iconId: "toolbar-add"
+            onClicked: {
+                sessionSheet.inProgress = false
+                sessionSheet.newRecord = true
+                sessionSheet.open()
+            }
+        }
+    }
+
+    SessionSheet {
+        id: sessionSheet
+        project: root.project
     }
 
     ContextMenu {

@@ -11,6 +11,7 @@ TumblerDialog {
     property int day: 1
     property int hour: 0
     property int minute: 0
+    property int year: 0
 
     signal picked
 
@@ -30,16 +31,17 @@ TumblerDialog {
         day = d.getDate()
         hour = d.getHours()
         minute = d.getMinutes()
+        year = d.getFullYear()
     }
 
     function toDateTime() {
-        var date = new Date(dateTime.currentYear(),month - 1,day,hour,minute,0)
+        var date = new Date(year, month - 1,day,hour,minute,0)
         return date
     }
 
 
     function toDateTimeUTC() {
-        var date = new Date(dateTime.currentYear(),month - 1,day,hour,minute,0)
+        var date = new Date(year, month - 1,day,hour,minute,0)
         return date.getTime()
     }
 

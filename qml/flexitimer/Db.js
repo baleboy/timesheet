@@ -33,7 +33,7 @@ function init()
 function createTables(tx)
 {
     tx.executeSql('CREATE TABLE IF NOT EXISTS Projects(name STRING UNIQUE, timeStamp INTEGER )');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS Details(recordId INTEGER, project STRING, startTime INTEGER, endTime INTEGER, comments TEXT)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Details(recordId INTEGER UNIQUE, project STRING, startTime INTEGER, endTime INTEGER, comments TEXT)');
     tx.executeSql('CREATE TABLE IF NOT EXISTS Properties(name STRING UNIQUE, value STRING)');
     var rs = tx.executeSql('SELECT * FROM Properties WHERE name=?', ["pendingRecordId"]);
     if (rs.rows.length > 0) {

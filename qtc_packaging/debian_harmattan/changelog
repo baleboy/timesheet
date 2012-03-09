@@ -1,3 +1,11 @@
+flexitimer (0.1.6) unstable; urgency=low
+
+  * Reports show total elapsed time
+  *
+
+ -- Francesco Balestrieri <bale@balenet.com>  Fri, 09 Mar 2012 10:00:17 +0200
+
+
 flexitimer (0.1.5) unstable; urgency=low
 
   * Weekly reports
