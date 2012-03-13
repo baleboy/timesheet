@@ -4,6 +4,7 @@ import "Projects.js" as Projects
 ProjectDialog {
 
     titleText: qsTr("Add Project")
+    initialText: ""
 
     onAccepted: if (inputText != "") {
                     try {

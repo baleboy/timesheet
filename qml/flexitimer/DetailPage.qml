@@ -71,6 +71,14 @@ CommonPage {
         }
     }
 
+    SectionScroller {
+        listView: detailsList
+    }
+
+    ScrollDecorator {
+        flickableItem: detailsList
+    }
+
     tools: DefaultToolbar {
 
         ToolIcon {
@@ -128,15 +136,26 @@ CommonPage {
             MenuItem {
                 id: deleteMenuItem
                 text: qsTr("Delete");
-                onClicked: deleteSessionDialog.open() }
+                onClicked: {
+                    deleteSessionDialog.date = detailsModel.get(sessionMenu.sessionIndex).date
+                    deleteSessionDialog.start = detailsModel.get(sessionMenu.sessionIndex).startTime
+                    deleteSessionDialog.end = detailsModel.get(sessionMenu.sessionIndex).endTime
+                    deleteSessionDialog.open()
+                }
+            }
         }
     }
 
     QueryDialog {
 
         id: deleteSessionDialog
+        property string date
+        property string start
+        property string end
+
         titleText: qsTr("Delete Session")
-        message:qsTr("Do you want to delete this session?")
+        message:qsTr("<b>%1</b><br/>From %2 to %3<br/><br/>Do you want to delete this session?")
+        .arg(date).arg(start).arg(end)
         acceptButtonText: qsTr("Yes")
         rejectButtonText: qsTr("No")
         onAccepted: {

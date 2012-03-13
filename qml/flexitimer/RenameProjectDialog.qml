@@ -5,7 +5,9 @@ ProjectDialog {
     property string oldName
     property int index
 
-    titleText: qsTr("Rename project %1").arg(oldName)
+    titleText: qsTr("Rename project")
+    initialText: oldName
+
     onAccepted: if ((inputText != "") && (inputText != oldName)) {
                     try {
                         Projects.renameProject(oldName, inputText, index)

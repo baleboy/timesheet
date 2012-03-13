@@ -8,8 +8,13 @@ Dialog {
 
     property alias titleText: titleLabel.text
     property alias inputText: projectNameInput.text
+    property string initialText
 
-    title: Label { id: titleLabel; color: "white" }
+    title: Label {
+        id: titleLabel;
+        color: "white";
+        font.pixelSize: Const.fontDialog
+    }
 
     content:Item {
         id: name
@@ -31,7 +36,7 @@ Dialog {
     }
 
     onStatusChanged: if (status === DialogStatus.Opening) {
-                         projectNameInput.text = ""
+                         projectNameInput.text = initialText
                          projectNameInput.focus = true
                      }
 }

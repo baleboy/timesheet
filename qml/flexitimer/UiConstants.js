@@ -4,6 +4,7 @@ var fontHuge = 52
 var fontLarge = 36
 var fontMedium = 28
 var fontSmall = 22
+var fontDialog = 32
 var spacing = 16
 var mediumButtonWidth = 200
 var smallButtonWidth = 120
