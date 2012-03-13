@@ -106,13 +106,16 @@ Item {
         }
     }
 
-    MoreIndicator {
+    Image {
         id: moreIndicator
         anchors {
             verticalCenter: startButton.verticalCenter
             right: parent.right
             rightMargin: Const.smallMargin
         }
+        source: inProgress !== name ?
+                    "image://theme/icon-m-common-drilldown-arrow" :
+                    "image://theme/icon-m-common-drilldown-arrow-inverse"
     }
 
     Image {
