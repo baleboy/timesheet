@@ -85,26 +85,6 @@ CommonPage {
         }
     }
 
-
-    Rectangle {
-        id: totalText
-        color: "gray"
-        width: parent.width
-        height: 90
-
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: background.bottom
-        }
-
-        Label {
-            id: totalTextLabel
-            color: "white"
-            anchors.centerIn: parent
-            font.pixelSize: Const.fontHuge
-        }
-    }
-
     ListModel {
         id: reportModel
     }
@@ -192,7 +172,6 @@ CommonPage {
             Label {
                 text: section
                 font.bold: true
-
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
@@ -218,8 +197,8 @@ CommonPage {
         clip: true
 
         anchors {
-            top: totalText.bottom
-            bottom: parent.bottom
+            top: background.bottom
+            bottom: totalText.top
             left: parent.left
             right: parent.right
         }
@@ -231,8 +210,55 @@ CommonPage {
 
         delegate: reportDelegate
 
-        section.delegate: sectionDelegate
+        // section.delegate: typeDialog.selected == "day" ? null : sectionDelegate
     }
+
+    SectionScroller {
+        id: reportScroller
+        listView: reportList
+        visible: typeDialog.selected != "day"
+    }
+
+    ScrollDecorator {
+        flickableItem: reportList
+    }
+
+    Rectangle {
+        id: totalText
+        color: "darkGray"
+        width: parent.width
+        height: 50
+
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+
+        Label {
+            id: totalTextCaption
+            text: qsTr("Total")
+            anchors {
+                left: parent.left
+                leftMargin: Const.margin
+                verticalCenter: parent.verticalCenter
+            }
+            font.pixelSize: Const.fontMedium
+            color: "white"
+        }
+
+        Label {
+            id: totalTextLabel
+            color: "white"
+            anchors {
+                right: parent.right
+                rightMargin: Const.margin
+                verticalCenter: parent.verticalCenter
+            }
+            font.pixelSize: Const.fontMedium
+        }
+    }
+
+
 
     SelectionDialog {
         id: typeDialog
@@ -270,6 +296,14 @@ CommonPage {
                 break;
             }
 
+            if (model.get(selectedIndex).type === "day") {
+                reportList.section.delegate = null
+                // reportScroller.listView = null
+            }
+            else {
+                reportList.section.delegate = sectionDelegate
+                // reportScroller.listView = reportList
+            }
             Reports.populateReportsModel()
 
         }

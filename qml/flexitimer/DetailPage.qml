@@ -83,7 +83,7 @@ CommonPage {
                 var recordId = appWindow.startProject(project, projectIndex)
                 var now = new Date
                 detailsModel.insert(0, {
-                                        startTime: Qt.formatTime(now, "hh:mm"),
+                                        startTime: Qt.formatTime(now),
                                         endTime: "",
                                         elapsed: "",
                                         date: Qt.formatDate(now, "dddd, MMMM dd yyyy"),
@@ -97,7 +97,7 @@ CommonPage {
                 appWindow.stopCurrentProject()
                 var now = new Date()
                 var elapsed = workTimer.elapsed
-                detailsModel.setProperty(0, "endTime", Qt.formatDateTime(now, "hh:mm"))
+                detailsModel.setProperty(0, "endTime", Qt.formatTime(now))
                 detailsModel.setProperty(0, "elapsed", Utils.toTime(elapsed))
                 mainPage.update()
             }
