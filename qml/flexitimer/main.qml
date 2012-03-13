@@ -63,11 +63,6 @@ PageStackWindow {
         ReportsPage {}
     }
 
-    Component {
-        id: editSessionPage
-        EditSessionPage {}
-    }
-
     ToolBarLayout {
         id: commonTools
         visible: true

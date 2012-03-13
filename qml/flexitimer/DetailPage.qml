@@ -95,8 +95,10 @@ CommonPage {
 
             function stopAction() {
                 appWindow.stopCurrentProject()
-                detailsModel.setProperty(0, "endTime", Qt.formatDateTime(new Date, "hh:mm"))
-                detailsModel.setProperty(0, "elapsed", Utils.toTime(workTimer.elapsed))
+                var now = new Date()
+                var elapsed = workTimer.elapsed
+                detailsModel.setProperty(0, "endTime", Qt.formatDateTime(now, "hh:mm"))
+                detailsModel.setProperty(0, "elapsed", Utils.toTime(elapsed))
                 mainPage.update()
             }
         }
@@ -106,6 +108,7 @@ CommonPage {
             onClicked: {
                 sessionSheet.inProgress = false
                 sessionSheet.newRecord = true
+                sessionSheet.projectName = root.project
                 sessionSheet.open()
             }
         }
@@ -113,7 +116,6 @@ CommonPage {
 
     SessionSheet {
         id: sessionSheet
-        project: root.project
     }
 
     ContextMenu {

@@ -68,5 +68,5 @@ function weekEnd(date)
         date = new Date()
     return new Date(date.getFullYear(),
                     date.getMonth(),
-                    date.getDate() + (6 - date.getDay()))
+                    date.getDate() + (7 - date.getDay()))
 }

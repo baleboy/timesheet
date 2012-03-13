@@ -6,7 +6,8 @@ import "Details.js" as Details
 import "Projects.js" as Projects
 
 Sheet {
-    id: editSessionPage
+    id: root
+
     acceptButtonText: qsTr("Save")
     rejectButtonText: qsTr("Cancel")
 
@@ -16,7 +17,7 @@ Sheet {
     property bool inProgress
     property bool dirty: false
     property bool newRecord: true
-    property string project
+    property string projectName
 
     function formatDate(utc) {
         var d = new Date
@@ -29,7 +30,7 @@ Sheet {
         Grid {
             id: grid1
             columns: 2
-            rows: 2
+            rows: 3
             spacing: 15
 
             anchors {
@@ -89,7 +90,6 @@ Sheet {
             }
             onActiveFocusChanged: if (!activeFocus)
                                   {
-                                      console.log("lost focus")
                                       // the following line is needed to ensure
                                       // that the last word of the input text is
                                       // taken in consideration (it makes the pre-edit buffer
@@ -144,6 +144,7 @@ Sheet {
 
     // dialog opens
     onStatusChanged: if (status === DialogStatus.Opening) {
+                         console.log("opening. Project: " + root.projectName)
                          dirty = newRecord
                          if (newRecord) {
                              var t = new Date()
@@ -154,6 +155,7 @@ Sheet {
                          }
                          else {
                              Details.populateEditSessionPage();
+                             console.log("updated. Projcect: " + root.projectName)
                          }
                      }
 
@@ -161,8 +163,8 @@ Sheet {
 
         if (dirty) {
             if (newRecord) {
-                console.log("creating: project " + editSessionPage.project )
-                Details.addRecord(recordId, editSessionPage.project, startTimeUTC, endTimeUTC, text1.text)
+                console.log("creating: project " + root.projectName )
+                Details.addRecord(recordId, root.projectName, startTimeUTC, endTimeUTC, text1.text)
             }
             else {
                 console.log("updating")

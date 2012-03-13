@@ -66,20 +66,11 @@ Item {
         color: endTime == "" ? "white" : "gray"
         anchors {
             top: startLabel.top
-            right: moreIndicator.left
-            rightMargin: Const.margin
-        }
-    }
-
-    MoreIndicator {
-        id: moreIndicator
-        anchors {
-            verticalCenter: parent.verticalCenter
             right: parent.right
             rightMargin: Const.margin
         }
-
     }
+
 
     Label {
         text: comments
@@ -92,7 +83,8 @@ Item {
             leftMargin: Const.margin
             top: startLabel.bottom
             topMargin: Const.smallMargin
-            right: moreIndicator.left
+            right: parent.right
+            rightMargin: Const.margin
         }
     }
 

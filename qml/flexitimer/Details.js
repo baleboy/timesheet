@@ -32,7 +32,8 @@ function populateProjectDetails()
                              })
             }
             else {
-                detailsList.model.insert(0, {startTime: Qt.formatTime(date1, "hh:mm"),
+                detailsList.model.insert(0, {
+                                 startTime: Qt.formatTime(date1, "hh:mm"),
                                  endTime: endTimeText,
                                  elapsed: elapsed,
                                  date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
@@ -60,6 +61,7 @@ function populateEditSessionPage()
     db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE recordId = ? ',
                                               [recordId]);
+                       projectName = rs.rows.item(0).project
                        startTimeUTC = rs.rows.item(0).startTime
                        if (rs.rows.item(0).endTime !== "") {
                            endTimeUTC = rs.rows.item(0).endTime
@@ -105,6 +107,6 @@ function addRecord(recordId, project, startTime, endTime, comment)
 function updateRecord(recordId, startTime, endTime, comment)
 {
     db.transaction(function(tx) {
-                       tx.executeSql('UPDATE Details SET startTime=?, endTime=?, comment=? WHERE recordId=?', [startTime, endTime, comment, recordId])
+                       tx.executeSql('UPDATE Details SET startTime=?, endTime=?, comments=? WHERE recordId=?', [startTime, endTime, comment, recordId])
     });
 }
