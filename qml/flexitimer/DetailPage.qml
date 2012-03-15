@@ -91,10 +91,10 @@ CommonPage {
                 var recordId = appWindow.startProject(project, projectIndex)
                 var now = new Date
                 detailsModel.insert(0, {
-                                        startTime: Qt.formatTime(now),
+                                        startTime: formatter.formatTime(now), //Qt.formatTime(now),
                                         endTime: "",
                                         elapsed: "",
-                                        date: Qt.formatDate(now, "dddd, MMMM dd yyyy"),
+                                        date: formatter.formatDateFull(now),
                                         recordId: recordId,
                                         comments: ""
                                     })
@@ -104,9 +104,8 @@ CommonPage {
             function stopAction() {
                 appWindow.stopCurrentProject()
                 var now = new Date()
-                var elapsed = workTimer.elapsed
-                detailsModel.setProperty(0, "endTime", Qt.formatTime(now))
-                detailsModel.setProperty(0, "elapsed", Utils.toTime(elapsed))
+                detailsModel.setProperty(0, "endTime", formatter.formatTime(now)) // Qt.formatTime(now))
+                detailsModel.setProperty(0, "elapsed", Utils.toTime(workTimer.elapsed))
                 mainPage.update()
             }
         }

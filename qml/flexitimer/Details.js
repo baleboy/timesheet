@@ -18,25 +18,25 @@ function populateProjectDetails()
             if(rs.rows.item(i).endTime !== "") {
                 var date2 = new Date
                 date2.setTime(rs.rows.item(i).endTime)
-                endTimeText = Qt.formatTime(date2)
+                endTimeText = formatter.formatTime(date2)
                 elapsed = toTime(date2.getTime() - date1.getTime())
             }
 
             if (endTimeText !== "") {
-            detailsList.model.append({startTime: Qt.formatTime(date1),
+            detailsList.model.append({startTime: formatter.formatTime(date1),
                              endTime: endTimeText,
                              elapsed: elapsed,
-                             date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
+                             date: formatter.formatDateFull(date1),
                              recordId: rs.rows.item(i).recordId,
                              comments: rs.rows.item(i).comments
                              })
             }
             else {
                 detailsList.model.insert(0, {
-                                 startTime: Qt.formatTime(date1),
+                                 startTime: formatter.formatTime(date1),
                                  endTime: endTimeText,
                                  elapsed: elapsed,
-                                 date: Qt.formatDate(date1, "dddd, MMMM dd yyyy"),
+                                 date: formatter.formatDateFull(date1),
                                  recordId: rs.rows.item(i).recordId,
                                  comments: rs.rows.item(i).comments
                                  })

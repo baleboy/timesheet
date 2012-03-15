@@ -18,7 +18,7 @@ CommonPage {
 
     function today() {
         var now = new Date()
-        return Qt.formatDate(now, "MMMM dd, yyyy")
+        return formatter.formatDateLong(now)
     }
 
     function checkDate()

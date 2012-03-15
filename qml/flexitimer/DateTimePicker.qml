@@ -52,11 +52,27 @@ TumblerDialog {
         label: qsTr("MONTH")
         selectedIndex: root.month - 1
 
+        onSelectedIndexChanged: {
+            // adjust the number of days that can be selected
+            var maxDays = dateTime.daysInMonth(root.year, selectedIndex + 1)
+            console.log("Month: " + (selectedIndex + 1) + " " + maxDays)
+            if (dayList.count > maxDays) {
+                // remove days
+                var oldDays = dayList.count
+                for (var i = 0 ; i < oldDays - maxDays ; i++) {
+                    dayList.remove(dayList.count - 1)
+                }
+            }
+            else if (dayList.count < maxDays) {
+                // add days
+                for (i = dayList.count ; i < maxDays ; i++)
+                    dayList.append({"value": i + 1})
+            }
+        }
         items: ListModel {
             id: monthList
         }
     }
-
 
     TumblerColumn {
         id: dayColumn

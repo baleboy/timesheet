@@ -22,7 +22,7 @@ Sheet {
     function formatDate(utc) {
         var d = new Date
         d.setTime(utc)
-        return Qt.formatDateTime(d, "ddd MMM dd, hh:mm")
+        return formatter.formatDateTime(d)
     }
 
     content: Item {

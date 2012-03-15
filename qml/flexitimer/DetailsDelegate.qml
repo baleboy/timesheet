@@ -48,7 +48,6 @@ Item {
         id: startLabel
         text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
         font.pixelSize: Const.listItemTitleFont
-        font.weight: Font.Bold
         width: 320
         color: endTime == "" ? "white" : "black"
         anchors {

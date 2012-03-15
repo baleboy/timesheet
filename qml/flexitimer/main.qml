@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.0
+import Formatter 1.0
 
 import "UiConstants.js" as Const
 import "Db.js" as Db
@@ -58,9 +59,8 @@ PageStackWindow {
         id: detailPage
     }
 
-    Component {
+    ReportsPage {
         id: reportsPage
-        ReportsPage {}
     }
 
     ToolBarLayout {
@@ -134,6 +134,15 @@ PageStackWindow {
         id: errorBanner
         topMargin: 40.0
         iconSource: "images/banner-error.png"
+    }
+
+    Formatter {
+        id: formatter
+        onLocaleChanged: {
+            mainPage.update()
+            detailPage.update()
+            reportsPage.update()
+        }
     }
 
 }

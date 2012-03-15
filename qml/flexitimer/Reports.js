@@ -38,16 +38,16 @@ function populateReportsModel()
             if(rs.rows.item(i).endTime !== "") {
                 var date2 = new Date
                 date2.setTime(rs.rows.item(i).endTime)
-                endTimeText = Qt.formatTime(date2, "hh:mm")
+                endTimeText = formatter.formatTime(date2, "hh:mm")
                 var delta = date2.getTime() - date1.getTime()
                 elapsed = toTime(delta)
                 totalElapsed += delta
                 reportModel.append({
                                  project: rs.rows.item(i).project,
-                                 startTime: Qt.formatTime(date1, "hh:mm"),
+                                 startTime: formatter.formatTime(date1, "hh:mm"),
                                  endTime: endTimeText,
                                  elapsed: elapsed,
-                                 date: Qt.formatDate(date1, "dd/MM/yyyy"),
+                                 date: formatter.formatDateShort(date1),
                                  comments: rs.rows.item(i).comments
                                  });
             }
@@ -71,13 +71,13 @@ function getTitle(type)
         return qsTr("All Time")
 
     case "month":
-        return Qt.formatDate(startTime, "MMMM yyyy")
+        return formatter.formatDateYearAndMonth(startTime)
 
     case "week":
         return "Week " + startTime.getWeek() + ", " + startTime.getFullYear()
 
     case "day":
-        return Qt.formatDate(startTime, "MMMM dd yyyy")
+        return formatter.formatDateLong(startTime)
     }
 }
 

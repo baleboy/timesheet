@@ -15,6 +15,11 @@ CommonPage {
     property date startTime: Utils.dayStart()
     property date endTime: Utils.dayEnd()
 
+    function update()
+    {
+         Reports.populateReportsModel(startTime, endTime)
+    }
+
     Rectangle {
         id: background
         width: parent.width
@@ -88,9 +93,6 @@ CommonPage {
     ListModel {
         id: reportModel
     }
-
-    Component.onCompleted: Reports.populateReportsModel(startTime, endTime)
-
 
     Component {
         id: reportDelegate
@@ -352,5 +354,8 @@ CommonPage {
         Component.onCompleted: Reports.getProjectList(projectSelectionDialog.model)
         acceptButtonText: qsTr("OK")
         onAccepted: Reports.populateReportsModel()
+    }
+    Component.onCompleted: {
+        Reports.populateReportsModel(startTime, endTime)
     }
 }

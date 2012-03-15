@@ -5,6 +5,9 @@ DEPLOYMENTFOLDERS = folder_01
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
+INCLUDEPATH += /usr/include/meegotouch
+QMAKE_LIBDIR += /usr/lib/meegotouch
+LIBS += -lmeegotouchcore
 
 symbian:TARGET.UID3 = 0xE78677D2
 
@@ -34,7 +37,8 @@ CONFIG += qtsparql
 SOURCES += main.cpp \
     filehandler.cpp \
     shareuiif.cpp \
-    exporter.cpp
+    exporter.cpp \
+    formatter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -55,7 +59,8 @@ RESOURCES +=
 HEADERS += \
     filehandler.h \
     shareuiif.h \
-    exporter.h
+    exporter.h \
+    formatter.h
 
 
 
