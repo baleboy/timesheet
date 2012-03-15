@@ -110,3 +110,12 @@ function updateRecord(recordId, startTime, endTime, comment)
                        tx.executeSql('UPDATE Details SET startTime=?, endTime=?, comments=? WHERE recordId=?', [startTime, endTime, comment, recordId])
     });
 }
+
+function deleteAll(project)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('DELETE FROM Details WHERE project=?', [project])
+    });
+    detailPage.update()
+    mainPage.update()
+}

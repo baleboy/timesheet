@@ -79,7 +79,7 @@ Item {
         font.pixelSize: Const.listItemTitleFont
         elide: Text.ElideRight
         maximumLineCount: 1
-        font.weight: Font.Bold
+        // font.weight: Font.Bold
         color: inProgress === name ? "white" : "black"
         anchors {
             top: parent.top

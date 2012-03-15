@@ -111,15 +111,42 @@ CommonPage {
         }
 
         ToolIcon {
-            iconId: "toolbar-add"
-            onClicked: {
-                sessionSheet.inProgress = false
-                sessionSheet.newRecord = true
-                sessionSheet.projectName = root.project
-                sessionSheet.open()
+            platformIconId: "toolbar-view-menu"
+            onClicked: (detailsMenu.status == DialogStatus.Closed) ? detailsMenu.open() : detailsMenu.close()
+        }
+    }
+
+    Menu {
+        id: detailsMenu
+        visualParent: pageStack
+        MenuLayout {
+
+            MenuItem {
+                text: qsTr("Add Session")
+                onClicked: {
+                    sessionSheet.inProgress = false
+                    sessionSheet.newRecord = true
+                    sessionSheet.projectName = root.project
+                    sessionSheet.open()
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Delete All")
+                onClicked: { deleteAllSessionsDialog.open() }
             }
         }
     }
+
+    QueryDialog {
+        id: deleteAllSessionsDialog
+        titleText: qsTr("Delete sessions")
+        message: qsTr("Delete all sessions for project <b>%1</b>?").arg(project)
+        acceptButtonText: qsTr("Ok")
+        rejectButtonText: qsTr("Cancel")
+        onAccepted: Details.deleteAll(project)
+    }
+
 
     SessionSheet {
         id: sessionSheet

@@ -105,7 +105,7 @@ CommonPage {
                 id: nameLabel
                 text: project
                 font.pixelSize: Const.listItemTitleFont
-                font.weight: Font.Bold
+                // font.weight: Font.Bold
                 anchors {
                     top: parent.top
                     topMargin: Const.smallMargin
