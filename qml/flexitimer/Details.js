@@ -111,6 +111,13 @@ function updateRecord(recordId, startTime, endTime, comment)
     });
 }
 
+function updateRecord(recordId, startTime, comment)
+{
+    db.transaction(function(tx) {
+                       tx.executeSql('UPDATE Details SET startTime=?, comments=? WHERE recordId=?', [startTime, comment, recordId])
+    });
+}
+
 function deleteAll(project)
 {
     db.transaction(function(tx) {

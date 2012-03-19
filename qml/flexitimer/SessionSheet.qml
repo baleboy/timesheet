@@ -168,7 +168,10 @@ Sheet {
             }
             else {
                 console.log("updating")
-                Details.updateRecord(recordId, startTimeUTC, endTimeUTC, text1.text)
+                if (!inProgress)
+                    Details.updateRecord(recordId, startTimeUTC, endTimeUTC, text1.text)
+                else
+                    Details.updateRecord(recordId, startTimeUTC, text1.text)
             }
             mainPage.update()
             detailPage.update()
