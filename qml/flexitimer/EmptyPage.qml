@@ -4,8 +4,6 @@ import "UiConstants.js" as Const
 
 Item {
 
-    anchors.fill: parent
-
     Column {
         id: column1
         spacing: Const.spacing

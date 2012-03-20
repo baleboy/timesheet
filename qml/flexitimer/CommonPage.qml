@@ -11,15 +11,16 @@ Page {
 
     orientationLock: PageOrientation.LockPortrait
 
-    Rectangle {
+    Image {
 
         id: header
-        height: commonPage.headerHeight
         width: parent.width
+        z: 10
         anchors {
             top: parent.top
         }
-        color: "orange"
+        source: "images/header-bg-77.png"
+        fillMode: Image.TileHorizontally
 
         Label {
             id: titleLabel
@@ -30,7 +31,6 @@ Page {
                 right: parent.right
             }
             font.pixelSize: Const.fontLarge
-            font.family: "Nokia Pure Text Light"
             color: "white"
             elide: Text.ElideRight
             maximumLineCount: 1

@@ -14,11 +14,6 @@ Item {
         anchors.centerIn: parent
 
         source: "images/orange-button.png"
-        ToolIcon {
-            iconId: "toolbar-mediacontrol-play-white"
-            anchors.centerIn: parent
-        }
-
     }
     Image {
         id: image2
@@ -26,17 +21,10 @@ Item {
         anchors.centerIn: parent
 
         source: "images/cyan-button.png"
-
-        ToolIcon {
-            iconId: "toolbar-mediacontrol-pause-white"
-            anchors.centerIn: parent
-            visible: checked
-        }
-
     }
 
     MouseArea {
         anchors.fill: parent
-        onClicked: { console.log("Clicked"); root.clicked() }
+        onClicked: root.clicked()
     }
 }

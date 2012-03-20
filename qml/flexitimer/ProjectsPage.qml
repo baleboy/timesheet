@@ -9,8 +9,7 @@ Item {
 
     id: projectsPage
 
-    anchors.fill: parent
-    // property int todaysTotal
+    property string daysTotalText: Utils.toTime(todaysTotal + (inProgress !== "" ? workTimer.elapsed : 0))
 
     function update()
     {
@@ -31,34 +30,13 @@ Item {
 
     }
 
-
-    Rectangle {
-
-        id: rect1
-        color: "orange"
-        width: parent.width
-        height: 90
-        anchors {
-            top: parent.top
-            topMargin: Const.headerHeight
-        }
-
-        Label {
-            font.pixelSize: Const.fontHuge
-            font.weight: Font.Bold
-            text: Utils.toTime(todaysTotal + (inProgress !== "" ? workTimer.elapsed : 0))
-            anchors.centerIn: parent
-            color: "white"
-        }
-    }
-
     ListView {
 
         id: projectList
         currentIndex: -1
 
         anchors {
-            top: rect1.bottom
+            top: parent.top
             bottom: parent.bottom
             left: parent.left
             right: parent.right

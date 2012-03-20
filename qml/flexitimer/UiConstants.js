@@ -1,6 +1,6 @@
 .pragma library
 
-var fontHuge = 52
+var fontHuge = 72
 var fontLarge = 36
 var fontMedium = 28
 var fontSmall = 22

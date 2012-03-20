@@ -8,9 +8,9 @@ import "Reports.js" as Reports
 import "Utils.js" as Utils
 import "Projects.js" as Projects
 
-CommonPage {
+Page {
 
-    title: qsTr("Reports")
+    property string title: qsTr("Reports")
 
     property date startTime: Utils.dayStart()
     property date endTime: Utils.dayEnd()
@@ -18,76 +18,6 @@ CommonPage {
     function update()
     {
          Reports.populateReportsModel(startTime, endTime)
-    }
-
-    Rectangle {
-        id: background
-        width: parent.width
-        height: 90
-        color: "orange"
-
-        anchors {
-            top: parent.top
-            topMargin: Const.headerHeight
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        Button {
-            id: reportTitle
-            platformStyle: myStyle
-            width: 300
-            text: Reports.getTitle(typeDialog.selected)
-
-            font {
-                pixelSize: Const.fontMedium
-            }
-
-            anchors.centerIn: parent
-
-            onClicked: typeDialog.open()
-        }
-
-        ButtonStyle {
-            id: myStyle
-            background: disabledBackground
-            textColor: "white"
-        }
-
-        Button {
-            id: leftButton
-            platformStyle: myStyle
-            visible: typeDialog.selected != "all"
-            anchors {
-                verticalCenter: reportTitle.verticalCenter
-                right: reportTitle.left
-                rightMargin: Const.margin
-            }
-            width: 48
-            height: 48
-            text: "<"
-            onClicked: {
-                Reports.setPreviousPeriod(typeDialog.selected)
-                Reports.populateReportsModel()
-            }
-        }
-
-        Button {
-            id: rightButton
-            platformStyle: myStyle
-            visible: typeDialog.selected != "all"
-            anchors {
-                verticalCenter: reportTitle.verticalCenter
-                left: reportTitle.right
-                leftMargin: Const.margin
-            }
-            width: 48
-            height: 48
-            text: ">"
-            onClicked: {
-                Reports.setNextPeriod(typeDialog.selected)
-                Reports.populateReportsModel()
-            }
-        }
     }
 
     ListModel {
@@ -108,7 +38,7 @@ CommonPage {
                 // font.weight: Font.Bold
                 anchors {
                     top: parent.top
-                    topMargin: Const.smallMargin
+                    topMargin: comments != "" ? Const.smallMargin : Const.margin
                     left: parent.left
                     leftMargin: Const.margin
                 }
@@ -200,6 +130,7 @@ CommonPage {
 
         anchors {
             top: background.bottom
+            topMargin: -5
             bottom: totalText.top
             left: parent.left
             right: parent.right
@@ -257,6 +188,96 @@ CommonPage {
                 verticalCenter: parent.verticalCenter
             }
             font.pixelSize: Const.fontMedium
+        }
+    }
+
+    Image {
+        id: background
+        width: parent.width
+        source: "images/header-bg-165.png"
+        fillMode: Image.TileHorizontally
+
+        anchors {
+            top: parent.top
+            left: parent.left
+        }
+
+        Label {
+            id: titleLabel
+            text: title
+            anchors {
+                top: parent.top
+                topMargin: Const.margin
+                left: parent.left
+                leftMargin: Const.margin
+                right: parent.right
+            }
+            font.pixelSize: Const.fontLarge
+            color: "white"
+            elide: Text.ElideRight
+            maximumLineCount: 1
+        }
+
+
+        Button {
+            id: reportTitle
+            platformStyle: myStyle
+            width: 300
+            text: Reports.getTitle(typeDialog.selected)
+
+            font {
+                pixelSize: Const.fontMedium
+            }
+
+            anchors {
+                top: titleLabel.bottom
+                topMargin: Const.margin
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            onClicked: typeDialog.open()
+        }
+
+        ButtonStyle {
+            id: myStyle
+            background: disabledBackground
+            textColor: "white"
+        }
+
+        Button {
+            id: leftButton
+            platformStyle: myStyle
+            visible: typeDialog.selected != "all"
+            anchors {
+                verticalCenter: reportTitle.verticalCenter
+                right: reportTitle.left
+                rightMargin: Const.margin
+            }
+            width: 48
+            height: 48
+            text: "<"
+            onClicked: {
+                Reports.setPreviousPeriod(typeDialog.selected)
+                Reports.populateReportsModel()
+            }
+        }
+
+        Button {
+            id: rightButton
+            platformStyle: myStyle
+            visible: typeDialog.selected != "all"
+            anchors {
+                verticalCenter: reportTitle.verticalCenter
+                left: reportTitle.right
+                leftMargin: Const.margin
+            }
+            width: 48
+            height: 48
+            text: ">"
+            onClicked: {
+                Reports.setNextPeriod(typeDialog.selected)
+                Reports.populateReportsModel()
+            }
         }
     }
 

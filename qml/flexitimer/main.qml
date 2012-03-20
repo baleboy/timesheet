@@ -75,8 +75,6 @@ PageStackWindow {
         ToolIcon {
             iconSource: "images/document-icon.png"
             onClicked: pageStack.push(reportsPage)
-            scale: 0.6
-            smooth: true
         }
 
         ToolIcon {
@@ -127,7 +125,7 @@ PageStackWindow {
         rejectButtonText: qsTr("Cancel")
         titleText: qsTr("Erase all data")
         message: qsTr("Do you really want to erase all the data?")
-        onAccepted: { Db.clearAll() ; Db.clearAll(); projectsModel.clear() }
+        onAccepted: { Db.clearAll() ; mainPage.update() }
     }
 
     InfoBanner {
@@ -142,6 +140,22 @@ PageStackWindow {
             mainPage.update()
             detailPage.update()
             reportsPage.update()
+        }
+    }
+
+    Connections {
+        target: platformWindow
+        onActiveChanged: {
+            if (inProgress != "") {
+                if (platformWindow.active) {
+                    console.log("resuming timer")
+                    workTimer.resumeTimer()
+                }
+                else {
+                    console.log("pausing timer")
+                    workTimer.pauseTimer()
+                }
+            }
         }
     }
 

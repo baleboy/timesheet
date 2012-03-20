@@ -8,9 +8,6 @@ import "Projects.js" as Projects
 Sheet {
     id: root
 
-    acceptButtonText: qsTr("Save")
-    rejectButtonText: qsTr("Cancel")
-
     property double recordId
     property double startTimeUTC
     property double endTimeUTC
@@ -23,6 +20,48 @@ Sheet {
         var d = new Date
         d.setTime(utc)
         return formatter.formatDateTime(d)
+    }
+
+    SheetButtonAccentStyle {
+        id: themedStyle
+        property int themeColor: 15
+        property string colorString: "color" + themeColor + "-"
+
+        background: "image://theme/" + colorString + "meegotouch-sheet-button-accent-background"
+        pressedBackground: "image://theme/" + colorString + "meegotouch-sheet-button-accent-background-pressed"
+        disabledBackground: "image://theme/" + colorString + "meegotouch-sheet-button-accent-background-disabled"
+    }
+
+    buttons: Item {
+        anchors.fill: parent
+
+        SheetButton {
+            id: rejectButton
+            text: qsTr("Cancel")
+            onClicked: root.reject()
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: Const.margin
+            }
+        }
+
+
+        SheetButton {
+            id: acceptButton
+            text: qsTr("Save")
+            enabled: root.dirty
+            onClicked: root.accept()
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+                rightMargin: Const.margin
+            }
+            platformStyle: themedStyle
+        }
+
     }
 
     content: Item {
@@ -88,17 +127,19 @@ Sheet {
                 bottom: parent.bottom
                 bottomMargin: Const.bigMargin
             }
-            onActiveFocusChanged: if (!activeFocus)
-                                  {
-                                      // the following line is needed to ensure
-                                      // that the last word of the input text is
-                                      // taken in consideration (it makes the pre-edit buffer
-                                      // to be copied to the actual buffer)
-                                      // For reference see https://bugs.meego.com/show_bug.cgi?id=21748
-                                      // 'inputContext' is a C++ object exposed by Qt components
-                                      inputContext.reset()
-                                      dirty = true;
-                                  }
+            onActiveFocusChanged: {
+                if (!activeFocus)
+                {
+                    // the following line is needed to ensure
+                    // that the last word of the input text is
+                    // taken in consideration (it makes the pre-edit buffer
+                    // to be copied to the actual buffer)
+                    // For reference see https://bugs.meego.com/show_bug.cgi?id=21748
+                    // 'inputContext' is a C++ object exposed by Qt components
+                    inputContext.reset()
+                }
+                dirty = true
+            }
         }
     }
 
@@ -169,7 +210,7 @@ Sheet {
             else {
                 console.log("updating")
                 if (!inProgress)
-                    Details.updateRecord(recordId, startTimeUTC, endTimeUTC, text1.text)
+                    Details.updateRecord(recordId, startTimeUTC, text1.text, endTimeUTC)
                 else
                     Details.updateRecord(recordId, startTimeUTC, text1.text)
             }

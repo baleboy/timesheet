@@ -28,6 +28,11 @@ Timer {
         myTimer.start()
     }
 
+    function pauseTimer()
+    {
+        myTimer.stop()
+    }
+
     interval:  60000
     repeat:  true
     running: false

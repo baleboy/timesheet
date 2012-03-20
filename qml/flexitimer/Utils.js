@@ -8,7 +8,8 @@ function zeroPad(n) {
 }
 
 function toTime(msec) {
-    return zeroPad(Math.floor(msec / 3600000)) + "h "  +
+    var hours = Math.floor(msec / 3600000)
+    return  zeroPad(hours) + "h " +
             zeroPad(Math.floor((msec % 3600000) / 60000)) + "m"
 }
 

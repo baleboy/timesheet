@@ -81,9 +81,10 @@ CommonPage {
 
     tools: DefaultToolbar {
 
-        ToolIcon {
-            iconId: project == inProgress ? "toolbar-mediacontrol-pause" :
-                                            "toolbar-mediacontrol-play"
+        ToolButton {
+            /* iconId: project == inProgress ? "toolbar-mediacontrol-pause" :
+                                            "toolbar-mediacontrol-play" */
+            text: project == inProgress ? qsTr("Stop") : qsTr("Start")
 
             onClicked: project == inProgress ? stopAction() : startAction()
 
@@ -122,7 +123,7 @@ CommonPage {
         MenuLayout {
 
             MenuItem {
-                text: qsTr("Add Session")
+                text: qsTr("Create Session")
                 onClicked: {
                     sessionSheet.inProgress = false
                     sessionSheet.newRecord = true
