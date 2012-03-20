@@ -64,8 +64,8 @@ Item {
 
         id: deleteProjectDialog
         titleText: qsTr("Delete Project")
-        message:qsTr("Do you want to delete project " +
-                      projectMenu.projectName + " and all its related data?")
+        message:qsTr("Do you want to delete project <b>" +
+                      projectMenu.projectName + "</b> and all its related data?")
         acceptButtonText: qsTr("Yes")
         rejectButtonText: qsTr("No")
         onAccepted: Projects.deleteProject(projectMenu.projectName, projectMenu.projectIndex)

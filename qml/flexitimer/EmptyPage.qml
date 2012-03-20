@@ -24,19 +24,15 @@ Item {
             font.pixelSize: Const.fontMedium
             color: "gray"
         }
-    }
 
-    Button {
-        id: button1
-        anchors {
-            top: column1.bottom
-            horizontalCenter: parent.horizontalCenter
-            topMargin: Const.bigMargin
+        Button {
+            id: button1
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: Const.mediumButtonWidth
+            text: qsTr("Add project")
+            onClicked: addProjectDialog.open()
         }
-        width: Const.mediumButtonWidth
-        text: qsTr("Add project")
-        onClicked: addProjectDialog.open()
-    }
 
+    }
 }
 

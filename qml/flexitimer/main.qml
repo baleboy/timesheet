@@ -74,7 +74,7 @@ PageStackWindow {
 
         ToolIcon {
             iconSource: "images/document-icon.png"
-            onClicked: pageStack.push(reportsPage)
+            onClicked: { reportsPage.update(); pageStack.push(reportsPage) }
         }
 
         ToolIcon {
@@ -92,15 +92,15 @@ PageStackWindow {
                 onClicked: { eraseDialog.open() }
             }
             MenuItem {
-                text: qsTr("Recreate DB")
-                onClicked: { Db.recreate(); projectsModel.clear() }
+                text: qsTr("About")
+                onClicked: { aboutDialog.open() }
             }
 
-            MenuItem {
-                text: qsTr("Print all")
-                onClicked: { Db.printAll() }
-            }
         }
+    }
+
+    AboutDialog {
+        id: aboutDialog
     }
 
     AddProjectDialog {
@@ -145,9 +145,10 @@ PageStackWindow {
 
     Connections {
         target: platformWindow
-        onActiveChanged: {
+        onVisibleChanged: {
+            mainPage.checkDate()
             if (inProgress != "") {
-                if (platformWindow.active) {
+                if (platformWindow.visible) {
                     console.log("resuming timer")
                     workTimer.resumeTimer()
                 }

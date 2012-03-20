@@ -13,6 +13,13 @@ function toTime(msec) {
             zeroPad(Math.floor((msec % 3600000) / 60000)) + "m"
 }
 
+function toTimeForReport(msec) {
+    var hours = Math.floor(msec / 3600000)
+    return  zeroPad(hours) + ":" +
+            zeroPad(Math.floor((msec % 3600000) / 60000))
+}
+
+
 function dayStart(date)
 {
     if (date === undefined)

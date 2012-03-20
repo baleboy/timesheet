@@ -15,6 +15,8 @@ Page {
     property date startTime: Utils.dayStart()
     property date endTime: Utils.dayEnd()
 
+    orientationLock: PageOrientation.LockPortrait
+
     function update()
     {
          Reports.populateReportsModel(startTime, endTime)
@@ -244,9 +246,15 @@ Page {
             textColor: "white"
         }
 
+        ButtonStyle {
+            id: iconStyle
+            background: ""
+        }
+
         Button {
             id: leftButton
-            platformStyle: myStyle
+            platformStyle: iconStyle
+            iconSource: "images/previousButton.png"
             visible: typeDialog.selected != "all"
             anchors {
                 verticalCenter: reportTitle.verticalCenter
@@ -255,7 +263,6 @@ Page {
             }
             width: 48
             height: 48
-            text: "<"
             onClicked: {
                 Reports.setPreviousPeriod(typeDialog.selected)
                 Reports.populateReportsModel()
@@ -264,8 +271,9 @@ Page {
 
         Button {
             id: rightButton
-            platformStyle: myStyle
+            platformStyle: iconStyle
             visible: typeDialog.selected != "all"
+            iconSource: "images/nextButton.png"
             anchors {
                 verticalCenter: reportTitle.verticalCenter
                 left: reportTitle.right
@@ -273,7 +281,6 @@ Page {
             }
             width: 48
             height: 48
-            text: ">"
             onClicked: {
                 Reports.setNextPeriod(typeDialog.selected)
                 Reports.populateReportsModel()
@@ -334,9 +341,9 @@ Page {
 
     Exporter {
         id: exporter
-        folderName: "FlexiTimer"
+        folderName: "Timesheet"
         mimeType: "text/plain"
-        fileName: "flexiTimer-report.csv"
+        fileName: "timesheet-report.csv"
 
         onError: {
             errorBanner.text = msg;
@@ -375,8 +382,5 @@ Page {
         Component.onCompleted: Reports.getProjectList(projectSelectionDialog.model)
         acceptButtonText: qsTr("OK")
         onAccepted: Reports.populateReportsModel()
-    }
-    Component.onCompleted: {
-        Reports.populateReportsModel(startTime, endTime)
     }
 }

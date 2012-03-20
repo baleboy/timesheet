@@ -47,6 +47,7 @@ function populateReportsModel()
                                  startTime: formatter.formatTime(date1, "hh:mm"),
                                  endTime: endTimeText,
                                  elapsed: elapsed,
+                                 elapsedUTC: delta,
                                  date: formatter.formatDateShort(date1),
                                  comments: rs.rows.item(i).comments
                                  });
@@ -83,13 +84,15 @@ function getTitle(type)
 
 function buildReport()
 {
-    var reportData = "Date, Start, End, Duration, Comment\n"
+    var reportData = "Project, Date, Start, End, Duration, Comment\n"
 
     for (var i = 0 ; i < reportModel.count ; i++) {
-        reportData += reportModel.get(i).date + ", " +
+        reportData +=
+                reportModel.get(i).project + ", "  +
+                reportModel.get(i).date + ", " +
                 reportModel.get(i).startTime + ", " +
                 reportModel.get(i).endTime + ", " +
-                reportModel.get(i).elapsed + ", " +
+                toTimeForReport(reportModel.get(i).elapsedUTC) + ", " +
                 reportModel.get(i).comments + "\n"
     }
 

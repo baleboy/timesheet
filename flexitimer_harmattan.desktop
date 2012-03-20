@@ -4,7 +4,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Timesheet
-Exec=/usr/bin/invoker --type=d -s /opt/flexitimer/bin/flexitimer
+Exec=/usr/bin/invoker --splash=/opt/flexitimer/images/splash.jpg --type=d -s /opt/flexitimer/bin/flexitimer
 Icon=/usr/share/icons/hicolor/80x80/apps/flexitimer80.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true

@@ -9,6 +9,8 @@ Page {
     tools: commonTools
     property string title: today()
 
+    orientationLock: PageOrientation.LockPortrait
+
     function update()
     {
         var t = today()
@@ -37,16 +39,6 @@ Page {
     {
         projectListPage.move(index1, index2)
     }
-
-    Connections {
-        target: platformWindow
-        onActiveChanged: {
-            console.log("active changed: " + platformWindow.active)
-            if (platformWindow.active)
-                              checkDate()
-        }
-    }
-
 
     EmptyPage {
         visible: projectsModel.count == 0
@@ -100,6 +92,7 @@ Page {
                 topMargin: Const.smallMargin
             }
         }
+
     }
 
 }
