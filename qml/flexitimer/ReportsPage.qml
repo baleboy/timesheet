@@ -362,7 +362,12 @@ Page {
             platformIconId: enabled ? "toolbar-share" : "toolbar-share-dimmed"
             enabled: reportModel.count != 0
             onClicked: {
-                exporter.fileName = "timesheet-report-" + reportTitle.text.toLowerCase().replace(", ","-").replace(" ", "-") + ".csv"
+                var dateString = reportTitle.text
+                dateString = dateString.replace(" ", "-")
+                dateString = dateString.replace(", ", "-")
+                dateString = dateString.replace(" ", "-")
+                dateString = dateString.toLowerCase()
+                exporter.fileName = "timesheet-report-" + dateString + ".csv"
                 exporter.body = Reports.buildReport()
                 exporter.share()
             }
