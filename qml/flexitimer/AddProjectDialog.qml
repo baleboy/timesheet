@@ -14,7 +14,6 @@ ProjectDialog {
                                                  "elapsedToday": 0})
                     }
                     catch(e) {
-                        console.debug("addProject: caught " + e)
                         errorBanner.text = qsTr("Project name must be unique")
                         errorBanner.show()
                     }

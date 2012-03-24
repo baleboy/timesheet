@@ -78,7 +78,7 @@ Sheet {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            Label {
+            CommonLabel {
                 text: qsTr("Start: ")
                 font.pixelSize: Const.fontLarge
             }
@@ -87,10 +87,10 @@ Sheet {
                 id: startSelector
                 text: formatDate(startTimeUTC)
                 width: 300
-                onClicked: { startPicker.setUtcTime(startTimeUTC); startPicker.open() }
+                onClicked: { startPicker.open() ; startPicker.setUtcTime(startTimeUTC); }
             }
 
-            Label {
+            CommonLabel {
                 text: qsTr("End: ")
                 font.pixelSize: Const.fontLarge
             }
@@ -100,11 +100,11 @@ Sheet {
                 text: inProgress ? qsTr("In progress") : formatDate(endTimeUTC)
                 width: startSelector.width
                 enabled: !inProgress
-                onClicked: { endPicker.setUtcTime(endTimeUTC); endPicker.open() }
+                onClicked: { endPicker.open() ; endPicker.setUtcTime(endTimeUTC) }
             }
         }
 
-        Label {
+        CommonLabel {
             id: label1
             text: qsTr("Comments")
             font.pixelSize: Const.fontLarge
@@ -196,7 +196,7 @@ Sheet {
                          }
                          else {
                              Details.populateEditSessionPage();
-                             console.log("updated. Projcect: " + root.projectName)
+                             console.log("updated. Record ID: " + recordId + " startTime: " + startTimeUTC)
                          }
                      }
 

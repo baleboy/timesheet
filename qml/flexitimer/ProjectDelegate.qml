@@ -60,7 +60,6 @@ Item {
         }
 
         onClicked: {
-            console.log("old in progress:" + inProgress)
             if (checked) {
                 // this task was stopped by pressing the pause button
                 appWindow.stopCurrentProject()
@@ -68,18 +67,17 @@ Item {
             else {
                 appWindow.startProject(name, index)
             }
-            console.log("new in progress:" + inProgress)
+
         }
 
     }
 
-    Label {
+    CommonLabel {
         id: nameLabel
         text: name
         font.pixelSize: Const.listItemTitleFont
         elide: Text.ElideRight
         maximumLineCount: 1
-        // font.weight: Font.Bold
         color: inProgress === name ? "white" : "black"
         anchors {
             top: parent.top
@@ -90,7 +88,7 @@ Item {
         }
     }
 
-    Label {
+    CommonLabel {
         id: timeLabel
         text: Utils.toTime(elapsedToday +
                            (inProgress === name ? workTimer.elapsed : 0)) +

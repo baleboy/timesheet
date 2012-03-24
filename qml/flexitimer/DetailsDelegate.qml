@@ -44,7 +44,7 @@ Item {
 
     }
 
-    Label {
+    CommonLabel {
         id: startLabel
         text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
         font.pixelSize: Const.listItemTitleFont
@@ -58,7 +58,7 @@ Item {
         }
     }
 
-    Label {
+    CommonLabel {
         id: elapsedLabel
         text: elapsed === "" ? Utils.toTime(workTimer.elapsed) : elapsed
         font.pixelSize: Const.listItemTitleFont
@@ -71,7 +71,7 @@ Item {
     }
 
 
-    Label {
+    CommonLabel {
         text: comments
         elide: Text.ElideRight
         maximumLineCount: 1

@@ -9,7 +9,7 @@ Item {
         spacing: Const.spacing
         anchors.centerIn: parent
 
-        Label {
+        CommonLabel {
             id: label1
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("No Projects")
@@ -17,7 +17,7 @@ Item {
             color: "gray"
         }
 
-        Label {
+        CommonLabel {
             id: label2
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Add a project to start tracking")

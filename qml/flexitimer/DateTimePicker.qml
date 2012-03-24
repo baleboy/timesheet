@@ -32,6 +32,20 @@ TumblerDialog {
         hour = d.getHours()
         minute = d.getMinutes()
         year = d.getFullYear()
+
+        update()
+
+        console.log(month + " " + day + " " + hour + " " + minute + " ")
+    }
+
+
+    function update()
+    {
+        monthColumn.selectedIndex = root.month - 1
+        dayColumn.selectedIndex = root.day - 1
+        hourColumn.selectedIndex = root.hour
+        minuteColumn.selectedIndex = root.minute
+
     }
 
     function toDateTime() {
@@ -50,7 +64,7 @@ TumblerDialog {
     TumblerColumn {
         id: monthColumn
         label: qsTr("MONTH")
-        selectedIndex: root.month - 1
+        // selectedIndex: root.month - 1
 
         onSelectedIndexChanged: {
             // adjust the number of days that can be selected
@@ -77,7 +91,7 @@ TumblerDialog {
     TumblerColumn {
         id: dayColumn
         label: qsTr("DAY")
-        selectedIndex: root.day - 1
+        // selectedIndex: root.day - 1
 
         items: ListModel {
             id: dayList
@@ -87,7 +101,7 @@ TumblerDialog {
     TumblerColumn {
         id: hourColumn
         label: qsTr("HOUR")
-        selectedIndex: root.hour
+        // selectedIndex: root.hour
 
         items: ListModel {
             id: hourList
@@ -97,7 +111,7 @@ TumblerDialog {
     TumblerColumn {
         id: minuteColumn
         label: qsTr("MIN")
-        selectedIndex: root.minute
+        // selectedIndex: root.minute
 
         items: ListModel {
             id: minuteList

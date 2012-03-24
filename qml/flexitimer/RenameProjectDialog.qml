@@ -13,7 +13,6 @@ ProjectDialog {
                         Projects.renameProject(oldName, inputText, index)
                     }
                     catch(e) {
-                        console.debug("renameProject: caught " + e)
                         errorBanner.text = qsTr("Project name must be unique")
                         errorBanner.show()
                     }

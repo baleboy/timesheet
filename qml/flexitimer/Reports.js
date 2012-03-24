@@ -5,8 +5,6 @@ function populateReportsModel()
 {
     reportModel.clear();
 
-    console.log("populateReportsModel: " + startTime + ", " + endTime)
-
     // build query (I couldn't figure out how to parametrize the list)
 
     var query = "SELECT * FROM Details WHERE startTime >= ? AND startTime <= ?"
@@ -20,8 +18,6 @@ function populateReportsModel()
     if (projectSelectionDialog.selectedIndexes.length > 0)
         query += ") "
     query += "ORDER BY startTime DESC"
-
-    console.log("report query: " + query)
 
     db.readTransaction(function(tx) {
                            var rs = tx.executeSql(query,
@@ -142,9 +138,6 @@ function setPreviousPeriod(periodType)
         endTime = monthEnd(refTime)
         break;
     }
-
-    console.log("Start time: " + startTime)
-    console.log("End time: " + endTime)
 }
 
 function setNextPeriod(periodType)
@@ -168,6 +161,4 @@ function setNextPeriod(periodType)
         break;
     }
 
-    console.log("Start time: " + startTime)
-    console.log("End time: " + endTime)
 }

@@ -22,7 +22,6 @@ PageStackWindow {
         var elapsedToday = projectsModel.get(inProgressIndex).elapsedToday
         var elapsedTotal = projectsModel.get(inProgressIndex).elapsedTotal
 
-        console.log("Project stopped. Elapsed: " + workTimer.elapsed + " todaysTotal: " + elapsedToday)
         Db.addProjectEnd()
         projectsModel.setProperty(inProgressIndex,
                                   "elapsedToday",
@@ -47,7 +46,6 @@ PageStackWindow {
         Db.setProperty("projectInProgress", inProgress)
         if (index !== 0) mainPage.move(index, 0)
         inProgressIndex = 0
-        // projectsList.positionAtBeginning()
         return recordId
     }
 
@@ -149,11 +147,9 @@ PageStackWindow {
             mainPage.checkDate()
             if (inProgress != "") {
                 if (platformWindow.visible) {
-                    console.log("resuming timer")
                     workTimer.resumeTimer()
                 }
                 else {
-                    console.log("pausing timer")
                     workTimer.pauseTimer()
                 }
             }

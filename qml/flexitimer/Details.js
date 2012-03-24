@@ -6,7 +6,6 @@ function populateProjectDetails()
 
     var now = new Date
 
-    console.log("populateProjectsDetails: " + project + ", " + 0 + ", " + now)
     db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE project=? AND startTime >= ? AND startTime <= ? ORDER BY endTime DESC',
                                               [project, 0, now.getTime()]);
@@ -48,7 +47,6 @@ function populateProjectDetails()
 
 function deleteRecord(project, recordId, index)
 {
-    console.log("Details.deleteRecord: " + project + ", " + recordId + ", " + index)
     db.transaction(function(tx) {
                        var rs = tx.executeSql('DELETE FROM Details WHERE project=? AND recordId = ?',
                                               [project, recordId])});
@@ -57,7 +55,6 @@ function deleteRecord(project, recordId, index)
 
 function populateEditSessionPage()
 {
-    console.log("Edit session page - record Id: ", recordId)
     db.readTransaction(function(tx) {
                        var rs = tx.executeSql('SELECT * FROM Details WHERE recordId = ? ',
                                               [recordId]);
@@ -77,7 +74,6 @@ function populateEditSessionPage()
 
 function saveComments(recordId, text)
 {
-    console.log("Details.saveComments. Record ID: " +  recordId + " text: " + text)
     db.transaction(function(tx) {
                        tx.executeSql('UPDATE Details SET comments=? WHERE recordId=?', [text, recordId])
     });

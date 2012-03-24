@@ -22,10 +22,11 @@ Page {
         source: "images/header-bg-77.png"
         fillMode: Image.TileHorizontally
 
-        Label {
+        CommonLabel {
             id: titleLabel
             anchors {
-                verticalCenter: parent.verticalCenter
+                top: parent.top
+                topMargin: Const.margin
                 left: parent.left
                 leftMargin: Const.margin
                 right: parent.right

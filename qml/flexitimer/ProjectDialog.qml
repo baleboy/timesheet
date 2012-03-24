@@ -10,7 +10,7 @@ Dialog {
     property alias inputText: projectNameInput.text
     property string initialText
 
-    title: Label {
+    title: CommonLabel {
         id: titleLabel;
         color: "white";
         font.pixelSize: Const.fontDialog

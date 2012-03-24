@@ -24,7 +24,7 @@ CommonPage {
 
     Item {
         anchors.fill: parent
-        Label {
+        CommonLabel {
             font.pixelSize: Const.fontLarge
             color: "gray"
             anchors.centerIn: parent
@@ -59,7 +59,7 @@ CommonPage {
             height: 48
             color: "lightGray"
 
-            Label {
+            CommonLabel {
                 text: section
                 font.bold: true
                 anchors {
@@ -82,8 +82,6 @@ CommonPage {
     tools: DefaultToolbar {
 
         ToolButton {
-            /* iconId: project == inProgress ? "toolbar-mediacontrol-pause" :
-                                            "toolbar-mediacontrol-play" */
             text: project == inProgress ? qsTr("Stop") : qsTr("Start")
 
             onClicked: project == inProgress ? stopAction() : startAction()

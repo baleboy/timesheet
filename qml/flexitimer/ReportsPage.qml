@@ -33,11 +33,10 @@ Page {
             height: 125
             width: reportList.width
 
-            Label {
+            CommonLabel {
                 id: nameLabel
                 text: project
                 font.pixelSize: Const.listItemTitleFont
-                // font.weight: Font.Bold
                 anchors {
                     top: parent.top
                     topMargin: comments != "" ? Const.smallMargin : Const.margin
@@ -46,7 +45,7 @@ Page {
                 }
             }
 
-            Label {
+            CommonLabel {
                 text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
                 font.pixelSize: Const.listItemSubtitleFont
                 color: "gray"
@@ -59,7 +58,7 @@ Page {
                 }
             }
 
-            Label {
+            CommonLabel {
                 id: elapsedLabel
                 text: elapsed
                 font.pixelSize: Const.listItemSubtitleFont
@@ -72,7 +71,7 @@ Page {
                 }
             }
 
-            Label {
+            CommonLabel {
                 text: comments
                 font.pixelSize: Const.listItemSubtitleFont
                 color: "gray"
@@ -103,7 +102,7 @@ Page {
             height: 40
             color: "lightGrey"
 
-            Label {
+            CommonLabel {
                 text: section
                 font.bold: true
                 anchors {
@@ -116,7 +115,7 @@ Page {
     }
     Item {
         anchors.fill: parent
-        Label {
+        CommonLabel {
             font.pixelSize: Const.fontLarge
             color: "gray"
             anchors.centerIn: parent
@@ -144,8 +143,6 @@ Page {
         model: reportModel
 
         delegate: reportDelegate
-
-        // section.delegate: typeDialog.selected == "day" ? null : sectionDelegate
     }
 
     SectionScroller {
@@ -169,7 +166,7 @@ Page {
             bottom: parent.bottom
         }
 
-        Label {
+        CommonLabel {
             id: totalTextCaption
             text: qsTr("Total")
             anchors {
@@ -181,7 +178,7 @@ Page {
             color: "white"
         }
 
-        Label {
+        CommonLabel {
             id: totalTextLabel
             color: "white"
             anchors {
@@ -204,7 +201,7 @@ Page {
             left: parent.left
         }
 
-        Label {
+        CommonLabel {
             id: titleLabel
             text: title
             anchors {
@@ -305,7 +302,6 @@ Page {
         }
 
         onSelectedIndexChanged: {
-            console.log("new report type: " + model.get(selectedIndex).type)
             var now = new Date()
             switch (model.get(selectedIndex).type) {
             case "day":
@@ -328,11 +324,9 @@ Page {
 
             if (model.get(selectedIndex).type === "day") {
                 reportList.section.delegate = null
-                // reportScroller.listView = null
             }
             else {
                 reportList.section.delegate = sectionDelegate
-                // reportScroller.listView = reportList
             }
             Reports.populateReportsModel()
 

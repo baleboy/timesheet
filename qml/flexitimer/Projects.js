@@ -3,8 +3,6 @@ Qt.include("Utils.js")
 
 function populate() {
 
-    console.log("Projects.populate")
-
     projectList.model.clear();
     db.readTransaction(function(tx) {
                        var now = new Date()
@@ -37,7 +35,7 @@ function restoreOngoingSession()
         for (var i = 0 ; i < projectList.model.count ; i++) {
             if (projectList.model.get(i).name === inProgress) {
                 inProgressIndex = i
-                console.log("Project in progress: " + inProgress + ", index: " + i)
+
             }
         }
         // set the timer start time to the start time of the ongoing session
@@ -94,7 +92,6 @@ function totalWork(startTime, endTime)
                                               [startTime.getTime(), endTime.getTime()]);
                        result = rs.rows.item(0).total
     });
-    console.log("total: " + result)
     if (result === "")
         return 0
     else

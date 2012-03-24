@@ -25,11 +25,8 @@ Page {
 
     function checkDate()
     {
-        console.log("Check date")
         var t = today()
-        console.log("comparing " + title + " with " + t)
         if (title != t) {
-            console.debug("Date has changed, updating")
             title = t
             projectListPage.update()
         }
@@ -69,7 +66,7 @@ Page {
         width: parent.width
         fillMode: Image.TileHorizontally
 
-        Label {
+        CommonLabel {
             id: titleLabel
             text: title
             font.pixelSize: Const.fontLarge
@@ -81,7 +78,7 @@ Page {
             }
         }
 
-        Label {
+        CommonLabel {
             font.pixelSize: Const.fontHuge
             font.weight: Font.Bold
             text: projectListPage.daysTotalText

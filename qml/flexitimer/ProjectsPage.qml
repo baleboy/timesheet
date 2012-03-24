@@ -80,6 +80,5 @@ Item {
     Component.onCompleted: {
         update()
         Projects.restoreOngoingSession()
-        // workTimer.initialize()
     }
 }
