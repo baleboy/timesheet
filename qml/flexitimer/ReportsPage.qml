@@ -337,7 +337,6 @@ Page {
         id: exporter
         folderName: "Timesheet"
         mimeType: "text/plain"
-        fileName: "timesheet-report.csv"
 
         onError: {
             errorBanner.text = msg;
@@ -363,6 +362,7 @@ Page {
             platformIconId: enabled ? "toolbar-share" : "toolbar-share-dimmed"
             enabled: reportModel.count != 0
             onClicked: {
+                exporter.fileName = "timesheet-report-" + reportTitle.text.toLowerCase().replace(", ","-").replace(" ", "-") + ".csv"
                 exporter.body = Reports.buildReport()
                 exporter.share()
             }

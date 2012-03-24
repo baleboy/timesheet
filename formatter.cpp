@@ -22,6 +22,11 @@ QString Formatter::formatTime(QDateTime dateTime)
     return m_mLocale->formatDateTime(dateTime, MLocale::DateNone, MLocale::TimeShort);
 }
 
+QString Formatter::formatTimeLong(QDateTime dateTime)
+{
+    return m_mLocale->formatDateTime(dateTime, MLocale::DateNone, MLocale::TimeLong);
+}
+
 QString Formatter::formatDateLong(QDateTime dateTime)
 {
     return m_mLocale->formatDateTime(dateTime, MLocale::DateLong, MLocale::TimeNone);

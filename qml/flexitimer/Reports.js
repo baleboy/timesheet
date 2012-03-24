@@ -34,14 +34,16 @@ function populateReportsModel()
             if(rs.rows.item(i).endTime !== "") {
                 var date2 = new Date
                 date2.setTime(rs.rows.item(i).endTime)
-                endTimeText = formatter.formatTime(date2, "hh:mm")
+                endTimeText = formatter.formatTime(date2)
                 var delta = date2.getTime() - date1.getTime()
                 elapsed = toTime(delta)
                 totalElapsed += delta
                 reportModel.append({
                                  project: rs.rows.item(i).project,
-                                 startTime: formatter.formatTime(date1, "hh:mm"),
+                                 startTime: formatter.formatTime(date1),
+                                 startTimeLong: formatter.formatTimeLong(date1),
                                  endTime: endTimeText,
+                                 endTimeLong: formatter.formatTimeLong(date2),
                                  elapsed: elapsed,
                                  elapsedUTC: delta,
                                  date: formatter.formatDateShort(date1),
@@ -86,8 +88,8 @@ function buildReport()
         reportData +=
                 reportModel.get(i).project + ", "  +
                 reportModel.get(i).date + ", " +
-                reportModel.get(i).startTime + ", " +
-                reportModel.get(i).endTime + ", " +
+                reportModel.get(i).startTimeLong + ", " +
+                reportModel.get(i).endTimeLong + ", " +
                 toTimeForReport(reportModel.get(i).elapsedUTC) + ", " +
                 reportModel.get(i).comments + "\n"
     }

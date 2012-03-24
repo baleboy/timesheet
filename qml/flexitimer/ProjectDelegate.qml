@@ -81,7 +81,7 @@ Item {
         color: inProgress === name ? "white" : "black"
         anchors {
             top: parent.top
-            topMargin: Const.mediumMargin
+            topMargin: 15
             left: startButton.right
             leftMargin: Const.margin
             right: moreIndicator.left
@@ -95,10 +95,9 @@ Item {
         color: inProgress === name ? "white" : "gray"
         font.pixelSize: Const.listItemSubtitleFont
         anchors {
-            verticalCenter: parent.verticalCenter
             left: nameLabel.left
             top: nameLabel.bottom
-            topMargin: Const.smallMargin
+            topMargin: 2
         }
     }
 

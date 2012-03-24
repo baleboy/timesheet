@@ -16,7 +16,8 @@ function toTime(msec) {
 function toTimeForReport(msec) {
     var hours = Math.floor(msec / 3600000)
     return  zeroPad(hours) + ":" +
-            zeroPad(Math.floor((msec % 3600000) / 60000))
+            zeroPad(Math.floor((msec % 3600000) / 60000)) + ":" +
+            zeroPad(Math.floor((msec % 60000) / 1000))
 }
 
 

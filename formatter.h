@@ -14,6 +14,7 @@ public:
     ~Formatter();
 
     Q_INVOKABLE QString formatTime(QDateTime dateTime);
+    Q_INVOKABLE QString formatTimeLong(QDateTime dateTime);
     Q_INVOKABLE QString formatDateLong(QDateTime dateTime);
     Q_INVOKABLE QString formatDateShort(QDateTime dateTime);
     Q_INVOKABLE QString formatDateFull(QDateTime dateTime);
