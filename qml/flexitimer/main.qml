@@ -5,6 +5,7 @@ import Formatter 1.0
 
 import "UiConstants.js" as Const
 import "Db.js" as Db
+import "StressTest.js" as Test
 
 PageStackWindow {
     id: appWindow
@@ -93,6 +94,12 @@ PageStackWindow {
                 text: qsTr("About")
                 onClicked: { aboutDialog.open() }
             }
+            /* Uncomment for performance tests
+            MenuItem {
+                text: qsTr("Create Test Data")
+                onClicked: { Test.createData() }
+            }
+            */
 
         }
     }

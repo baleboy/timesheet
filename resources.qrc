@@ -1,0 +1,43 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/flexitimer/AboutDialog.qml</file>
+        <file>qml/flexitimer/AddProjectDialog.qml</file>
+        <file>qml/flexitimer/BackgroundTimer.qml</file>
+        <file>qml/flexitimer/CommonLabel.qml</file>
+        <file>qml/flexitimer/CommonPage.qml</file>
+        <file>qml/flexitimer/DateTimePicker.qml</file>
+        <file>qml/flexitimer/Db.js</file>
+        <file>qml/flexitimer/DefaultToolbar.qml</file>
+        <file>qml/flexitimer/DetailPage.qml</file>
+        <file>qml/flexitimer/Details.js</file>
+        <file>qml/flexitimer/DetailsDelegate.qml</file>
+        <file>qml/flexitimer/EmptyPage.qml</file>
+        <file>qml/flexitimer/main.qml</file>
+        <file>qml/flexitimer/MainPage.qml</file>
+        <file>qml/flexitimer/PlayPauseButton.qml</file>
+        <file>qml/flexitimer/ProjectDelegate.qml</file>
+        <file>qml/flexitimer/ProjectDialog.qml</file>
+        <file>qml/flexitimer/Projects.js</file>
+        <file>qml/flexitimer/ProjectsPage.qml</file>
+        <file>qml/flexitimer/RenameProjectDialog.qml</file>
+        <file>qml/flexitimer/Reports.js</file>
+        <file>qml/flexitimer/ReportsPage.qml</file>
+        <file>qml/flexitimer/SessionSheet.qml</file>
+        <file>qml/flexitimer/StressTest.js</file>
+        <file>qml/flexitimer/Timer.js</file>
+        <file>qml/flexitimer/UiConstants.js</file>
+        <file>qml/flexitimer/Utils.js</file>
+        <file>qml/flexitimer/images/banner-error.png</file>
+        <file>qml/flexitimer/images/cyan-button.png</file>
+        <file>qml/flexitimer/images/document-icon.png</file>
+        <file>qml/flexitimer/images/header-bg-77.png</file>
+        <file>qml/flexitimer/images/header-bg-165.png</file>
+        <file>qml/flexitimer/images/header-bg.png</file>
+        <file>qml/flexitimer/images/icon.png</file>
+        <file>qml/flexitimer/images/nextButton.png</file>
+        <file>qml/flexitimer/images/orange-button.png</file>
+        <file>qml/flexitimer/images/previousButton.png</file>
+        <file>qml/flexitimer/images/selected-bg.png</file>
+        <file>qml/flexitimer/images/separator.png</file>
+    </qresource>
+</RCC>

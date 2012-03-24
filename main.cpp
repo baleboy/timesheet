@@ -13,7 +13,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<Formatter,1>("Formatter", 1, 0, "Formatter");
 
     viewer->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer->setMainQmlFile(QLatin1String("qml/flexitimer/main.qml"));
+    // viewer->setMainQmlFile("qrc:///qml/main.qml");// QLatin1String("qml/flexitimer/main.qml"));
+    viewer->setSource(QUrl("qrc:///qml/flexitimer/main.qml"));
     viewer->showExpanded();
 
     return app->exec();

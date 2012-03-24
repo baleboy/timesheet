@@ -1,9 +1,9 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/flexitimer
-folder_01.target = qml
+# folder_01.source = qml/flexitimer
+# folder_01.target = qml
 folder_02.source = images
 folder_02.target = /
-DEPLOYMENTFOLDERS = folder_01 folder_02
+DEPLOYMENTFOLDERS = folder_02
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
@@ -54,9 +54,10 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    qml/flexitimer/UiConstants.js
+    qml/flexitimer/*
 
-RESOURCES +=
+RESOURCES += \
+    resources.qrc
 
 HEADERS += \
     filehandler.h \

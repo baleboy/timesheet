@@ -91,9 +91,7 @@ Item {
     CommonLabel {
         id: timeLabel
         text: Utils.toTime(elapsedToday +
-                           (inProgress === name ? workTimer.elapsed : 0)) +
-              " (" + Utils.toTime(elapsedTotal + (inProgress === name ? workTimer.elapsed : 0))
-              + ")"
+                           (inProgress === name ? workTimer.elapsed : 0))
         color: inProgress === name ? "white" : "gray"
         font.pixelSize: Const.listItemSubtitleFont
         anchors {
