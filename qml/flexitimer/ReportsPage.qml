@@ -2,6 +2,7 @@ import QtQuick 1.1
 import Exporter 1.0
 
 import com.nokia.meego 1.0
+import com.nokia.extras 1.0
 
 import "UiConstants.js" as Const
 import "Reports.js" as Reports
@@ -221,7 +222,7 @@ Page {
         Button {
             id: reportTitle
             platformStyle: myStyle
-            width: 300
+            width: 315
             text: Reports.getTitle(typeDialog.selected)
 
             font {
@@ -232,6 +233,15 @@ Page {
                 top: titleLabel.bottom
                 topMargin: Const.margin
                 horizontalCenter: parent.horizontalCenter
+            }
+
+            Image {
+                source: "images/triangle.png"
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: 10
+                }
             }
 
             onClicked: typeDialog.open()

@@ -39,5 +39,6 @@
         <file>qml/flexitimer/images/previousButton.png</file>
         <file>qml/flexitimer/images/selected-bg.png</file>
         <file>qml/flexitimer/images/separator.png</file>
+        <file>qml/flexitimer/images/triangle.png</file>
     </qresource>
 </RCC>

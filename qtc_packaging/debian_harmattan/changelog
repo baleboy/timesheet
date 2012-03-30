@@ -1,5 +1,11 @@
-flexitimer (1.0.0) unstable; urgency=low
+flexitimer (1.0.2) unstable; urgency=low
+
+  * Small fix in About dialog
+
+ -- Francesco Balestrieri <bale@balenet.com>  Fri, 30 Mar 2012 10:00:17 +0200
+
+flexitimer (1.0.1) unstable; urgency=low
 
   * First release
 
- -- Francesco Balestrieri <bale@balenet.com>  Sat, 24 Mar 2012 10:00:17 +0200
+ -- Francesco Balestrieri <bale@balenet.com>  Tue, 27 Mar 2012 10:00:17 +0200

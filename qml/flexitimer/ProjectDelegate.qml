@@ -90,12 +90,26 @@ Item {
 
     CommonLabel {
         id: timeLabel
-        text: Utils.toTime(elapsedToday +
+        text: Utils.toTime(elapsedTotal +
                            (inProgress === name ? workTimer.elapsed : 0))
         color: inProgress === name ? "white" : "gray"
         font.pixelSize: Const.listItemSubtitleFont
         anchors {
             left: nameLabel.left
+            top: nameLabel.bottom
+            topMargin: 2
+        }
+    }
+
+    CommonLabel {
+        id: todaysTimeLabel
+        text: qsTr("Today: ") + Utils.toTime(elapsedToday +
+                           (inProgress === name ? workTimer.elapsed : 0))
+        color: inProgress === name ? "white" : "gray"
+        font.pixelSize: Const.listItemSubtitleFont
+        anchors {
+            left: timeLabel.right
+            leftMargin: Const.bigMargin
             top: nameLabel.bottom
             topMargin: 2
         }
