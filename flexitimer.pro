@@ -54,7 +54,10 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    qml/flexitimer/*
+    qml/flexitimer/* \
+    qml/flexitimer/ReportScript.js \
+    qml/flexitimer/BusyPanel.qml \
+    qml/flexitimer/ExportScript.js
 
 RESOURCES += \
     resources.qrc

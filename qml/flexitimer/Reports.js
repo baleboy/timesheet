@@ -1,63 +1,6 @@
 Qt.include("Db.js")
 Qt.include("Utils.js")
 
-function populateReportsModel()
-{
-    reportModel.clear();
-
-    // build query (I couldn't figure out how to parametrize the list)
-
-    var query = "SELECT * FROM Details WHERE startTime >= ? AND startTime <= ?"
-    if (projectSelectionDialog.selectedIndexes.length > 0)
-        query += " AND project IN ("
-    for (var i = 0 ; i < projectSelectionDialog.selectedIndexes.length; i++) {
-        query += "'" + projectSelectionDialog.model.get(projectSelectionDialog.selectedIndexes[i]).name + "'"
-        if (i !== projectSelectionDialog.selectedIndexes.length - 1)
-            query += ","
-    }
-    if (projectSelectionDialog.selectedIndexes.length > 0)
-        query += ") "
-    query += "ORDER BY startTime DESC"
-
-    db.readTransaction(function(tx) {
-                           var rs = tx.executeSql(query,
-                                              [startTime.getTime(), endTime.getTime()]);
-         var totalElapsed = 0;
-
-         for(var i = 0; i < rs.rows.length; i++) {
-            var date1 = new Date
-            date1.setTime(rs.rows.item(i).startTime)
-            var endTimeText = "";
-            var elapsed = ""
-
-
-            if(rs.rows.item(i).endTime !== "") {
-                var date2 = new Date
-                date2.setTime(rs.rows.item(i).endTime)
-                endTimeText = formatter.formatTime(date2)
-                var delta = date2.getTime() - date1.getTime()
-                elapsed = toTime(delta)
-                totalElapsed += delta
-                reportModel.append({
-                                 project: rs.rows.item(i).project,
-                                 startTime: formatter.formatTime(date1),
-                                 startTimeLong: formatter.formatTimeLong(date1),
-                                 endTime: endTimeText,
-                                 endTimeLong: formatter.formatTimeLong(date2),
-                                 elapsed: elapsed,
-                                 elapsedUTC: delta,
-                                 date: formatter.formatDateShort(date1),
-                                 comments: rs.rows.item(i).comments
-                                 });
-            }
-
-        }
-         totalTextLabel.text = toTime(totalElapsed)
-    });
-
-
-}
-
 Date.prototype.getWeek = function() {
     var onejan = new Date(this.getFullYear(),0,1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
@@ -88,8 +31,10 @@ function buildReport()
         reportData +=
                 reportModel.get(i).project + ", "  +
                 reportModel.get(i).date + ", " +
-                reportModel.get(i).startTimeLong + ", " +
-                reportModel.get(i).endTimeLong + ", " +
+                Qt.formatTime(new Date(reportModel.get(i).startTimeUTC), Qt.DefaultLocaleLongDate) + ", " +
+                Qt.formatTime(new Date(reportModel.get(i).endTimeUTC), Qt.DefaultLocaleLongDate) + ", " +
+                //formatter.formatTimeLong(new Date(reportModel.get(i).startTimeUTC)) + ", " +
+                // formatter.formatTimeLong(new Date(reportModel.get(i).endTimeUTC)) + ", " +
                 toTimeForReport(reportModel.get(i).elapsedUTC) + ", " +
                 reportModel.get(i).comments + "\n"
     }

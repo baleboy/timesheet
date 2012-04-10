@@ -27,11 +27,11 @@ QueryDialog {
     id: query
 
     icon: "images/icon.png"
-    titleText: "Timesheet 1.0"
+    titleText: "Timesheet 1.0.2"
     message: "(c) 2012 Francesco Balestrieri\n\nIcon by Eric Le Roux"
 
     acceptButtonText: "Send Feedback"
-    onAccepted: Qt.openUrlExternally("mailto:bale@balenet.com?subject=Feedback about Timesheet 1.0")
+    onAccepted: Qt.openUrlExternally("mailto:bale@balenet.com?subject=Feedback about Timesheet 1.0.2")
     rejectButtonText: "Close"
 }
 

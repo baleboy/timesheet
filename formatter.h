@@ -9,6 +9,9 @@ class MLocale;
 class Formatter : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool monthFirst READ monthFirst NOTIFY localeChanged)
+
 public:
     explicit Formatter(QObject *parent = 0);
     ~Formatter();
@@ -20,6 +23,7 @@ public:
     Q_INVOKABLE QString formatDateFull(QDateTime dateTime);
     Q_INVOKABLE QString formatDateYearAndMonth(QDateTime dateTime);
     Q_INVOKABLE QString formatDateTime(QDateTime dateTime);
+    bool monthFirst();
 
 
 public slots:
@@ -32,6 +36,9 @@ signals:
 
 private:
     MLocale* m_mLocale;
+    bool m_monthFirst;
+
+    bool isMonthFirst();
 };
 
 #endif // FORMATTER_H

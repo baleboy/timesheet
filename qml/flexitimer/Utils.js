@@ -79,3 +79,8 @@ function weekEnd(date)
                     date.getMonth(),
                     date.getDate() + (7 - date.getDay()))
 }
+
+function localizedShortDate(date, monthFirst)
+{
+    return monthFirst ? Qt.formatDate(date, "MM/dd/yyyy") : Qt.formatDate(date, "dd/MM/yyyy")
+}

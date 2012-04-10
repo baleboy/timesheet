@@ -15,17 +15,50 @@ Page {
 
     property date startTime: Utils.dayStart()
     property date endTime: Utils.dayEnd()
+    property bool loading: false
+    property bool exporting: false
 
     orientationLock: PageOrientation.LockPortrait
 
     function update()
     {
-         Reports.populateReportsModel(startTime, endTime)
+        loading = true
+        reportWorker.sendMessage({
+                                     'model': reportModel,
+                                     'selectionModel': projectSelectionDialog.model,
+                                     'selectedIndexes': projectSelectionDialog.selectedIndexes,
+                                     'startTime': startTime,
+                                     'endTime': endTime,
+                                     'monthFirst': formatter.monthFirst
+                                 })
     }
 
     ListModel {
         id: reportModel
     }
+
+    WorkerScript {
+        id: reportWorker
+        source: "ReportScript.js"
+        onMessage: { totalTextLabel.text = messageObject.elapsed; loading = false }
+    }
+
+    WorkerScript {
+        id: exportWorker
+        source: "ExportScript.js"
+        onMessage: {
+            var dateString = reportTitle.text
+            dateString = dateString.replace(" ", "-")
+            dateString = dateString.replace(", ", "-")
+            dateString = dateString.replace(" ", "-")
+            dateString = dateString.toLowerCase()
+            exporter.fileName = "timesheet-report-" + dateString + ".csv"
+            exporter.body = messageObject.data
+            exporter.share()
+            exporting = false
+        }
+    }
+
 
     Component {
         id: reportDelegate
@@ -47,7 +80,7 @@ Page {
             }
 
             CommonLabel {
-                text: startTime + " - " +  (endTime === "" ? qsTr("In progress") : endTime)
+                text: formatter.formatTime(new Date(startTimeUTC)) + " - " +  formatter.formatTime(new Date(endTimeUTC))
                 font.pixelSize: Const.listItemSubtitleFont
                 color: "gray"
                 width: 320
@@ -191,11 +224,27 @@ Page {
         }
     }
 
+    BusyPanel {
+        id: busy
+        text: "Loading..."
+
+        running: loading
+        visible: loading
+        anchors {
+            top: reportList.top
+            bottom: totalText.bottom
+            left: parent.left
+            right: parent.right
+        }
+    }
+
     Image {
         id: background
         width: parent.width
         source: "images/header-bg-165.png"
         fillMode: Image.TileHorizontally
+
+        enabled: !loading
 
         anchors {
             top: parent.top
@@ -272,7 +321,7 @@ Page {
             height: 48
             onClicked: {
                 Reports.setPreviousPeriod(typeDialog.selected)
-                Reports.populateReportsModel()
+                update()
             }
         }
 
@@ -290,12 +339,10 @@ Page {
             height: 48
             onClicked: {
                 Reports.setNextPeriod(typeDialog.selected)
-                Reports.populateReportsModel()
+                update()
             }
         }
     }
-
-
 
     SelectionDialog {
         id: typeDialog
@@ -338,8 +385,7 @@ Page {
             else {
                 reportList.section.delegate = sectionDelegate
             }
-            Reports.populateReportsModel()
-
+            update()
         }
     }
 
@@ -369,18 +415,23 @@ Page {
         }
 
         ToolIcon {
+            id: sharingButton
             platformIconId: enabled ? "toolbar-share" : "toolbar-share-dimmed"
-            enabled: reportModel.count != 0
+            iconSource: exporting ? "empty.png" : ""
+
+            enabled: (reportModel.count != 0) && !exporting
+
             onClicked: {
-                var dateString = reportTitle.text
-                dateString = dateString.replace(" ", "-")
-                dateString = dateString.replace(", ", "-")
-                dateString = dateString.replace(" ", "-")
-                dateString = dateString.toLowerCase()
-                exporter.fileName = "timesheet-report-" + dateString + ".csv"
-                exporter.body = Reports.buildReport()
-                exporter.share()
+                exporting = true
+                exportWorker.sendMessage({ 'model': reportModel })
             }
+
+            BusyIndicator {
+                anchors.centerIn: sharingButton
+                running: exporting
+                visible: exporting
+            }
+
         }
     }
 
@@ -390,6 +441,6 @@ Page {
         model: ListModel {}
         Component.onCompleted: Reports.getProjectList(projectSelectionDialog.model)
         acceptButtonText: qsTr("OK")
-        onAccepted: Reports.populateReportsModel()
+        onAccepted: update()
     }
 }
