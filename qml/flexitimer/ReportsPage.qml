@@ -20,13 +20,27 @@ Page {
 
     orientationLock: PageOrientation.LockPortrait
 
+    function updateProjectsDialog()
+    {
+        projectSelectionDialog.updateProjects();
+    }
+
     function update()
     {
         loading = true
+        var projectString = ""
+        if (typeDialog.selected == "all")
+            endTime = new Date // update report limit to current time
+        for (var i = 0 ; i < projectSelectionDialog.selectedIndexes.length; i++) {
+            projectString += "'" + projectSelectionDialog.model.get(projectSelectionDialog.selectedIndexes[i]).name + "'"
+            if (i !== projectSelectionDialog.selectedIndexes.length - 1)
+                projectString += ","
+        }
+        console.debug("Project selection: " + projectString)
+        // Reports.getProjectList(projectSelectionDialog.model)
         reportWorker.sendMessage({
                                      'model': reportModel,
-                                     'selectionModel': projectSelectionDialog.model,
-                                     'selectedIndexes': projectSelectionDialog.selectedIndexes,
+                                     'projectString': projectString,
                                      'startTime': startTime,
                                      'endTime': endTime,
                                      'monthFirst': formatter.monthFirst
@@ -128,25 +142,12 @@ Page {
         }
 
     }
+
     Component {
         id: sectionDelegate
-
-        Rectangle {
-            width: parent.width
-            height: 40
-            color: "lightGrey"
-
-            CommonLabel {
-                text: section
-                font.bold: true
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    leftMargin: 8
-                }
-            }
-        }
+        SectionDelegate {}
     }
+
     Item {
         anchors.fill: parent
         CommonLabel {
@@ -417,7 +418,7 @@ Page {
         ToolIcon {
             id: sharingButton
             platformIconId: enabled ? "toolbar-share" : "toolbar-share-dimmed"
-            iconSource: exporting ? "empty.png" : ""
+            iconSource: exporting ? "images/empty.png" : ""
 
             enabled: (reportModel.count != 0) && !exporting
 
@@ -439,8 +440,22 @@ Page {
         id: projectSelectionDialog
         titleText: qsTr("Select Projects")
         model: ListModel {}
-        Component.onCompleted: Reports.getProjectList(projectSelectionDialog.model)
+
+        function updateProjects()
+        {
+            Reports.getProjectList(projectSelectionDialog.model)
+        }
+
+        function addProject(name)
+        {
+            projectSelectionDialog.model.append({'name': name})
+            console.debug("Selection model length: " + projectSelectionDialog.model.count)
+        }
+
+        Component.onCompleted: updateProjects()
+
         acceptButtonText: qsTr("OK")
-        onAccepted: update()
+        onAccepted: reportsPage.update()
     }
+
 }

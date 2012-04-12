@@ -68,7 +68,7 @@ Item {
                       projectMenu.projectName + "</b> and all its related data?")
         acceptButtonText: qsTr("Yes")
         rejectButtonText: qsTr("No")
-        onAccepted: Projects.deleteProject(projectMenu.projectName, projectMenu.projectIndex)
+        onAccepted: { Projects.deleteProject(projectMenu.projectName, projectMenu.projectIndex); reportsPage.updateProjectsDialog() }
     }
 
     RenameProjectDialog {

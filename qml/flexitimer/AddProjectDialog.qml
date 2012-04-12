@@ -12,8 +12,10 @@ ProjectDialog {
                         projectsModel.append({"name": inputText,
                                                  "elapsedTotal": 0,
                                                  "elapsedToday": 0})
+                        reportsPage.updateProjectsDialog()
                     }
                     catch(e) {
+                        debug.log("caught error: " + e)
                         errorBanner.text = qsTr("Project name must be unique")
                         errorBanner.show()
                     }

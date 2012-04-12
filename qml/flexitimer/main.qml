@@ -130,7 +130,7 @@ PageStackWindow {
         rejectButtonText: qsTr("Cancel")
         titleText: qsTr("Erase all data")
         message: qsTr("Do you really want to erase all the data?")
-        onAccepted: { Db.clearAll() ; mainPage.update() }
+        onAccepted: { Db.clearAll() ; mainPage.update(); reportsPage.updateProjectsDialog() }
     }
 
     InfoBanner {

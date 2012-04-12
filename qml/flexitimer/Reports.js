@@ -23,27 +23,9 @@ function getTitle(type)
     }
 }
 
-function buildReport()
-{
-    var reportData = "Project, Date, Start, End, Duration, Comment\n"
-
-    for (var i = 0 ; i < reportModel.count ; i++) {
-        reportData +=
-                reportModel.get(i).project + ", "  +
-                reportModel.get(i).date + ", " +
-                Qt.formatTime(new Date(reportModel.get(i).startTimeUTC), Qt.DefaultLocaleLongDate) + ", " +
-                Qt.formatTime(new Date(reportModel.get(i).endTimeUTC), Qt.DefaultLocaleLongDate) + ", " +
-                //formatter.formatTimeLong(new Date(reportModel.get(i).startTimeUTC)) + ", " +
-                // formatter.formatTimeLong(new Date(reportModel.get(i).endTimeUTC)) + ", " +
-                toTimeForReport(reportModel.get(i).elapsedUTC) + ", " +
-                reportModel.get(i).comments + "\n"
-    }
-
-    return reportData
-}
-
 function getProjectList(model)
 {
+    model.clear()
     db.readTransaction(function(tx) {
                            var rs = tx.executeSql('SELECT name FROM Projects ORDER BY name ASC')
                            for(var i = 0; i < rs.rows.length; i++) {

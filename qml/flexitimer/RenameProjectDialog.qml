@@ -11,6 +11,7 @@ ProjectDialog {
     onAccepted: if ((inputText != "") && (inputText != oldName)) {
                     try {
                         Projects.renameProject(oldName, inputText, index)
+                        reportsPage.updateProjectsDialog()
                     }
                     catch(e) {
                         errorBanner.text = qsTr("Project name must be unique")

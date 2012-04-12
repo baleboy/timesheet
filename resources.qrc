@@ -44,5 +44,6 @@
         <file>qml/flexitimer/BusyPanel.qml</file>
         <file>qml/flexitimer/ExportScript.js</file>
         <file>qml/flexitimer/images/empty.png</file>
+        <file>qml/flexitimer/SectionDelegate.qml</file>
     </qresource>
 </RCC>

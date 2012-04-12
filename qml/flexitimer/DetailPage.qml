@@ -54,21 +54,7 @@ CommonPage {
 
         delegate: DetailsDelegate {}
 
-        section.delegate: Rectangle {
-            width: parent.width
-            height: 48
-            color: "lightGray"
-
-            CommonLabel {
-                text: section
-                font.bold: true
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    leftMargin: 8
-                }
-            }
-        }
+        section.delegate: SectionDelegate {}
     }
 
     SectionScroller {

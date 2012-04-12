@@ -57,7 +57,8 @@ OTHER_FILES += \
     qml/flexitimer/* \
     qml/flexitimer/ReportScript.js \
     qml/flexitimer/BusyPanel.qml \
-    qml/flexitimer/ExportScript.js
+    qml/flexitimer/ExportScript.js \
+    qml/flexitimer/SectionDelegate.qml
 
 RESOURCES += \
     resources.qrc
