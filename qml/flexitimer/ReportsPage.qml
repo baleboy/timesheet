@@ -299,13 +299,15 @@ Page {
 
         ButtonStyle {
             id: myStyle
-            background: disabledBackground
+            background: "image://theme/meegotouch-button-background-disabled"
             textColor: "white"
+            disabledTextColor: "orange"
         }
 
         ButtonStyle {
             id: iconStyle
             background: ""
+            disabledBackground: ""
         }
 
         Button {
@@ -318,6 +320,7 @@ Page {
                 right: reportTitle.left
                 rightMargin: Const.margin
             }
+            opacity: enabled ? 1 : 0.7
             width: 48
             height: 48
             onClicked: {
@@ -336,6 +339,7 @@ Page {
                 left: reportTitle.right
                 leftMargin: Const.margin
             }
+            opacity: enabled ? 1 : 0.7
             width: 48
             height: 48
             onClicked: {
