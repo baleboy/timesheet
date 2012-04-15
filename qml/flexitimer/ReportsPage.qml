@@ -459,6 +459,7 @@ Page {
         Component.onCompleted: updateProjects()
 
         acceptButtonText: qsTr("OK")
+
         onAccepted: reportsPage.update()
     }
 

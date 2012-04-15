@@ -4,6 +4,7 @@ import com.nokia.extras 1.0
 import "UiConstants.js" as Const
 import "Details.js" as Details
 import "Projects.js" as Projects
+import "Utils.js" as Utils
 
 Sheet {
     id: root
@@ -80,7 +81,7 @@ Sheet {
 
             CommonLabel {
                 text: qsTr("Start: ")
-                font.pixelSize: Const.fontLarge
+                font.pixelSize: Const.fontMedium
             }
 
             TumblerButton {
@@ -92,7 +93,7 @@ Sheet {
 
             CommonLabel {
                 text: qsTr("End: ")
-                font.pixelSize: Const.fontLarge
+                font.pixelSize: Const.fontMedium
             }
 
             TumblerButton {
@@ -102,12 +103,27 @@ Sheet {
                 enabled: !inProgress
                 onClicked: { endPicker.open() ; endPicker.setUtcTime(endTimeUTC) }
             }
+
+            CommonLabel {
+                text: qsTr("Duration: ")
+                font.pixelSize: Const.fontMedium
+            }
+
+            TumblerButton {
+                id: durationSelector
+                text: inProgress ? Utils.toTimeWithSeconds((new Date()).getTime() - startTimeUTC) :
+                                   Utils.toTimeWithSeconds(endTimeUTC - startTimeUTC)
+                width: startSelector.width
+                enabled: !inProgress
+                onClicked: { durationPicker.open() }
+            }
+
         }
 
         CommonLabel {
             id: label1
             text: qsTr("Comments")
-            font.pixelSize: Const.fontLarge
+            font.pixelSize: Const.fontMedium
 
             anchors {
                 top: grid1.bottom
@@ -151,7 +167,6 @@ Sheet {
                     ((startPicker.toDateTimeUTC() < new Date) && inProgress)) {
 
                 startTimeUTC = startPicker.toDateTimeUTC()
-                // Details.saveStartTime(recordId, startTimeUTC)
 
                 if (inProgress) {
                     workTimer.setStartTime(startTimeUTC)
@@ -183,20 +198,42 @@ Sheet {
 
     }
 
+    TimePickerDialog {
+        id: durationPicker
+
+        property int delta: hour * 3600000 + minute * 60000 + second * 1000
+
+        function setDuration()
+        {
+            var delta = endTimeUTC - startTimeUTC
+            durationPicker.hour = Math.floor(delta / 3600000)
+            durationPicker.minute = Math.floor((delta % 3600000) / 60000)
+            durationPicker.second = Math.floor((delta % 60000) / 1000)
+        }
+
+        titleText: qsTr("Select Duration")
+        hourMode: DateTime.TwentyFourHours
+        fields: DateTime.Hours | DateTime.Minutes | DateTime.Seconds
+
+        onStatusChanged: if (status == DialogStatus.Opening) durationPicker.setDuration()
+
+        onAccepted: { endTimeUTC = startTimeUTC + durationPicker.delta ; dirty = true}
+    }
+
     // dialog opens
     onStatusChanged: if (status === DialogStatus.Opening) {
-                         console.log("opening. Project: " + root.projectName)
                          dirty = newRecord
                          if (newRecord) {
+                             // create new session of 1hr duration
+                             // ending at the current time
                              var t = new Date()
                              recordId = t.getTime()
-                             startTimeUTC = t.getTime()
-                             t.setHours(t.getHours() + 1)
                              endTimeUTC = t.getTime()
+                             t.setHours(t.getHours() - 1)
+                             startTimeUTC = t.getTime()
                          }
                          else {
                              Details.populateEditSessionPage();
-                             console.log("updated. Record ID: " + recordId + " startTime: " + startTimeUTC)
                          }
                      }
 
@@ -204,11 +241,9 @@ Sheet {
 
         if (dirty) {
             if (newRecord) {
-                console.log("creating: project " + root.projectName )
                 Details.addRecord(recordId, root.projectName, startTimeUTC, endTimeUTC, text1.text)
             }
             else {
-                console.log("updating")
                 if (!inProgress)
                     Details.updateRecord(recordId, startTimeUTC, text1.text, endTimeUTC)
                 else

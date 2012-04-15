@@ -3,7 +3,7 @@ import com.nokia.extras 1.0
 
 TumblerDialog {
     id: root
-    acceptButtonText: qsTr("Ok")
+    acceptButtonText: qsTr("Accept")
     rejectButtonText: qsTr("Cancel")
     titleText: qsTr("Select Date and Time")
 
@@ -25,8 +25,6 @@ TumblerDialog {
         var d = new Date
         d.setTime(utc)
 
-        console.log("DateTimePicker - Setting time: " + Qt.formatDateTime(d))
-
         month = d.getMonth() + 1
         day = d.getDate()
         hour = d.getHours()
@@ -34,8 +32,6 @@ TumblerDialog {
         year = d.getFullYear()
 
         update()
-
-        console.log(month + " " + day + " " + hour + " " + minute + " ")
     }
 
 
@@ -64,12 +60,10 @@ TumblerDialog {
     TumblerColumn {
         id: monthColumn
         label: qsTr("MONTH")
-        // selectedIndex: root.month - 1
 
         onSelectedIndexChanged: {
             // adjust the number of days that can be selected
             var maxDays = dateTime.daysInMonth(root.year, selectedIndex + 1)
-            console.log("Month: " + (selectedIndex + 1) + " " + maxDays)
             if (dayList.count > maxDays) {
                 // remove days
                 var oldDays = dayList.count
@@ -91,7 +85,6 @@ TumblerDialog {
     TumblerColumn {
         id: dayColumn
         label: qsTr("DAY")
-        // selectedIndex: root.day - 1
 
         items: ListModel {
             id: dayList
@@ -101,7 +94,6 @@ TumblerDialog {
     TumblerColumn {
         id: hourColumn
         label: qsTr("HOUR")
-        // selectedIndex: root.hour
 
         items: ListModel {
             id: hourList
@@ -111,7 +103,6 @@ TumblerDialog {
     TumblerColumn {
         id: minuteColumn
         label: qsTr("MIN")
-        // selectedIndex: root.minute
 
         items: ListModel {
             id: minuteList

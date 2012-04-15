@@ -20,6 +20,13 @@ function toTimeForReport(msec) {
             zeroPad(Math.floor((msec % 60000) / 1000))
 }
 
+function toTimeWithSeconds(msec) {
+    var hours = Math.floor(msec / 3600000)
+    return  zeroPad(hours) + "h " +
+            zeroPad(Math.floor((msec % 3600000) / 60000)) + "m " +
+            zeroPad(Math.floor((msec % 60000) / 1000)) + "s"
+}
+
 
 function dayStart(date)
 {
