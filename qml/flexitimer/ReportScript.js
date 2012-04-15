@@ -21,8 +21,6 @@ function handleReport(message)
     }
     query += " ORDER BY startTime DESC"
 
-    console.debug("Reports query: " + query)
-
     db.readTransaction(function(tx) {
                            var rs = tx.executeSql(query,
                                                   [startTime.getTime(), endTime.getTime()]);

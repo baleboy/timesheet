@@ -65,7 +65,6 @@ bool Formatter::isMonthFirst()
 {
     QDate testDate(2012, 12, 1);
     QString formatted = m_mLocale->formatDateTime(QDateTime(testDate), MLocale::DateShort);
-    qDebug() << formatted;
     formatted.truncate(2);
     return (formatted == "12");
 }
