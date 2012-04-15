@@ -36,8 +36,7 @@ Page {
             if (i !== projectSelectionDialog.selectedIndexes.length - 1)
                 projectString += ","
         }
-        console.debug("Project selection: " + projectString)
-        // Reports.getProjectList(projectSelectionDialog.model)
+
         reportWorker.sendMessage({
                                      'model': reportModel,
                                      'projectString': projectString,
@@ -450,10 +449,11 @@ Page {
             Reports.getProjectList(projectSelectionDialog.model)
         }
 
-        function addProject(name)
-        {
-            projectSelectionDialog.model.append({'name': name})
-            console.debug("Selection model length: " + projectSelectionDialog.model.count)
+        onSelectedIndexesChanged: {
+            if (selectedIndexes.indexOf(0) !== -1) { // handles the "all projects" item
+                selectedIndexes = []
+                accept()
+            }
         }
 
         Component.onCompleted: updateProjects()

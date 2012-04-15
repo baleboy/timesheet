@@ -26,10 +26,12 @@ function getTitle(type)
 function getProjectList(model)
 {
     model.clear()
+    // fixed item used to remove all selections
+    model.append({ "name": qsTr("All Projects") })
     db.readTransaction(function(tx) {
                            var rs = tx.executeSql('SELECT name FROM Projects ORDER BY name ASC')
                            for(var i = 0; i < rs.rows.length; i++) {
-                               model.append({name: rs.rows.item(i).name})
+                               model.append({"name": rs.rows.item(i).name})
                            }
 
                        });

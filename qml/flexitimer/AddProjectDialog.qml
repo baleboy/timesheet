@@ -9,7 +9,8 @@ ProjectDialog {
     onAccepted: if (inputText != "") {
                     try {
                         Projects.addProject(inputText)
-                        projectsModel.append({"name": inputText,
+                        projectsModel.insert(inProgress == "" ? 0 : 1,
+                                                {"name": inputText,
                                                  "elapsedTotal": 0,
                                                  "elapsedToday": 0})
                         reportsPage.updateProjectsDialog()

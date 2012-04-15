@@ -1,6 +1,8 @@
 flexitimer (1.0.4) unstable; urgency=low
 
   * Duration can be specified when editing session
+  * Project selection in reports page can be cleared
+  * New projects are inserted at the top of the list
 
  -- Francesco Balestrieri <bale@balenet.com>  Tue, 10 Apr 2012 10:00:17 +0200
 
