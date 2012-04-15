@@ -27,7 +27,7 @@ QueryDialog {
     id: query
 
     icon: "images/icon.png"
-    titleText: "Timesheet 1.0.3"
+    titleText: "Timesheet 1.0.4"
     message: "(c) 2012 Francesco Balestrieri\n\nIcon by Eric Le Roux"
 
     acceptButtonText: "Send Feedback"
